@@ -372,7 +372,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 11:21:38" itemprop="dateModified" datetime="2018-04-20T11:21:38+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-20 15:38:29" itemprop="dateModified" datetime="2018-04-20T15:38:29+08:00">2018-04-20</time>
               
             
           </span>
@@ -425,8 +425,7 @@
       
         
           
-            <hr>
-<p>先简单说一下常见的git 分支管理策略</p>
+            <p>先简单说一下常见的git 分支管理策略</p>
 <ol>
 <li>集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。</li>
 <li>feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支</li>
@@ -436,8 +435,10 @@
 <p>以上四种工作方式除了第一种不能使用pull request其他都可以。<br>pull request 就是提交代码之后发起给团队其他人发起code review请求。</p>
 <hr>
 <p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。</p>
+<p><img src="/images/gitflow.png" alt="Alt text"></p>
 <p>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。</p>
 <p>gitFlow 日常工作流程图如下</p>
+<p><img src="/images/gitflow-branch.png" alt="Alt text"></p>
 <hr>
 <p>下面介绍一下使用gitflow 工作流的常规操作。</p>
 <p>将设我们开发一个新的feature-1</p>
@@ -564,7 +565,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 11:20:13" itemprop="dateModified" datetime="2018-04-20T11:20:13+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-20 15:28:45" itemprop="dateModified" datetime="2018-04-20T15:28:45+08:00">2018-04-20</time>
               
             
           </span>
@@ -618,7 +619,7 @@
         
           
             <p>虽然JAVA程序不用像C和C++程序员一样自己处理内存问题。但是作为一名合格的JAVA程序员还是很有必要去了解一下JVM的内存划分和使用情况的。特别是当你遇到内存溢出的情况时候，你就会发现不掌握JVM的内存知识是玩儿不转滴！</p>
-<p>下面我就简单的说下JVM的划分情况。如下图：<br><img src="images/jvm.png" alt="Alt text"></p>
+<p>下面我就简单的说下JVM的划分情况。如下图：<br><img src="/images/jvm.png" alt="Alt text"></p>
 <p>1.程序计数器：线程隔离的数据区<br>2.虚拟机栈：线程隔离的数据区<br>3.本地方法栈：线程隔离的数据区<br>4.方法区：所有线程共享的数据区<br>5.堆：所有线程共享的数据区</p>
 <p><strong>程序计数器：</strong> 记录当前线程所执行的字节码的行号指示器，在虚拟机的概念模型里，字节码解释器工作时来选取下一个需要执行的字节码指令，分支，循环，跳转，异常处理，线程恢复等基础功能等都需要这个计数器来完成。<br>每条线程都有一个独立的程序计数器，各条线程间的程序计数器互相不受影响，独立存储。这类内存是线程私有的。这个区域不会出现内存溢出情况。</p>
 <p><strong>虚拟机栈：</strong> 虚拟机栈也是线程私有的，它的生命周期与线程相同。每个方法在执行的同时都会创建一个栈帧（Stack Frame）用于存储局部变量表，操作数栈，动态链接，方法出口等信息。每个方法从调用直至执行完成的过程，就对着栈帧在虚拟机中如栈出栈的过程。大家常说的堆栈中的栈指的就是这个虚拟机栈。虚拟机栈中存有局部变量表。局部变量表存放了编译期可知的各种基本数据类型（boolean,byte,char,short,int,float,long,double）,对象引用（reference类型它不等同于对象本身，可能是指向对象起始地址的引用指针）和returnAddress（指向了一条字节码指令的地址）类型。其中Long和double会占用两个局部变量空间，其余的只占用一个空间。局部变量表在编译期完成分配。在该区域存在两种异常情况，线程请求的栈深度大于虚拟机所允许的栈深度将抛出StackOverFlowError。如果扩展无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>

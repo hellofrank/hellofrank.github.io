@@ -102,18 +102,21 @@
 
 
 
-  <meta name="description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个m">
+  <meta name="description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="记一次常规的gitflow工作流">
 <meta property="og:url" content="http://yoursite.com/2018/04/19/记一次常规的gitflow工作流/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个m">
+<meta property="og:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-20T03:21:38.130Z">
+<meta property="og:image" content="http://yoursite.com/images/gitflow.png">
+<meta property="og:image" content="http://yoursite.com/images/gitflow-branch.png">
+<meta property="og:updated_time" content="2018-04-20T07:38:29.398Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次常规的gitflow工作流">
-<meta name="twitter:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个m">
+<meta name="twitter:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
+<meta name="twitter:image" content="http://yoursite.com/images/gitflow.png">
 
 
 
@@ -369,7 +372,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 11:21:38" itemprop="dateModified" datetime="2018-04-20T11:21:38+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-20 15:38:29" itemprop="dateModified" datetime="2018-04-20T15:38:29+08:00">2018-04-20</time>
               
             
           </span>
@@ -420,8 +423,7 @@
       
 
       
-        <hr>
-<p>先简单说一下常见的git 分支管理策略</p>
+        <p>先简单说一下常见的git 分支管理策略</p>
 <ol>
 <li>集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。</li>
 <li>feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支</li>
@@ -431,8 +433,10 @@
 <p>以上四种工作方式除了第一种不能使用pull request其他都可以。<br>pull request 就是提交代码之后发起给团队其他人发起code review请求。</p>
 <hr>
 <p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。</p>
+<p><img src="/images/gitflow.png" alt="Alt text"></p>
 <p>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。</p>
 <p>gitFlow 日常工作流程图如下</p>
+<p><img src="/images/gitflow-branch.png" alt="Alt text"></p>
 <hr>
 <p>下面介绍一下使用gitflow 工作流的常规操作。</p>
 <p>将设我们开发一个新的feature-1</p>
