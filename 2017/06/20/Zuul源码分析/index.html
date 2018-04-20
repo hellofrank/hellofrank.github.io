@@ -1,0 +1,773 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Zuul源码分析">
+<meta property="og:url" content="http://yoursite.com/2017/06/20/Zuul源码分析/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T09:09:02.920Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Zuul源码分析">
+<meta name="twitter:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/06/20/Zuul源码分析/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Zuul源码分析 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+    <a href="/404/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/06/20/Zuul源码分析/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Zuul源码分析
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-06-20 00:00:00" itemprop="dateCreated datePublished" datetime="2017-06-20T00:00:00+08:00">2017-06-20</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-04-19 17:09:02" itemprop="dateModified" datetime="2018-04-19T17:09:02+08:00">2018-04-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。</p>
+<p>准备工作：<a href="https://github.com/Netflix/zuul" target="_blank" rel="noopener">下载源码</a>，安装JDK，Maven，以及IDE。</p>
+<p>Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。<br>init()方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">     <span class="keyword">super</span>.init(config);</span><br><span class="line">     String bufferReqsStr = config.getInitParameter(<span class="string">"buffer-requests"</span>);</span><br><span class="line">     <span class="keyword">boolean</span> bufferReqs = bufferReqsStr != <span class="keyword">null</span> &amp;&amp; bufferReqsStr.equals(<span class="string">"true"</span>) ? <span class="keyword">true</span> : <span class="keyword">false</span>;</span><br><span class="line">     zuulRunner = <span class="keyword">new</span> ZuulRunner(bufferReqs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这个方法里面，首先调用父类的init方法初始化ServletConfig.同时也会对ZuulRunner进行初始化。</p>
+<p>下面来看service方法。这个方法比较主要，下面会具体说。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Marks this request as having passed through the "Zuul engine", as opposed to servlets</span></span><br><span class="line">            <span class="comment">// explicitly bound in web.xml, for which requests will not have the same data attached</span></span><br><span class="line">            RequestContext context = RequestContext.getCurrentContext();</span><br><span class="line">            context.setZuulEngineRan();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                preRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                route();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                postRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            error(<span class="keyword">new</span> ZuulException(e, <span class="number">500</span>, <span class="string">"UNHANDLED_EXCEPTION_"</span> + e.getClass().getName()));</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            RequestContext.getCurrentContext().unset();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>从这个方法里面可以看到先调用preRoute方法如果出现异常，就会调用postRoute方法。如果没有异常就会调用route方法。同样出现异常也会调用postRoute方法。这里面的三个方法，实际上就是你写配置文件的时候filter类型(一般zuul网关允许你定义三种类型的filter,pre,post,route)。我们跟进postRoute方法，看一下里面到底什么。进去之后会发现其实是委托给zuulRunner去工作。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">postRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">       zuulRunner.postRoute();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure>
+<p>那就别废话了，来看下ZuulRunner的postRoute的方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * executes "post" filterType  ZuulFilters</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ZuulException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">    FilterProcessor.getInstance().postRoute();</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>实际上ZuulRunner又交给FilterProcessor。那就走进FilterProcessor看个究竟，下面的代码是FilterProcessor里面的postRoute方法。发现也没干啥具体事儿，只是调了一个runFilters(“post”)方法。那我们就继续往前走吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * runs "post" filters which are called after "route" filters. ZuulExceptions from ZuulFilters are thrown.</span></span><br><span class="line"><span class="comment"> * Any other Throwables are caught and a ZuulException is thrown out with a 500 status code</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ZuulException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">postRoute</span><span class="params">()</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        runFilters(<span class="string">"post"</span>);</span><br><span class="line">    &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> e;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> ZuulException(e, <span class="number">500</span>, <span class="string">"UNCAUGHT_EXCEPTION_IN_POST_FILTER_"</span> + e.getClass().getName());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>下面是runFilters方法的具体实现。至此我们终于走到核心地带了。对于这段代码的解读大家可以看我在代码里面加的两行注释。已经说得很清楚了。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="comment">/**</span></span><br><span class="line"><span class="comment"> * runs all filters of the filterType sType/ Use this method within filters to run custom filters by type</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> sType the filterType.</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span></span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> Throwable throws up an arbitrary exception</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">runFilters</span><span class="params">(String sType)</span> <span class="keyword">throws</span> Throwable </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (RequestContext.getCurrentContext().debugRouting()) &#123;</span><br><span class="line">        Debug.addRoutingDebug(<span class="string">"Invoking &#123;"</span> + sType + <span class="string">"&#125; type filters"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">boolean</span> bResult = <span class="keyword">false</span>;</span><br><span class="line">    <span class="comment">//通过FilterLoader加载对应的Filter.</span></span><br><span class="line">    List&lt;ZuulFilter&gt; list = FilterLoader.getInstance().getFiltersByType(sType);</span><br><span class="line">    <span class="keyword">if</span> (list != <span class="keyword">null</span>) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; list.size(); i++) &#123;</span><br><span class="line">            ZuulFilter zuulFilter = list.get(i);</span><br><span class="line">            <span class="comment">//分别执行每一个Filter</span></span><br><span class="line">            Object result = processZuulFilter(zuulFilter);</span><br><span class="line">            <span class="keyword">if</span> (result != <span class="keyword">null</span> &amp;&amp; result <span class="keyword">instanceof</span> Boolean) &#123;</span><br><span class="line">                bResult |= ((Boolean) result);</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> bResult;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这段代码是上面提到的processZuulFilter方法的具体实现。同样，我也在这段代码的关键处加了一行注释。其实主要就是调用ZullFilter里面的runFilter()方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * Processes an individual ZuulFilter. This method adds Debug information. Any uncaught Thowables are caught by this method and converted to a ZuulException with a 500 status code.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@param</span> filter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the return value for that filter</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@throws</span> ZuulException</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> Object <span class="title">processZuulFilter</span><span class="params">(ZuulFilter filter)</span> <span class="keyword">throws</span> ZuulException </span>&#123;</span><br><span class="line"></span><br><span class="line">    RequestContext ctx = RequestContext.getCurrentContext();</span><br><span class="line">    <span class="keyword">boolean</span> bDebug = ctx.debugRouting();</span><br><span class="line">    <span class="keyword">final</span> String metricPrefix = <span class="string">"zuul.filter-"</span>;</span><br><span class="line">    <span class="keyword">long</span> execTime = <span class="number">0</span>;</span><br><span class="line">    String filterName = <span class="string">""</span>;</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        <span class="keyword">long</span> ltime = System.currentTimeMillis();</span><br><span class="line">        filterName = filter.getClass().getSimpleName();</span><br><span class="line"></span><br><span class="line">        RequestContext copy = <span class="keyword">null</span>;</span><br><span class="line">        Object o = <span class="keyword">null</span>;</span><br><span class="line">        Throwable t = <span class="keyword">null</span>;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (bDebug) &#123;</span><br><span class="line">            Debug.addRoutingDebug(<span class="string">"Filter "</span> + filter.filterType() + <span class="string">" "</span> + filter.filterOrder() + <span class="string">" "</span> + filterName);</span><br><span class="line">            copy = ctx.copy();</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="comment">//这行是主要代码，调用ZuulFilter里面的runFilter()方法。</span></span><br><span class="line">        ZuulFilterResult result = filter.runFilter();</span><br><span class="line">        ExecutionStatus s = result.getStatus();</span><br><span class="line">        execTime = System.currentTimeMillis() - ltime;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">switch</span> (s) &#123;</span><br><span class="line">            <span class="keyword">case</span> FAILED:</span><br><span class="line">                t = result.getException();</span><br><span class="line">                ctx.addFilterExecutionSummary(filterName, ExecutionStatus.FAILED.name(), execTime);</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">case</span> SUCCESS:</span><br><span class="line">                o = result.getResult();</span><br><span class="line">                ctx.addFilterExecutionSummary(filterName, ExecutionStatus.SUCCESS.name(), execTime);</span><br><span class="line">                <span class="keyword">if</span> (bDebug) &#123;</span><br><span class="line">                    Debug.addRoutingDebug(<span class="string">"Filter &#123;"</span> + filterName + <span class="string">" TYPE:"</span> + filter.filterType() + <span class="string">" ORDER:"</span> + filter.filterOrder() + <span class="string">"&#125; Execution time = "</span> + execTime + <span class="string">"ms"</span>);</span><br><span class="line">                    Debug.compareContextState(filterName, copy);</span><br><span class="line">                &#125;</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">            <span class="keyword">default</span>:</span><br><span class="line">                <span class="keyword">break</span>;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (t != <span class="keyword">null</span>) <span class="keyword">throw</span> t;</span><br><span class="line"></span><br><span class="line">        usageNotifier.notify(filter, s);</span><br><span class="line">        <span class="keyword">return</span> o;</span><br><span class="line"></span><br><span class="line">    &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">        <span class="keyword">if</span> (bDebug) &#123;</span><br><span class="line">            Debug.addRoutingDebug(<span class="string">"Running Filter failed "</span> + filterName + <span class="string">" type:"</span> + filter.filterType() + <span class="string">" order:"</span> + filter.filterOrder() + <span class="string">" "</span> + e.getMessage());</span><br><span class="line">        &#125;</span><br><span class="line">        usageNotifier.notify(filter, ExecutionStatus.FAILED);</span><br><span class="line">        <span class="keyword">if</span> (e <span class="keyword">instanceof</span> ZuulException) &#123;</span><br><span class="line">            <span class="keyword">throw</span> (ZuulException) e;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            ZuulException ex = <span class="keyword">new</span> ZuulException(e, <span class="string">"Filter threw Exception"</span>, <span class="number">500</span>, filter.filterType() + <span class="string">":"</span> + filterName);</span><br><span class="line">            ctx.addFilterExecutionSummary(filterName, ExecutionStatus.FAILED.name(), execTime);</span><br><span class="line">            <span class="keyword">throw</span> ex;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>来看下ZuulFilter里面的runFilter()方法。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/**</span></span><br><span class="line"><span class="comment"> * runFilter checks !isFilterDisabled() and shouldFilter(). The run() method is invoked if both are true.</span></span><br><span class="line"><span class="comment"> *</span></span><br><span class="line"><span class="comment"> * <span class="doctag">@return</span> the return from ZuulFilterResult</span></span><br><span class="line"><span class="comment"> */</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> ZuulFilterResult <span class="title">runFilter</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    ZuulFilterResult zr = <span class="keyword">new</span> ZuulFilterResult();</span><br><span class="line">    <span class="keyword">if</span> (!isFilterDisabled()) &#123;</span><br><span class="line">        <span class="keyword">if</span> (shouldFilter()) &#123;</span><br><span class="line">            Tracer t = TracerFactory.instance().startMicroTracer(<span class="string">"ZUUL::"</span> + <span class="keyword">this</span>.getClass().getSimpleName());</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                Object res = run();</span><br><span class="line">                zr = <span class="keyword">new</span> ZuulFilterResult(res, ExecutionStatus.SUCCESS);</span><br><span class="line">            &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">                t.setName(<span class="string">"ZUUL::"</span> + <span class="keyword">this</span>.getClass().getSimpleName() + <span class="string">" failed"</span>);</span><br><span class="line">                zr = <span class="keyword">new</span> ZuulFilterResult(ExecutionStatus.FAILED);</span><br><span class="line">                zr.setException(e);</span><br><span class="line">            &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">                t.stopAndLog();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">            zr = <span class="keyword">new</span> ZuulFilterResult(ExecutionStatus.SKIPPED);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> zr;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在这个方法里面首先检查以下该filter是否执行，然后就是调用run方法。其实就是调用你自己写的filter里面的run方法。</p>
+<p>这就是zuul的整个工作流程了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/10/聊聊微服务那些事儿——微服务介绍/" rel="next" title="聊聊微服务那些事儿——微服务介绍">
+                <i class="fa fa-chevron-left"></i> 聊聊微服务那些事儿——微服务介绍
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/20/JAVA内存模型划分/" rel="prev" title="JAVA内存模型划分">
+                JAVA内存模型划分 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

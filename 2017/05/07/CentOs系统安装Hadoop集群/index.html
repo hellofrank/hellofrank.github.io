@@ -1,0 +1,793 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这里介绍一下CentOS系统下，搭建一个简单的Hadoop集群，这里以三台机器为例子。123100.100.100.0 #Master100.100.100.1 #Slave1100.100.100.2 #Slave2 1. 准备工作 检查Java环境 在安装Hadoop之前需要确保系统已经安装正确的Java环境和版本(不建议使用系统自带的OpenJDK)。检查方法如下，如果看到如下内容说明一切O">
+<meta name="keywords" content="大数据">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOs系统安装Hadoop集群">
+<meta property="og:url" content="http://yoursite.com/2017/05/07/CentOs系统安装Hadoop集群/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="这里介绍一下CentOS系统下，搭建一个简单的Hadoop集群，这里以三台机器为例子。123100.100.100.0 #Master100.100.100.1 #Slave1100.100.100.2 #Slave2 1. 准备工作 检查Java环境 在安装Hadoop之前需要确保系统已经安装正确的Java环境和版本(不建议使用系统自带的OpenJDK)。检查方法如下，如果看到如下内容说明一切O">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T08:25:51.360Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOs系统安装Hadoop集群">
+<meta name="twitter:description" content="这里介绍一下CentOS系统下，搭建一个简单的Hadoop集群，这里以三台机器为例子。123100.100.100.0 #Master100.100.100.1 #Slave1100.100.100.2 #Slave2 1. 准备工作 检查Java环境 在安装Hadoop之前需要确保系统已经安装正确的Java环境和版本(不建议使用系统自带的OpenJDK)。检查方法如下，如果看到如下内容说明一切O">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/07/CentOs系统安装Hadoop集群/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>CentOs系统安装Hadoop集群 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+    <a href="/404/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/07/CentOs系统安装Hadoop集群/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">CentOs系统安装Hadoop集群
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-05-07 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-07T00:00:00+08:00">2017-05-07</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-04-19 16:25:51" itemprop="dateModified" datetime="2018-04-19T16:25:51+08:00">2018-04-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这里介绍一下CentOS系统下，搭建一个简单的Hadoop集群，这里以三台机器为例子。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">100.100.100.0 #Master</span><br><span class="line">100.100.100.1 #Slave1</span><br><span class="line">100.100.100.2 #Slave2</span><br></pre></td></tr></table></figure></p>
+<p><strong>1. 准备工作</strong></p>
+<p><em>检查Java环境</em></p>
+<p>在安装Hadoop之前需要确保系统已经安装正确的Java环境和版本(不建议使用系统自带的OpenJDK)。检查方法如下，如果看到如下内容说明一切OK。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ java -version</span><br><span class="line">java version &quot;1.8.0_111&quot;</span><br><span class="line">Java(TM) SE Runtime Environment (build 1.8.0_111-b14)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 25.111-b14, mixed mode)</span><br></pre></td></tr></table></figure></p>
+<p><em>网络检查</em></p>
+<p>CentOS系统默认开启了防火墙，在开启 Hadoop 集群之前，需要关闭集群中每个节点的防火墙。有防火墙会导致 ping 得通但 telnet 端口不通，从而导致 DataNode 启动了，但 Live datanodes 为 0 的情况。</p>
+<p>在 CentOS 6.x 中，可以通过如下命令关闭防火墙：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo service iptables stop # 关闭防火墙服务</span><br><span class="line">sudo chkconfig iptables off # 禁止防火墙开机自启，就不用手动关闭了</span><br></pre></td></tr></table></figure></p>
+<p>也可以这样关闭<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">setenforce 0 #临时禁用，不需要重启</span><br><span class="line">iptables -F #清空iptables</span><br><span class="line">vim /etc/sysconfig/selinux #修改SELINUX=disabled</span><br><span class="line">chkconfig iptables off #重启后永久失效</span><br></pre></td></tr></table></figure></p>
+<p>在CentOS 7.x中，可以通过如下命令关闭防火墙<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">systemctl stop firewalld.service # 关闭firewall</span><br><span class="line">systemctl disable firewalld.service # 禁止firewall开机启动</span><br></pre></td></tr></table></figure></p>
+<p><em>下载Hadoop包</em></p>
+<p>这步简单,通过wget下载或者把你开发机上的tar包上传到服务器上都可以，如果是测试开发环境用，可以用最新版本，如果是生产环境，建议用他的稳定版本。</p>
+<p>2.开始安装：</p>
+<p>大家可以通过hostname来查看自己的主机名称，如果想修改主机名称可以通过<br><figure class="highlight vim"><figcaption><span>/etc/sysconfig/network ``` 修改，修改之后通过hostname查看一下，如果没有生效可以通过使用 hostname master。当然你也可以不修改，就直接使用默认的主机名。这些都不影响，之所以修改名称是为了机器之间的关系更清楚。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">修改完主机名称之后，我们依次修改 ``` <span class="keyword">vim</span> /etc/hosts``` 文件，把主机名和IP地址一一对应上。</span><br></pre></td></tr></table></figure></p>
+<p>100.100.100.0 master<br>100.100.100.1 slave1<br>100.100.100.2 slave2<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">完成这些之后，我们需要做的是SSH无密码验证登陆。</span><br><span class="line"></span><br><span class="line">_SSH无密码登陆_</span><br><span class="line"></span><br><span class="line">因为hadoop各个节点之间的管理都是通过ssh实现的，所以必须配置成SSH无密码登陆。</span><br><span class="line">依次在每台机器上执行</span><br></pre></td></tr></table></figure></p>
+<p>ssh-keygen -t rsa -P ‘’<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">一路回车就可以</span><br><span class="line"></span><br><span class="line">然后在master上执行</span><br></pre></td></tr></table></figure></p>
+<p>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.1:/home/frank/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.2:/home/frank/.ssh/authorized_keys<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slave1上</span><br></pre></td></tr></table></figure></p>
+<p>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.0:/home/frank/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.2:/home/frank/.ssh/authorized_keys<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">slave2上</span><br></pre></td></tr></table></figure></p>
+<p>cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.0:/home/frank/.ssh/authorized_keys<br>scp /home/frank/.ssh/authorized_keys 100.100.100.1:/home/frank/.ssh/authorized_keys<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">最后 ``` chmod 400 ~/.ssh/authorized_keys</span><br></pre></td></tr></table></figure></p>
+<p>这步一定要做，不然是不能做到无密码登陆的。<br>现在可以做测试了，如果没问题的话，<figure class="highlight plain"><figcaption><span>100.100.100.1``` 就会直接登陆到slave1上了。</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">忙活了大半天，到现在才真正开始操作hadoop的安装</span><br><span class="line">将三台机器上 你下载的hadoop文件进行解压</span><br><span class="line">``` tar xzvf hadoop-2.7.3.tar.gz ``` 将解压后的文件放到 /opt/app目录下(随意)，到此可以说已经完成了hadoop的安装，下面要做的就是集群的配置。</span><br><span class="line"></span><br><span class="line">3.集群配置</span><br><span class="line"></span><br><span class="line">我们需要修改每台机器的 hadoop-2.7.3下面的etc/hadoop 目录下面的</span><br></pre></td></tr></table></figure></p>
+<p>hadoop-env.sh<br>core-site.xml<br>hdfs-site.xml<br>mapred-site.xml<br>yarn-site.mxl<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">hadoop-env.sh需要修改java 路径</span><br><span class="line">``` export JAVA_HOME=&apos;/usr/local/java/jdk1.8.0_111&apos;</span><br></pre></td></tr></table></figure></p>
+<p>core-site.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">　　&lt;name&gt;hadoop.tmp.dir&lt;/name&gt;</span><br><span class="line">　　&lt;value&gt;file:/DATA/hadoop-data/hadoop/tmp/&lt;/value&gt;</span><br><span class="line">　　&lt;description&gt;Abase for other temporary directories.&lt;/description&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">&lt;value&gt;hdfs://100.100.100.0:8090&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>hdfs-site.xml<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">&lt;value&gt;1&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;dfs.block.size&lt;/name&gt;</span><br><span class="line">&lt;value&gt;1073741824&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">　　&lt;name&gt;dfs.namenode.name.dir&lt;/name&gt;</span><br><span class="line">　　&lt;value&gt;file:/DATA/hadoop-data/hadoop/tmp/dfs/name&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">　　&lt;name&gt;dfs.datanode.data.dir&lt;/name&gt;</span><br><span class="line">　　&lt;value&gt;file:/DATA/hadoop-data/hadoop/tmp/dfs/data&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:8084&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;dfs.namenode.http-address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:8087&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;dfs.webhdfs.enabled&lt;/name&gt;</span><br><span class="line">&lt;value&gt;true&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure></p>
+<p>mapred-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">&lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;mapreduce.jobhistory.address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:10020&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;mapreduce.jobhistory.webapp.address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:8082&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>yarn-site.xml</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">&lt;configuration&gt;</span><br><span class="line">&lt;!-- Site specific YARN configuration properties --&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;yarn.resourcemanager.hostname&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;yarn.resourcemanager.resource-tracker.address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:11111&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;yarn.resourcemanager.webapp.address&lt;/name&gt;</span><br><span class="line">&lt;value&gt;100.100.100.0:8081&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;property&gt;</span><br><span class="line">&lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">&lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">&lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<p>然后将这几个配置文件分发到另外两台机器上。注意 file:/DATA/hadoop-data 目录要存在并且有写权限</p>
+<p>4.启动Hadoop集群</p>
+<p>在首次启动前需要执行<br><figure class="highlight plain"><figcaption><span>namenode -format ```</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">然后在master节点依次执行下面的脚本</span><br></pre></td></tr></table></figure></p>
+<p>start-dfs.sh<br>start-yarn.sh<br>mr-jobhistory-daemon.sh start historyserver<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">启动成功之后，通过jps指令可以看到如下进程</span><br></pre></td></tr></table></figure></p>
+<p>37684 SecondaryNameNode<br>38423 JobHistoryServer<br>37912 ResourceManager<br>37354 NameNode<br>72138 Jps<br>37499 DataNode<br>38030 NodeManager<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">在slave节点可以看到如下进程</span><br></pre></td></tr></table></figure></p>
+<p>129443 NodeManager<br>26163 Jps<br>129256 DataNode<br><code>`</code><br>至此Hadoop集群就搭建成功了，通过浏览器访问你在配置文件里配置的，8090端口，8081端口可以看到Hadoop提供的相应的管理界面</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/05/10/聊聊微服务那些事儿——微服务介绍/" rel="prev" title="聊聊微服务那些事儿——微服务介绍">
+                聊聊微服务那些事儿——微服务介绍 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

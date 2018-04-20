@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="#####什么是微服务 我认为的微服务架构是将系统中的每个服务或者功能独立成一个单独的可独立部署的应用。一般我们都是根据业务的边界来确定服务的边界，并根据单一职责原则保证每个服务都有很强的自治性。服务之间通过网络进行通信，以避免耦合。说白了微服务架构想要达到的目的和软件工程里面的解藕原则是一回事儿。  单一职责原则：把因相同原因而变化的东西聚合到一起，把因不同原因而变化的东西分离开来。  ####">
+<meta name="keywords" content="微服务">
+<meta property="og:type" content="article">
+<meta property="og:title" content="聊聊微服务那些事儿——微服务介绍">
+<meta property="og:url" content="http://yoursite.com/2017/05/10/聊聊微服务那些事儿——微服务介绍/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="#####什么是微服务 我认为的微服务架构是将系统中的每个服务或者功能独立成一个单独的可独立部署的应用。一般我们都是根据业务的边界来确定服务的边界，并根据单一职责原则保证每个服务都有很强的自治性。服务之间通过网络进行通信，以避免耦合。说白了微服务架构想要达到的目的和软件工程里面的解藕原则是一回事儿。  单一职责原则：把因相同原因而变化的东西聚合到一起，把因不同原因而变化的东西分离开来。  ####">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2018-04-19T09:01:49.408Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="聊聊微服务那些事儿——微服务介绍">
+<meta name="twitter:description" content="#####什么是微服务 我认为的微服务架构是将系统中的每个服务或者功能独立成一个单独的可独立部署的应用。一般我们都是根据业务的边界来确定服务的边界，并根据单一职责原则保证每个服务都有很强的自治性。服务之间通过网络进行通信，以避免耦合。说白了微服务架构想要达到的目的和软件工程里面的解藕原则是一回事儿。  单一职责原则：把因相同原因而变化的东西聚合到一起，把因不同原因而变化的东西分离开来。  ####">
+
+
+
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/05/10/聊聊微服务那些事儿——微服务介绍/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>聊聊微服务那些事儿——微服务介绍 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="Toggle navigation bar">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-home">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-about">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-tags">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-categories">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-archives">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-commonweal">
+    <a href="/404/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/10/聊聊微服务那些事儿——微服务介绍/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.gif">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">聊聊微服务那些事儿——微服务介绍
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">Posted on</span>
+              
+
+              
+                
+              
+
+              <time title="Created: 2017-05-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-10T00:00:00+08:00">2017-05-10</time>
+            
+
+            
+              
+
+              
+                
+                <span class="post-meta-divider">|</span>
+                
+
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-calendar-check-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Edited on</span>
+                
+                <time title="Modified: 2018-04-19 17:01:49" itemprop="dateModified" datetime="2018-04-19T17:01:49+08:00">2018-04-19</time>
+              
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#####什么是微服务</p>
+<p>我认为的微服务架构是将系统中的每个服务或者功能独立成一个单独的可独立部署的应用。一般我们都是根据业务的边界来确定服务的边界，并根据<strong>单一职责原则</strong>保证每个服务都有很强的自治性。服务之间通过网络进行通信，以避免耦合。说白了微服务架构想要达到的目的和软件工程里面的解藕原则是一回事儿。</p>
+<blockquote>
+<p>单一职责原则：把因相同原因而变化的东西聚合到一起，把因不同原因而变化的东西分离开来。</p>
+</blockquote>
+<p>#####微服务的优点</p>
+<p>######1. 技术异构性。<br><em>在进行微服务化之后，每个服务都是一个单独的实体，服务间通过网络进行通信，所以每个服务都可以根据自身特点选择最适合自己的技术栈，不用向原来那样，单体庞大的项目都是用一个技术栈来实现。</em></p>
+<p>######2. 弹性。<br><em>在微服务架构中，如果某个服务不可用了，我们可以及时的隔离故障点，或者采取功能降级等方式避免因为一个服务的故障而影响整个系统。因为每个服务的边界都是一个壁舱，出问题之后不会影响其他服务，但是传统的架构方式，一个服务挂掉，会导致服务器的负载上升，整个系统的可用性都会变差。</em></p>
+<p>######3. 扩展。<br><em>传统的项目架构中，即便有一个简单的服务有性能瓶颈，我们也需要对整体进行扩展，微服务化之后我们只需要对特定的服务进行扩展就可以了。扩展变得更加容易也更加简单了。</em></p>
+<p>######4. 简化部署。<br><em>在传统项目架构中，即便我们要修改很简单的几行代码也需要进行一次整体部署，如果频繁的进行这样的部署，对我们系统的可用性影响很大，而且出错风险也比较大。所以为了避免这个问题，我们往往都是把需求积累到一定程度在上线，但是这样就会出现上线不及时，出错的概率一样不低因为改动的代码多了，出错概率自然就高了。但是微服务就可以很好的避免这些问题。</em></p>
+<p>######5.  微服务架构与组织架构相匹配。<br><em>当我们的代码库和团队，因为功能的增加而日益变得庞大的时候，对于团队管理和代码管理都是及其困难的。微服务化后，代码和团队都可以水平化管理。</em></p>
+<p>######6.可组合性<br><em>一个服务可以多场合重复使用，这也是我们软件开发极力推崇的一种方式。比如我们不仅可以满足系统间的调用，还可以满足手机端，web端，可穿戴设备等等。每个服务都可以自由的组合。</em></p>
+<p>######6. 对可替代性的优化。<br><em>单一庞大的系统，特别是遗留很久的系统，很少有同事愿意触碰，更别说修改了，因为里面全是坑。但是微服务化之后，因为功能和结构都是单一职责的，代码量也少很多，所以优化和修改起来都相对简单。</em></p>
+<p>#####微服务需要的基本组件<br>说了这么多微服务架构的好处，很多同学可能已经迫不及待的跃跃欲试了。为了满足你们急切的心情，我来说说大家比较关心的，一个合格的微服务架构都需要哪些组件来支撑。<br>首先你需要一个注册中心用来注册所有的服务，其次你可能还需要一个服务网关，负责对流量控制，用户认证等。然后我们还需要一个服务熔断器，对服务进行隔离降级。还需要负载均衡，分布式日志等。对了我们还需要一个重要的组件，就是对服务进行服务化的框架。<br>除了这些我们还需要一套PASS平台，来部署所有的服务。嗯，差不多把这些都搞定就可以运维你的微服务框架了。</p>
+<p>#####慎重选择微服务–没有银弹<br>说了这么多我想根据自己的经验来说说对微服务框架的认识。我的建议就是慎重选择微服务框架。你要进行微服务架构改造至少要根据以下这么几点进行考量：</p>
+<ol>
+<li>是否有完整的运维平台。</li>
+<li>项目是否有必要进行微服务改造。</li>
+<li>团队规模是否支撑你去搞微服务。</li>
+</ol>
+<p>我之所以这么说是因为微服务不是免费的午餐，更不是银弹。你需要面对所有分布式系统需要面对的所有问题。另外部署运维也是你需要考虑的一个问题。这里我举一个例子，大家设想一下，假设我们有30个服务，传统服务是打包到一个应用一起部署，假设我们部署到10台机器上，这样的话撑个几百上千个TPS是不成问题的。但是如果我们微服务化之后，至少要变成30个单体应用，这还不算注册中心，网关，熔断等等其他应用，这样我们就需要三十台机器部署，我们不可能搞单点应用，每个服务都要两到三个节点，这样一来就上百台机器了。所以这样看来，所有成本都上来了，机器的问题我们可以通过云平台来解决，现在已经不是问题了，但是接下来的其他问题呢，大家就要好好考量一下了。总之不要一言不合就飙车。</p>
+<p>#####微服务框架–SpringCloud<br>正如前面所说，没有一条通用准则来支持我们如何为服务化，目前也没有一款通用的微服务框架。其实仔细想想，这也是有原因的。微服务用到的这些概念和组件都是大家不断在实践中总结出来的。随着业务增加，业务复杂度增加，我们的架构在不断的变化，当我们需要一个网关的时候，就针对自己公司的业务和场景自己开发一个，当我们需要一个注册中心的时候，我们也自己开发一个。随着时间的推移，我们的项目慢慢就变成微服务的样子了。但是这些根据自己公司业务场景开发的组件不具备太多通用性，而且能达到开源条件的也比较少，所以到目前为止还没有一个通用的框架出现。就在大家都想微服务化又缺少通用标准框架的时候，SpringCloud就站了出来，其实他也是站在了巨人的肩膀上，这个巨人就是Netflix。这家公司开源了，eureka,zuul,robbin,hydrix四个主要的项目，SpringCloud把这个四个项目基于自己的SpringBoot有机的整合到了一起，完成了注册中心，服务注册发现，负载均衡，网关，熔断等主要功能。这给很多没有太多技术储备和精力的团队提供了一个很好的选择去专心的搞自己的服务化。</p>
+<p>#####总结<br>上面说了那么多，是我自己这段时间搞微服务化的一些心得，说的不一定对，但确实是经验之谈，总之希望大家要慎重选择微服务，看看自己的项目是否确实需要进行架构升级，是否真的有必要选择微服务。接下来我会简单的分析一下zuul的源代码，跟大家分享一下zuul网关的实现原理。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/微服务/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/05/07/CentOs系统安装Hadoop集群/" rel="next" title="CentOs系统安装Hadoop集群">
+                <i class="fa fa-chevron-left"></i> CentOs系统安装Hadoop集群
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/20/Zuul源码分析/" rel="prev" title="Zuul源码分析">
+                Zuul源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives/">
+                
+                    <span class="site-state-item-count">6</span>
+                    <span class="site-state-item-name">posts</span>
+                  </a>
+                </div>
+              
+
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">tags</span>
+                  
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+
+  
+</div>
+
+
+
+
+  <div class="powered-by">Powered by <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">Theme &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
