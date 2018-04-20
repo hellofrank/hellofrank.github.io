@@ -103,14 +103,14 @@
 
 
   <meta name="description" content="最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。 我使用的Hadoop和Flume版本分别时2.7.3和1.7。 如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目">
-<meta name="keywords" content="大数据">
+<meta name="keywords" content="大数据,Flume,HDFS">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Flume如何对接HDFS">
-<meta property="og:url" content="http://yoursite.com/2018/05/10/Flume如何对接HDFS/index.html">
+<meta property="og:url" content="http://yoursite.com/2017/05/10/Flume如何对接HDFS/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
 <meta property="og:description" content="最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。 我使用的Hadoop和Flume版本分别时2.7.3和1.7。 如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-19T09:04:57.135Z">
+<meta property="og:updated_time" content="2018-04-20T03:16:54.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flume如何对接HDFS">
 <meta name="twitter:description" content="最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。 我使用的Hadoop和Flume版本分别时2.7.3和1.7。 如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目">
@@ -120,7 +120,7 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2018/05/10/Flume如何对接HDFS/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/05/10/Flume如何对接HDFS/"/>
 
 
 
@@ -217,49 +217,49 @@
         
         
           
-          <li class="menu-item menu-item-home">
+          <li class="menu-item menu-item-首页">
     <a href="/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />Home</a>
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-about">
+          <li class="menu-item menu-item-关于">
     <a href="/about/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />About</a>
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-tags">
+          <li class="menu-item menu-item-标签">
     <a href="/tags/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />Tags</a>
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-categories">
+          <li class="menu-item menu-item-分类">
     <a href="/categories/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />Categories</a>
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-archives">
+          <li class="menu-item menu-item-归档">
     <a href="/archives/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />Archives</a>
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
   </li>
         
         
         
           
-          <li class="menu-item menu-item-commonweal">
-    <a href="/404/" rel="section">
-      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />Commonweal 404</a>
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
   </li>
 
       
@@ -310,12 +310,12 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2018/05/10/Flume如何对接HDFS/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/05/10/Flume如何对接HDFS/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
       <meta itemprop="description" content="">
-      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="image" content="/images/avatar.png">
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
@@ -352,7 +352,7 @@
                 
               
 
-              <time title="Created: 2018-05-10 00:00:00" itemprop="dateCreated datePublished" datetime="2018-05-10T00:00:00+08:00">2018-05-10</time>
+              <time title="Created: 2017-05-10 00:00:00" itemprop="dateCreated datePublished" datetime="2017-05-10T00:00:00+08:00">2017-05-10</time>
             
 
             
@@ -369,11 +369,29 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-19 17:04:57" itemprop="dateModified" datetime="2018-04-19T17:04:57+08:00">2018-04-19</time>
+                <time title="Modified: 2018-04-20 11:16:54" itemprop="dateModified" datetime="2018-04-20T11:16:54+08:00">2018-04-20</time>
               
             
           </span>
 
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">In</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a></span>
+
+                
+                
+              
+            </span>
           
 
           
@@ -421,6 +439,30 @@
     
 
     
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>Donate</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Frank WeChat Pay"/>
+        <p>WeChat Pay</p>
+      </div>
+    
+
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
 
     
 
@@ -429,6 +471,10 @@
         <div class="post-tags">
           
             <a href="/tags/大数据/" rel="tag"># 大数据</a>
+          
+            <a href="/tags/Flume/" rel="tag"># Flume</a>
+          
+            <a href="/tags/HDFS/" rel="tag"># HDFS</a>
           
         </div>
       
@@ -441,8 +487,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/记一次常规的gitflow工作流/" rel="next" title="记一次常规的gitflow工作流">
-                <i class="fa fa-chevron-left"></i> 记一次常规的gitflow工作流
+              <a href="/2017/05/10/聊聊微服务那些事儿——微服务介绍/" rel="next" title="聊聊微服务那些事儿——微服务介绍">
+                <i class="fa fa-chevron-left"></i> 聊聊微服务那些事儿——微服务介绍
               </a>
             
           </div>
@@ -450,6 +496,10 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2017/06/20/Zuul源码分析/" rel="prev" title="Zuul源码分析">
+                Zuul源码分析 <i class="fa fa-chevron-right"></i>
+              </a>
             
           </div>
         </div>
@@ -503,6 +553,10 @@
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
               <p class="site-author-name" itemprop="name">Frank</p>
               <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
           </div>
@@ -512,7 +566,7 @@
               
                 <div class="site-state-item site-state-posts">
                 
-                  <a href="/archives/">
+                  <a href="/archives">
                 
                     <span class="site-state-item-count">6</span>
                     <span class="site-state-item-name">posts</span>
@@ -521,12 +575,10 @@
               
 
               
-
-              
                 
                 
-                <div class="site-state-item site-state-tags">
-                  
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
                     
                     
                       
@@ -538,8 +590,45 @@
                       
                     
                     <span class="site-state-item-count">4</span>
+                    <span class="site-state-item-name">categories</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">12</span>
                     <span class="site-state-item-name">tags</span>
-                  
+                  </a>
                 </div>
               
             </nav>
