@@ -80,7 +80,7 @@
     root: '/',
     scheme: 'Pisces',
     version: '6.2.0',
-    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":false,"onmobile":false},
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
     fancybox: false,
     fastclick: false,
     lazyload: false,
@@ -112,7 +112,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/gitflow.png">
 <meta property="og:image" content="http://yoursite.com/images/gitflow-branch.png">
-<meta property="og:updated_time" content="2018-04-20T07:38:29.398Z">
+<meta property="og:updated_time" content="2018-04-20T07:41:42.333Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次常规的gitflow工作流">
 <meta name="twitter:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
@@ -372,7 +372,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 15:38:29" itemprop="dateModified" datetime="2018-04-20T15:38:29+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-20 15:41:42" itemprop="dateModified" datetime="2018-04-20T15:41:42+08:00">2018-04-20</time>
               
             
           </span>
@@ -431,16 +431,7 @@
 <li>forking 工作流：这个工作流和其他工作流有本质不同，其他工作流都是有一个服务端仓库，forking工作流允许每个开发者有一个自己的服务端仓库。每个开发者可以将修改push到自己的服务端仓库，然后发起一个pull request 项目拥有者将修改更新到本地，测试通过之后，合并到自己本地的master分支，然后推送到公共仓库。</li>
 </ol>
 <p>以上四种工作方式除了第一种不能使用pull request其他都可以。<br>pull request 就是提交代码之后发起给团队其他人发起code review请求。</p>
-<hr>
-<p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。</p>
-<p><img src="/images/gitflow.png" alt="Alt text"></p>
-<p>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。</p>
-<p>gitFlow 日常工作流程图如下</p>
-<p><img src="/images/gitflow-branch.png" alt="Alt text"></p>
-<hr>
-<p>下面介绍一下使用gitflow 工作流的常规操作。</p>
-<p>将设我们开发一个新的feature-1</p>
-<p>操作如下：</p>
+<p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。<br><img src="/images/gitflow.png" alt="Alt text"><br>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。<br>gitFlow 日常工作流程图如下<br><img src="/images/gitflow-branch.png" alt="Alt text"><br>下面介绍一下使用gitflow 工作流的常规操作。<br>将设我们开发一个新的feature-1<br>操作如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop #切换到develop分支，保证最新。</span><br><span class="line">git checkout -b feature-1 #新建feature-1分支，并切换到该分支</span><br></pre></td></tr></table></figure>
 <p>做一堆修改，然后加入暂存区</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;compelete feature-1&quot; #一次commit操作</span><br><span class="line">git checkout develop #切回到develop分支</span><br><span class="line">git pull --rebase #检查更新，并以rebase方式更新到本地</span><br><span class="line">git checkout feature-1 #切回feature-1</span><br><span class="line">git rebase develop #将develop rebase到feature-1</span><br><span class="line">git push -u origin feature-1 #推送到服务端进行code review</span><br></pre></td></tr></table></figure>
@@ -456,6 +447,13 @@
     
     
     
+
+    <div>
+        
+            
+
+        
+    </div>
 
     
 
@@ -485,6 +483,20 @@
       </div>
     
 
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>Post author:  </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>Post link: </strong>
+    <a href="http://yoursite.com/2018/04/19/记一次常规的gitflow工作流/" title="记一次常规的gitflow工作流">http://yoursite.com/2018/04/19/记一次常规的gitflow工作流/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>Copyright Notice:  </strong>All articles in this blog are licensed under <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> unless stating additionally.</li>
+</ul>
+
+      </div>
     
 
     <footer class="post-footer">
@@ -722,6 +734,8 @@
     
       <div class="back-to-top">
         <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
         
       </div>
     
