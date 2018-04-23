@@ -112,7 +112,7 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/gitflow.png">
 <meta property="og:image" content="http://yoursite.com/images/gitflow-branch.png">
-<meta property="og:updated_time" content="2018-04-20T07:41:42.333Z">
+<meta property="og:updated_time" content="2018-04-23T02:45:33.303Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="记一次常规的gitflow工作流">
 <meta name="twitter:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
@@ -374,7 +374,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 15:41:42" itemprop="dateModified" datetime="2018-04-20T15:41:42+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-23 10:45:33" itemprop="dateModified" datetime="2018-04-23T10:45:33+08:00">2018-04-23</time>
               
             
           </span>
@@ -409,6 +409,34 @@
           
 
           
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Symbols count in article: </span>
+                
+                <span title="Symbols count in article">1.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">3 mins.</span>
+              
+            </div>
+          
 
           
 
@@ -432,6 +460,7 @@
 <li>gitflow工作流：长期存在两个分支，一个master分支，一个develop分支，develop分支为日常开发分支，所有功能开发都基于develop分支，测试也基于develop，测试通过之后合并到master分支。</li>
 <li>forking 工作流：这个工作流和其他工作流有本质不同，其他工作流都是有一个服务端仓库，forking工作流允许每个开发者有一个自己的服务端仓库。每个开发者可以将修改push到自己的服务端仓库，然后发起一个pull request 项目拥有者将修改更新到本地，测试通过之后，合并到自己本地的master分支，然后推送到公共仓库。</li>
 </ol>
+<a id="more"></a>
 <p>以上四种工作方式除了第一种不能使用pull request其他都可以。<br>pull request 就是提交代码之后发起给团队其他人发起code review请求。</p>
 <p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。<br><img src="/images/gitflow.png" alt="Alt text"><br>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。<br>gitFlow 日常工作流程图如下<br><img src="/images/gitflow-branch.png" alt="Alt text"><br>下面介绍一下使用gitflow 工作流的常规操作。<br>将设我们开发一个新的feature-1<br>操作如下：</p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop #切换到develop分支，保证最新。</span><br><span class="line">git checkout -b feature-1 #新建feature-1分支，并切换到该分支</span><br></pre></td></tr></table></figure>
@@ -468,6 +497,11 @@
       </div>
     
 
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Frank Alipay"/>
+        <p>Alipay</p>
+      </div>
     
 
     
@@ -679,7 +713,21 @@
   <span class="author" itemprop="copyrightHolder">Frank</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="Symbols count total">20k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="Reading time total">36 mins.</span>
   
 </div>
 

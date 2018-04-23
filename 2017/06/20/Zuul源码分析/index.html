@@ -102,18 +102,18 @@
 
 
 
-  <meta name="description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+  <meta name="description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。">
 <meta name="keywords" content="zuul,微服务,网关">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Zuul源码分析">
 <meta property="og:url" content="http://yoursite.com/2017/06/20/Zuul源码分析/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+<meta property="og:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-20T03:18:34.498Z">
+<meta property="og:updated_time" content="2018-04-23T02:44:53.055Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Zuul源码分析">
-<meta name="twitter:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。init()方法如下1234567@Overridepublic void init(ServletC">
+<meta name="twitter:description" content="zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。 准备工作：下载源码，安装JDK，Maven，以及IDE。 Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。">
 
 
 
@@ -371,7 +371,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 11:18:34" itemprop="dateModified" datetime="2018-04-20T11:18:34+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-23 10:44:53" itemprop="dateModified" datetime="2018-04-23T10:44:53+08:00">2018-04-23</time>
               
             
           </span>
@@ -406,6 +406,34 @@
           
 
           
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Symbols count in article: </span>
+                
+                <span title="Symbols count in article">8.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">15 mins.</span>
+              
+            </div>
+          
 
           
 
@@ -424,7 +452,9 @@
       
         <p>zuul介绍：zuul是Netflix开原的一款服务网关。提供用户认证，复杂均衡，动态路由等功能。</p>
 <p>准备工作：<a href="https://github.com/Netflix/zuul" target="_blank" rel="noopener">下载源码</a>，安装JDK，Maven，以及IDE。</p>
-<p>Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。<br>init()方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">     <span class="keyword">super</span>.init(config);</span><br><span class="line">     String bufferReqsStr = config.getInitParameter(<span class="string">"buffer-requests"</span>);</span><br><span class="line">     <span class="keyword">boolean</span> bufferReqs = bufferReqsStr != <span class="keyword">null</span> &amp;&amp; bufferReqsStr.equals(<span class="string">"true"</span>) ? <span class="keyword">true</span> : <span class="keyword">false</span>;</span><br><span class="line">     zuulRunner = <span class="keyword">new</span> ZuulRunner(bufferReqs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>Zuul的核心代码是从ZuulServlet开始的。这个类继承自HttpServlet，然后重写了init()方法和service()方法。</p>
+<a id="more"></a>
+<p>init()方法如下<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">init</span><span class="params">(ServletConfig config)</span> <span class="keyword">throws</span> ServletException </span>&#123;</span><br><span class="line">     <span class="keyword">super</span>.init(config);</span><br><span class="line">     String bufferReqsStr = config.getInitParameter(<span class="string">"buffer-requests"</span>);</span><br><span class="line">     <span class="keyword">boolean</span> bufferReqs = bufferReqsStr != <span class="keyword">null</span> &amp;&amp; bufferReqsStr.equals(<span class="string">"true"</span>) ? <span class="keyword">true</span> : <span class="keyword">false</span>;</span><br><span class="line">     zuulRunner = <span class="keyword">new</span> ZuulRunner(bufferReqs);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p>在这个方法里面，首先调用父类的init方法初始化ServletConfig.同时也会对ZuulRunner进行初始化。</p>
 <p>下面来看service方法。这个方法比较主要，下面会具体说。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">service</span><span class="params">(javax.servlet.ServletRequest servletRequest, javax.servlet.ServletResponse servletResponse)</span> <span class="keyword">throws</span> ServletException, IOException </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            init((HttpServletRequest) servletRequest, (HttpServletResponse) servletResponse);</span><br><span class="line"></span><br><span class="line">            <span class="comment">// Marks this request as having passed through the "Zuul engine", as opposed to servlets</span></span><br><span class="line">            <span class="comment">// explicitly bound in web.xml, for which requests will not have the same data attached</span></span><br><span class="line">            RequestContext context = RequestContext.getCurrentContext();</span><br><span class="line">            context.setZuulEngineRan();</span><br><span class="line"></span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                preRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                route();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                postRoute();</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">try</span> &#123;</span><br><span class="line">                postRoute();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (ZuulException e) &#123;</span><br><span class="line">                error(e);</span><br><span class="line">                <span class="keyword">return</span>;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (Throwable e) &#123;</span><br><span class="line">            error(<span class="keyword">new</span> ZuulException(e, <span class="number">500</span>, <span class="string">"UNHANDLED_EXCEPTION_"</span> + e.getClass().getName()));</span><br><span class="line">        &#125; <span class="keyword">finally</span> &#123;</span><br><span class="line">            RequestContext.getCurrentContext().unset();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
 <p>从这个方法里面可以看到先调用preRoute方法如果出现异常，就会调用postRoute方法。如果没有异常就会调用route方法。同样出现异常也会调用postRoute方法。这里面的三个方法，实际上就是你写配置文件的时候filter类型(一般zuul网关允许你定义三种类型的filter,pre,post,route)。我们跟进postRoute方法，看一下里面到底什么。进去之后会发现其实是委托给zuulRunner去工作。</p>
@@ -465,6 +495,11 @@
       </div>
     
 
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Frank Alipay"/>
+        <p>Alipay</p>
+      </div>
     
 
     
@@ -684,7 +719,21 @@
   <span class="author" itemprop="copyrightHolder">Frank</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="Symbols count total">20k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="Reading time total">36 mins.</span>
   
 </div>
 

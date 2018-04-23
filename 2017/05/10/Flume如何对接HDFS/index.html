@@ -110,7 +110,7 @@
 <meta property="og:site_name" content="Frank&#39;s Blog">
 <meta property="og:description" content="最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。 我使用的Hadoop和Flume版本分别时2.7.3和1.7。 如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2018-04-20T03:16:54.050Z">
+<meta property="og:updated_time" content="2018-04-23T02:43:53.767Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Flume如何对接HDFS">
 <meta name="twitter:description" content="最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。 我使用的Hadoop和Flume版本分别时2.7.3和1.7。 如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目">
@@ -371,7 +371,7 @@
                 
                   <span class="post-meta-item-text">Edited on</span>
                 
-                <time title="Modified: 2018-04-20 11:16:54" itemprop="dateModified" datetime="2018-04-20T11:16:54+08:00">2018-04-20</time>
+                <time title="Modified: 2018-04-23 10:43:53" itemprop="dateModified" datetime="2018-04-23T10:43:53+08:00">2018-04-23</time>
               
             
           </span>
@@ -406,6 +406,34 @@
           
 
           
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Symbols count in article: </span>
+                
+                <span title="Symbols count in article">564</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">Reading time &asymp;</span>
+                
+                <span title="Reading time">1 mins.</span>
+              
+            </div>
+          
 
           
 
@@ -425,6 +453,7 @@
         <p>最近在做日志分析工作，日志分析的第一步就是要收集日志，我们选择的使用Flume进行收集。收集之后将日志存储到HDFS上，然后跑Hadoop任务。</p>
 <p>我使用的Hadoop和Flume版本分别时2.7.3和1.7。</p>
 <p>如果要想把Flume收集到的日志信息存储到HDFS上，Flume需要一些jar包，在Flume安装目录下新建一个plugins.d文件夹，按照Flume的约定，第三方扩展jar包都放在这个目录下，在该目录下新建custom-hadoop目录，在该目录下建立 lib,libext, native<br>并将以下jar包放到lib目录下</p>
+<a id="more"></a>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">commons-configuration-1.6.jar</span><br><span class="line">commons-io-2.4.jar</span><br><span class="line">hadoop-auth-2.7.3.jar</span><br><span class="line">hadoop-common-2.7.3.jar</span><br><span class="line">hadoop-hdfs-2.7.3.jar</span><br><span class="line">hadoop-nfs-2.7.3.jar</span><br><span class="line">htrace-core-3.1.0-incubating.jar</span><br></pre></td></tr></table></figure>
 <p>这些jar包都可以在hadoop的安装目录里面找到.</p>
 <p>同时需要将core-site.xml和hdfs-site.xml<br>放到flume的conf目录下，这两个配置文件的内容和Hadoop主节点的配置内容一样。具体配置信息可以参照我另外一篇博客。</p>
@@ -456,6 +485,11 @@
       </div>
     
 
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.jpg" alt="Frank Alipay"/>
+        <p>Alipay</p>
+      </div>
     
 
     
@@ -675,7 +709,21 @@
   <span class="author" itemprop="copyrightHolder">Frank</span>
 
   
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="Symbols count total">20k</span>
+  
 
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="Reading time total">36 mins.</span>
   
 </div>
 
