@@ -128,21 +128,21 @@
 
 
 
-  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git Rebase 黄金法则问题">
 <meta property="og:url" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
-<meta property="og:updated_time" content="2018-04-27T09:13:51.076Z">
+<meta property="og:updated_time" content="2018-04-28T02:29:32.971Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git Rebase 黄金法则问题">
-<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta name="twitter:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 
 
@@ -465,7 +465,6 @@
 
       
         <p>这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">上一篇</a>文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。</p>
-<hr>
 <p>git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，<br>merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。</p>
 <a id="more"></a>
 <blockquote>
@@ -531,14 +530,14 @@
 
     
       <div id="wechat" style="display: inline-block">
-        <img id="wechat_qr" src="/images/wechatpay.jpg" alt="Frank 微信支付"/>
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
         <p>微信支付</p>
       </div>
     
 
     
       <div id="alipay" style="display: inline-block">
-        <img id="alipay_qr" src="/images/alipay.jpg" alt="Frank 支付宝"/>
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
         <p>支付宝</p>
       </div>
     
