@@ -128,28 +128,29 @@
 
 
 
-  <meta name="description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
+  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
-<meta property="og:title" content="记一次常规的gitflow工作流">
-<meta property="og:url" content="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/index.html">
+<meta property="og:title" content="Git Rebase 黄金法则问题">
+<meta property="og:url" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
+<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/gitflow.png">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/gitflow-branch.png">
-<meta property="og:updated_time" content="2018-04-27T09:17:16.212Z">
+<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
+<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
+<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
+<meta property="og:updated_time" content="2018-04-27T09:13:51.076Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="记一次常规的gitflow工作流">
-<meta name="twitter:description" content="先简单说一下常见的git 分支管理策略  集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。 feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支 gitflow工作流：长期存在两个分支，一个ma">
-<meta name="twitter:image" content="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/gitflow.png">
+<meta name="twitter:title" content="Git Rebase 黄金法则问题">
+<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。  git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/"/>
 
 
 
@@ -159,7 +160,7 @@
   };
 </script>
 
-  <title>记一次常规的gitflow工作流 | Frank's Blog</title>
+  <title>Git Rebase 黄金法则问题 | Frank's Blog</title>
   
 
 
@@ -341,7 +342,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -358,7 +359,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">记一次常规的gitflow工作流
+          <h1 class="post-title" itemprop="name headline">Git Rebase 黄金法则问题
               
             
           </h1>
@@ -383,7 +384,7 @@
                 
               
 
-              <time title="创建时间：2018-04-19 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-19T00:00:00+08:00">2018-04-19</time>
+              <time title="创建时间：2018-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-27T00:00:00+08:00">2018-04-27</time>
             
 
             
@@ -429,7 +430,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.5k</span>
+                <span title="本文字数">1.8k</span>
               
 
               
@@ -463,22 +464,39 @@
       
 
       
-        <p>先简单说一下常见的git 分支管理策略</p>
-<ol>
-<li>集中式工作流：类似于SVN管理方式，只有一个master分支，每个人将自己的代码提交到master上。</li>
-<li>feature工作流：有一个主分支默认为master分支。每个人开发的时候基于master分支新建feature分支，然后提交到中央仓库，供大家code-review，通过之后merge进master分支</li>
-<li>gitflow工作流：长期存在两个分支，一个master分支，一个develop分支，develop分支为日常开发分支，所有功能开发都基于develop分支，测试也基于develop，测试通过之后合并到master分支。</li>
-<li>forking 工作流：这个工作流和其他工作流有本质不同，其他工作流都是有一个服务端仓库，forking工作流允许每个开发者有一个自己的服务端仓库。每个开发者可以将修改push到自己的服务端仓库，然后发起一个pull request 项目拥有者将修改更新到本地，测试通过之后，合并到自己本地的master分支，然后推送到公共仓库。</li>
-</ol>
+        <p>这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">上一篇</a>文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。</p>
+<hr>
+<p>git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，<br>merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。</p>
 <a id="more"></a>
-<p>以上四种工作方式除了第一种不能使用pull request其他都可以。<br>pull request 就是提交代码之后发起给团队其他人发起code review请求。</p>
-<p>下面来具体说说gitflow 工作流，也是很多团队都在使用的工作流。<br>优点：就是打包上线，测试，开发，都很清晰。<br>gitflow工作流是由<a href="http://nvie.com/posts/a-successful-git-branching-model/" target="_blank" rel="noopener">Vincent Driessen</a> 提出的。其主要思想可以用如下图表示。<br><img src="gitflow.png" alt="gitflow"><br>在Gitflow 工作流中主要体现两个分支：<br>一个master分支，所有上线的版本全部由该分支打包。<br>一个develop分支，日常开发基于该分支。<br>gitFlow 日常工作流程图如下<br><img src="gitflow-branch.png" alt="gitflow-branch"><br>下面介绍一下使用gitflow 工作流的常规操作。<br>将设我们开发一个新的feature-1<br>操作如下：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop #切换到develop分支，保证最新。</span><br><span class="line">git checkout -b feature-1 #新建feature-1分支，并切换到该分支</span><br></pre></td></tr></table></figure>
-<p>做一堆修改，然后加入暂存区</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">git commit -m &quot;compelete feature-1&quot; #一次commit操作</span><br><span class="line">git checkout develop #切回到develop分支</span><br><span class="line">git pull --rebase #检查更新，并以rebase方式更新到本地</span><br><span class="line">git checkout feature-1 #切回feature-1</span><br><span class="line">git rebase develop #将develop rebase到feature-1</span><br><span class="line">git push -u origin feature-1 #推送到服务端进行code review</span><br></pre></td></tr></table></figure>
-<p>code review #团队 code review，顺利通过。</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">git checkout develop #切回develop</span><br><span class="line">git merge feature-1 #将feature-1 合并进develop</span><br><span class="line">git push origin develop #将develop 推送到服务端</span><br><span class="line">git push origin --delete feature-1 #删除分支</span><br><span class="line">git branch -d feature-1 #删除本地分支</span><br><span class="line">14.git checkout master #切回master分支</span><br><span class="line">15.git merge --no-ff develop #将 develop 合并进master分支</span><br></pre></td></tr></table></figure>
-<p>以上是一次完整的功能开发。</p>
+<blockquote>
+<p>rebase的简单定义：你可以把某一分支的所有修改都移至另外一个分支就像重新播放一样。</p>
+</blockquote>
+<p>有点儿像金庸武侠小说里面的乾坤大挪移。</p>
+<p>举个🌰</p>
+<p>将设我们本地库的代码，如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">     A---B---C  remotes/origin/master</span><br><span class="line">     /</span><br><span class="line">D---E---F---G  master</span><br></pre></td></tr></table></figure>
+<p>如果此时我们执行 git pull 操作，就会变成下面的样子，因为 pull 默认执行的是 merge 操作，多出来H这次没必要的提交。如下所示</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">     A---B---C  remotes/origin/master</span><br><span class="line">     /         \</span><br><span class="line">D---E---F---G---H master</span><br></pre></td></tr></table></figure>
+<p>如果我们执行 git pull –rebase 操作，将会变成下面的样子，这里我们用rebase代替了默认的merge操作</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">            remotes/origin</span><br><span class="line">                |</span><br><span class="line">D---E---A---B---C---F---G</span><br><span class="line">                        |</span><br><span class="line">                        master</span><br></pre></td></tr></table></figure>
+<p>rebase 作用就是变成线性了，这在多人协作的情况变得非常关键。因为多人合作是不允许随意制造分叉的。大家可以参考我<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">这篇文章</a>。</p>
+<p>这就引出了这篇博文要主要阐述的问题，rebase golden rule 问题。</p>
+<blockquote>
+<p>Rebase golden rule<br>“No one shall rebase a shared branch” — Everyone about rebase</p>
+</blockquote>
+<p>简单来说就是不要在你的公共分支上做任何rebase操作。</p>
+<p>再举一个🌰。</p>
+<p>图一是我们做rebase操作前的样子<br><img src="rebase-pic-1.png" alt="pic-1">图二是我们正确rebase的结果，即在feature分支执行rebase develop命令<br><img src="rebase-pic-2.png" alt="pic-2"><br>图三是我们错误rebase的结果，即违反黄金法则的结果，我们在develop分支上执行了rebase feature操作<br><img src="rebase-pic-2.png" alt="pic-3"></p>
+<p>当我们在图三这种情况下对develop分支进行提交的话，会发现和远程分支冲突，然后我们手动或自动解决冲突，继续提交上去之后发现，我们修改的功能代码已经提交上去了，但是当我们看我们提交历史的记录的时候会发现有一部分重复的提交log。<br>这就是问题所在，你的项目组长是绝对不允许在他的项目里出现这种情况，因为会影响后续的代码追查，code review等问题。</p>
+<p>说完了这个问题，这篇博文的主要任务基本完成了，最后在简单说一下 merge 的 –no-ff 参数，这也是我们在分支合并的时候经常遇到的问题。<br>–no-ff 的意思就是关闭 merge 的 fast-forwarded，merge 操作默认执行的是 fast-forwarded。<br>fast-forwarded 的意思就是在合并分支的时候，如果不涉及三方合并，git 只会简单的移动指针。</p>
+<p>再再举一个🌰</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        dev</span><br><span class="line">        |</span><br><span class="line">A---B---C</span><br><span class="line">         \</span><br><span class="line">          D---E</span><br><span class="line">              |</span><br><span class="line">              feature</span><br></pre></td></tr></table></figure>
+<p>此时我们执行 merge –no-ff 操作，将会得到如下图</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                dev</span><br><span class="line">                |</span><br><span class="line">A---B---C--------F</span><br><span class="line">         \      /</span><br><span class="line">          D---E</span><br></pre></td></tr></table></figure>
+<p>执行 merge 之后得到的结果如下</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">               dev</span><br><span class="line">                |</span><br><span class="line">A---B---C---D---E</span><br></pre></td></tr></table></figure>
+<p>如上git 将指针从C移到了E。</p>
+<p>简单来说就是 –no-ff 的作用就是保持分支的非线性。方便我们看到分支的变化。</p>
 
       
     </div>
@@ -540,7 +558,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/" title="记一次常规的gitflow工作流">http://hellofrank.github.io/2018/04/19/记一次常规的gitflow工作流/</a>
+    <a href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/" title="Git Rebase 黄金法则问题">http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -566,8 +584,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/20/JAVA内存模型划分/" rel="next" title="JAVA内存模型划分">
-                <i class="fa fa-chevron-left"></i> JAVA内存模型划分
+              <a href="/2018/04/19/记一次常规的gitflow工作流/" rel="next" title="记一次常规的gitflow工作流">
+                <i class="fa fa-chevron-left"></i> 记一次常规的gitflow工作流
               </a>
             
           </div>
@@ -575,10 +593,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/27/Git-Rebase-黄金法则问题/" rel="prev" title="Git Rebase 黄金法则问题">
-                Git Rebase 黄金法则问题 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
