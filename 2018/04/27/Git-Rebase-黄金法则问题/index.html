@@ -128,21 +128,21 @@
 
 
 
-  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta name="keywords" content="git">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Git Rebase 黄金法则问题">
 <meta property="og:url" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
-<meta property="og:updated_time" content="2018-04-28T02:29:32.971Z">
+<meta property="og:updated_time" content="2018-04-28T02:35:35.001Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git Rebase 黄金法则问题">
-<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。 git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
 <meta name="twitter:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 
 
@@ -464,8 +464,7 @@
       
 
       
-        <p>这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">上一篇</a>文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。</p>
-<p>git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，<br>merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。</p>
+        <p>这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">上一篇</a>文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。<br>git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，<br>merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。</p>
 <a id="more"></a>
 <blockquote>
 <p>rebase的简单定义：你可以把某一分支的所有修改都移至另外一个分支就像重新播放一样。</p>
@@ -593,6 +592,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2019/06/13/HTML中src和href之间的区别/" rel="prev" title="HTML中src和href之间的区别">
+                HTML中src和href之间的区别 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -660,7 +663,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">7</span>
+                    <span class="site-state-item-count">8</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -681,7 +684,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">4</span>
+                      
+                    
+                    <span class="site-state-item-count">5</span>
                     <span class="site-state-item-name">分类</span>
                   </a>
                 </div>
@@ -718,7 +723,11 @@
                     
                       
                     
-                    <span class="site-state-item-count">12</span>
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -758,7 +767,7 @@
 
     <footer id="footer" class="footer">
       <div class="footer-inner">
-        <div class="copyright">&copy; <span itemprop="copyrightYear">2018</span>
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
   <span class="with-love" id="animate">
     <i class="fa fa-user"></i>
   </span>
@@ -770,7 +779,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">21k</span>
+    <span title="站点总字数">22k</span>
   
 
   
@@ -779,7 +788,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">39 分钟</span>
+    <span title="站点阅读时长">40 分钟</span>
   
 </div>
 
