@@ -138,8 +138,8 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
 <meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
-<meta property="og:updated_time" content="2018-04-28T02:35:35.001Z">
+<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-3.png">
+<meta property="og:updated_time" content="2019-09-04T13:05:58.144Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Git Rebase 黄金法则问题">
 <meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
@@ -418,6 +418,14 @@
           
 
           
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
 
           
             <div class="post-symbolscount">
@@ -484,7 +492,7 @@
 </blockquote>
 <p>简单来说就是不要在你的公共分支上做任何rebase操作。</p>
 <p>再举一个🌰。</p>
-<p>图一是我们做rebase操作前的样子<br><img src="rebase-pic-1.png" alt="pic-1">图二是我们正确rebase的结果，即在feature分支执行rebase develop命令<br><img src="rebase-pic-2.png" alt="pic-2"><br>图三是我们错误rebase的结果，即违反黄金法则的结果，我们在develop分支上执行了rebase feature操作<br><img src="rebase-pic-2.png" alt="pic-3"></p>
+<p>图一是我们做rebase操作前的样子<br><img src="rebase-pic-1.png" alt="pic-1">图二是我们正确rebase的结果，即在feature分支执行rebase develop命令<br><img src="rebase-pic-2.png" alt="pic-2"><br>图三是我们错误rebase的结果，即违反黄金法则的结果，我们在develop分支上执行了rebase feature操作<br><img src="rebase-pic-3.png" alt="pic-3"></p>
 <p>当我们在图三这种情况下对develop分支进行提交的话，会发现和远程分支冲突，然后我们手动或自动解决冲突，继续提交上去之后发现，我们修改的功能代码已经提交上去了，但是当我们看我们提交历史的记录的时候会发现有一部分重复的提交log。<br>这就是问题所在，你的项目组长是绝对不允许在他的项目里出现这种情况，因为会影响后续的代码追查，code review等问题。</p>
 <p>说完了这个问题，这篇博文的主要任务基本完成了，最后在简单说一下 merge 的 –no-ff 参数，这也是我们在分支合并的时候经常遇到的问题。<br>–no-ff 的意思就是关闭 merge 的 fast-forwarded，merge 操作默认执行的是 fast-forwarded。<br>fast-forwarded 的意思就是在合并分支的时候，如果不涉及三方合并，git 只会简单的移动指针。</p>
 <p>再再举一个🌰</p>
@@ -797,7 +805,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">30k</span>
+    <span title="站点总字数">31k</span>
   
 
   
@@ -806,21 +814,46 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">54 分钟</span>
+    <span title="站点阅读时长">57 分钟</span>
   
 </div>
 
 
 
 
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
 
 
 
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
 
 
 
 
         
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
 
 
 
