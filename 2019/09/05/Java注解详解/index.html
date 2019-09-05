@@ -1,0 +1,1042 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="JAVA 注解在Think in Java 这本书里是这样定义的  “注解（也成为元数据）为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后的某个时刻非常方便的使用这些数据”。">
+<meta name="keywords" content="注解,Java">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java注解详解">
+<meta property="og:url" content="http://hellofrank.github.io/2019/09/05/Java注解详解/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="JAVA 注解在Think in Java 这本书里是这样定义的  “注解（也成为元数据）为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后的某个时刻非常方便的使用这些数据”。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-09-05T13:47:38.031Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java注解详解">
+<meta name="twitter:description" content="JAVA 注解在Think in Java 这本书里是这样定义的  “注解（也成为元数据）为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后的某个时刻非常方便的使用这些数据”。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2019/09/05/Java注解详解/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java注解详解 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/09/05/Java注解详解/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java注解详解
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-09-05 21:31:14" itemprop="dateCreated datePublished" datetime="2019-09-05T21:31:14+08:00">2019-09-05</time>
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">10 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>JAVA 注解在Think in Java 这本书里是这样定义的</p>
+<blockquote>
+<p>“注解（也成为元数据）为我们在代码中添加信息提供了一种形式化的方法，使我们可以在稍后的某个时刻非常方便的使用这些数据”。</p>
+</blockquote>
+<a id="more"></a>
+<p>这个定义有点儿抽象，而且根据我的经验，什么事情只要一跟“元”沾上边就变得复杂了，比如“元编程”。<br>我希望你尽快忘了这么晦涩的定义，下面我将给出一个简单的类比，帮你理解注解。<br>举个例子，比如你新爷的女儿有很多彩色小球，都散落在地上了，你新爷跟她说，把红色的球都放到箱子里。然后你新爷的女儿屁颠儿屁颠儿的就去找红色的球，然后放到箱子里。这个过程就是Java注解的工作过程。这个红色就是球的标签，JAVA注解就是一段代码的标签。</p>
+<h4 id="注解的用处："><a href="#注解的用处：" class="headerlink" title="注解的用处："></a>注解的用处：</h4><ol>
+<li>提供信息给编译器： 编译器可以利用注解来探测错误和警告信息。</li>
+<li>编译阶段时的处理： 软件工具可以用来利用注解信息来生成代码、Html文档或者做其它相应处理。</li>
+<li>运行时的处理： 某些注解可以在程序运行的时候接受代码的提取。</li>
+</ol>
+<h4 id="基本注解。"><a href="#基本注解。" class="headerlink" title="基本注解。"></a>基本注解。</h4><p>JAVA1.8之前，内置了三个基本注解，1.7新增了<code>@SafeVarargs</code>，1.8新增了<code>@FunctionalInterface</code><br><code>@Overried</code>：表示当前的方法定义将覆盖超类中的方法。如果你不小心拼写错误，或者方法中签名对不上被覆盖的方法，编译器就会发出错误提示。<br><code>@Deprected</code>: 如果你使用了该注解标记的元素，那么编译器会发出警告信息。<br><code>@SuppressWarnings</code>:  关闭不当的编译器警告信息。<br><code>@SafeVarargs</code>：参数安全类型注解。它的目的是提醒开发者不要用参数做一些不安全的操作,它的存在会阻止编译器产生 unchecked 这样的警告。<br><code>@FunctionalInterface</code>：用于编译级错误检查，加上该注解，当你写的接口不符合函数式接口定义的时候，编译器会报错。</p>
+<p>仅用上面的几种内置的基本注解显然不能满足我们日常开发需求，也不是JAVA提供注解的真正目的。我们日常开发过程中还是要定义自己的注解，帮助我们提高代码开发效率。</p>
+<h4 id="自定义注解"><a href="#自定义注解" class="headerlink" title="自定义注解"></a>自定义注解</h4><p>下面我们就通过自定义一个注解，来详细说说JAVA注解的知识点。</p>
+<p>首先定义一个<code>@FrankTest</code>注解，我希望标注了<code>@FrankTest</code>标签的方法都执行一下，没有标注该注解的方法则不执行。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(&#123;ElementType.METHOD&#125;)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FrankTest &#123; &#125;</span><br></pre></td></tr></table></figure></p>
+<p>就这么三行代码就定义完成了一个注解，如果没有@符号你还以为我定义了一个接口呢，除了@符号以外，相信你对<code>@Target</code>，<code>@Retention</code>一定也很好奇。这两个是JAVA的元注解（注解的注解）。同样被称为元注解的还有<code>@Documented</code>，<code>@Inherited</code>。如果你想自定义注解，就离不开这四个元注解。</p>
+<h4 id="元注解"><a href="#元注解" class="headerlink" title="元注解"></a>元注解</h4><p><code>@Target</code>，表示该注解可以用于什么地方。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">ElementType参数包括：</span><br><span class="line"> –CONSTRUCTOR，构造器的声明 </span><br><span class="line"> –FIELD，域声明，包括[<span class="keyword">enum</span>实例] </span><br><span class="line"> –LOCAL_VARIABLE, 局部变量声明 </span><br><span class="line"> –METHOD，方法声明 </span><br><span class="line"> –PACKAGE，包声明 </span><br><span class="line"> –PARAMETER，参数声明 </span><br><span class="line"> –TYPE：类，接口（包括注解类型）或<span class="keyword">enum</span>声明</span><br><span class="line"> -TYPE_PARAMETER：Java1.8新增，表示该注解能写在类型参数的声明语句中</span><br><span class="line"> -TYPE_USE:Java1.8新增，能标注任何类型名称</span><br></pre></td></tr></table></figure></p>
+<p><code>@Retention</code>，表示需要在什么级别保存该注解信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">RetentionPolicy参数包括： </span><br><span class="line"> –SOURCE，注解将被编译器丢弃 </span><br><span class="line"> –CLASS，注解在class文件中可用 ，但会被VM丢弃[不读入内存] </span><br><span class="line"> –RUNTIME, VM将在运行期也保留注解，因此可以通过反射机制读取注解的信息</span><br></pre></td></tr></table></figure>
+<p><code>@Documented</code>，将此注解包含在Javadoc中。<br><code>@Repeatable</code>，Java1.8新增，标记的注解可以多次应用于相同的声明或类型<br><code>@Inherited</code>，允许子类型继承父类中的注解。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Inherited</span></span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="meta">@interface</span> Test &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="meta">@Test</span></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">A</span> </span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">B</span> <span class="keyword">extends</span> <span class="title">A</span> </span>&#123;&#125;</span><br></pre></td></tr></table></figure>
+<p>注解 Test 被 <code>@Inherited</code> 修饰，之后类 A 被 Test 注解，类 B 继承 A,类 B 也拥有 Test 这个注解。</p>
+<p>回到刚才我们自定义的<code>@FrankTest</code>的例子，我们使用了<code>@Target</code>，其中ElementType是Method，表示该注解可以作用在方法上面，如果ElementType是TYPE,则表示可以作用在类上。<code>@Retention</code>表示在JVM运行时保留注解信息。</p>
+<p>以上，介绍了如何定义一个注解，下面我们该使用注解了。看代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"> </span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrankAnnotationUtil</span> </span>&#123;</span><br><span class="line"> <span class="meta">@FrankTest</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">frankMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Frank"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="meta">@FrankTest</span></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">jackMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Jack"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">maryMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Mary"</span>);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>我在其中两个方法上面标注了注解，另外一个没有标注。我希望JVM能够运行frankMethod方法和jackMethod方法。那么你会问了，JVM怎么知道要怎么处理这些标记了@FrankTest的方法呢。答案就是注解处理器。这才关健</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrankTestProcessor</span> </span>&#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">processor</span><span class="params">(Class&lt;?&gt; tClass)</span> <span class="keyword">throws</span> IllegalAccessException, InstantiationException, InvocationTargetException </span>&#123;</span><br><span class="line"> <span class="keyword">for</span> (Method method : tClass.getDeclaredMethods())&#123;</span><br><span class="line"> FrankTest frankTest = method.getAnnotation(FrankTest.class);</span><br><span class="line"> Object object = tClass.newInstance();</span><br><span class="line"> <span class="keyword">if</span> (frankTest != <span class="keyword">null</span>)&#123;</span><br><span class="line"> System.out.println(<span class="string">"Found FrankTest Annotation "</span> + method.getName());</span><br><span class="line"> method.invoke(object);</span><br><span class="line"> &#125;<span class="keyword">else</span> &#123;</span><br><span class="line"> System.out.println(<span class="string">"Not Found FrankTest Annotation "</span> + method.getName());</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String args[])</span> <span class="keyword">throws</span> IllegalAccessException, InvocationTargetException, InstantiationException </span>&#123;</span><br><span class="line"> processor(FrankAnnotationUtil.class);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这段代码的输出是这样的</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Not Found FrankTest Annotation maryMethod</span><br><span class="line">Found FrankTest Annotation frankMethod</span><br><span class="line">Frank</span><br><span class="line">Found FrankTest Annotation jackMethod</span><br><span class="line">Jack</span><br></pre></td></tr></table></figure>
+<p>标记标签的方法都执行了一次，没有标注的没有执行。其实没有什么神奇的，注解处理器的基本原理就是利用JAVA的反射原理。</p>
+<p>在看另外一个例子，定义另外一个注解<code>@FrankInfo</code>，希望它能够提供更多信息。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Target</span>(ElementType.METHOD)</span><br><span class="line"><span class="meta">@Retention</span>(RetentionPolicy.RUNTIME)</span><br><span class="line"><span class="keyword">public</span> <span class="meta">@interface</span> FrankInfo &#123;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">id</span><span class="params">()</span></span>;</span><br><span class="line"> <span class="function"><span class="keyword">public</span> String <span class="title">describe</span><span class="params">()</span> <span class="keyword">default</span> "no description"</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个注解比上面那个多了int元素id，以及一个String元素description。</p>
+<p>注解里面的元素可使用如下类型，所有的基本类型[int, float,boolean]，String，Class，enum，Annotation以及以上类型的数组 ，如果你使用了其他类型，那编译器就会报错。注意，也不允许使用其他任何包装类型，不过由于自动打包的存在，这算不上是什么限制。注解也可以作为元素的类型，也就是说注解可以嵌套。</p>
+<h4 id="注解默认值限制"><a href="#注解默认值限制" class="headerlink" title="注解默认值限制"></a>注解默认值限制</h4><p>编译器对元素的默认值是有限制的。</p>
+<ol>
+<li>元素不能有不确定的值。要么在元素定义的时候提供默认值，要么在使用注解时提供元素的值。 </li>
+<li>对于非基本类型的元素，无论是在源代码中声明，还是在注解接口中定义默认值，都不能以null作为其值。</li>
+</ol>
+<p>为了表示元素确实为空这种定义，我们可以使用一些其他自定义的特殊值来表示某个元素不存在，比如空字符串或者负数。例如<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">@Target(ElementType.METHOD)</span><br><span class="line">@Retention(RetentionPolicy.RUNTIME)</span><br><span class="line">public @interface SimulatingNull &#123;</span><br><span class="line"> public int id() default -1;</span><br><span class="line"> public String description() default &quot;&quot;;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>最后，注解不支持继承。不能使用extends来继承某个<code>@interface</code></p>
+<p>回到上面的例子，我们定义了包含元素的注解，那么如何使用注解呢，看例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrankAnnotationUtil</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="meta">@FrankTest</span></span><br><span class="line"> <span class="meta">@FrankInfo</span>(id = <span class="number">01</span>,describe = <span class="string">"Frank's Method"</span>)</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">frankMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Frank"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="meta">@FrankTest</span></span><br><span class="line"> <span class="meta">@FrankInfo</span>(id = <span class="number">02</span>)</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">jackMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Jack"</span>);</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="meta">@FrankInfo</span>(id = <span class="number">03</span>,describe = <span class="string">"Mary's Method"</span>)</span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">maryMethod</span><span class="params">()</span></span>&#123;</span><br><span class="line">	 System.out.println(<span class="string">"Mary"</span>);</span><br><span class="line"> &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>JVM如何拿到注解标注中的信息呢？还是利用反射机制，看代码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">FrankInfoProcessor</span> </span>&#123;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">processor</span><span class="params">(Class&lt;?&gt; cl)</span></span>&#123;</span><br><span class="line">	 <span class="keyword">for</span> (Method method : cl.getDeclaredMethods())&#123;</span><br><span class="line">		 FrankInfo frankInfo = method.getAnnotation(FrankInfo.class);</span><br><span class="line">		 <span class="keyword">if</span> (frankInfo != <span class="keyword">null</span>)&#123;</span><br><span class="line">		 System.out.println(<span class="string">"Found FrankInfo "</span> + frankInfo.id() + <span class="string">" "</span> + frankInfo.describe());</span><br><span class="line">		 &#125;</span><br><span class="line">	 &#125;</span><br><span class="line"> &#125;</span><br><span class="line"></span><br><span class="line"> <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">	 processor(FrankAnnotationUtil.class);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面代码输出如下内容：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">Found FrankInfo <span class="number">2</span> no description</span><br><span class="line">Found FrankInfo <span class="number">3</span> Mary<span class="string">'s Method</span></span><br><span class="line"><span class="string">Found FrankInfo 1 Frank'</span>s Method</span><br></pre></td></tr></table></figure></p>
+<p>以上就是有关Java注解的基本信息，以后日常开发中，可以任性的定义自己的注解了。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2019/09/05/Java注解详解/" title="Java注解详解">http://hellofrank.github.io/2019/09/05/Java注解详解/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/注解/" rel="tag"><i class="fa fa-tag"></i> 注解</a>
+          
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/08/31/Spring注解系列一/" rel="next" title="Spring注解系列一">
+                <i class="fa fa-chevron-left"></i> Spring注解系列一
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">13</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">8</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">21</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#注解的用处："><span class="nav-number">1.</span> <span class="nav-text">注解的用处：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#基本注解。"><span class="nav-number">2.</span> <span class="nav-text">基本注解。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#自定义注解"><span class="nav-number">3.</span> <span class="nav-text">自定义注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#元注解"><span class="nav-number">4.</span> <span class="nav-text">元注解</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#注解默认值限制"><span class="nav-number">5.</span> <span class="nav-text">注解默认值限制</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">37k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">1:07</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
