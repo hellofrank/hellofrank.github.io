@@ -128,25 +128,25 @@
 
 
 
-  <meta name="description" content="一说到Java访问权限大家想到的一定是public，protected，以及private。如果你心里想的也是这三个访问权限那就错了，其实还有一个访问权限是经常被大家忽视的，那就是包访问权限。">
-<meta name="keywords" content="-Java -访问权限">
+  <meta name="description" content="说Java的equals方法前需要先说说操作符==，因为很多新手都容易困惑,操作符==和equals方法的区别。">
+<meta name="keywords" content="Java,equals,hashCode">
 <meta property="og:type" content="article">
-<meta property="og:title" content="你应该知道的Java访问权限">
-<meta property="og:url" content="http://hellofrank.github.io/2019/09/17/你应该知道的Java访问权限/index.html">
+<meta property="og:title" content="说说如何重写Java的equals方法">
+<meta property="og:url" content="http://hellofrank.github.io/2019/09/21/说说如何重写Java的equals方法/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="一说到Java访问权限大家想到的一定是public，protected，以及private。如果你心里想的也是这三个访问权限那就错了，其实还有一个访问权限是经常被大家忽视的，那就是包访问权限。">
+<meta property="og:description" content="说Java的equals方法前需要先说说操作符==，因为很多新手都容易困惑,操作符==和equals方法的区别。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-17T13:45:17.139Z">
+<meta property="og:updated_time" content="2019-09-21T13:50:29.366Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="你应该知道的Java访问权限">
-<meta name="twitter:description" content="一说到Java访问权限大家想到的一定是public，protected，以及private。如果你心里想的也是这三个访问权限那就错了，其实还有一个访问权限是经常被大家忽视的，那就是包访问权限。">
+<meta name="twitter:title" content="说说如何重写Java的equals方法">
+<meta name="twitter:description" content="说Java的equals方法前需要先说说操作符==，因为很多新手都容易困惑,操作符==和equals方法的区别。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2019/09/17/你应该知道的Java访问权限/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2019/09/21/说说如何重写Java的equals方法/"/>
 
 
 
@@ -156,7 +156,7 @@
   };
 </script>
 
-  <title>你应该知道的Java访问权限 | Frank's Blog</title>
+  <title>说说如何重写Java的equals方法 | Frank's Blog</title>
   
 
 
@@ -338,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/09/17/你应该知道的Java访问权限/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/09/21/说说如何重写Java的equals方法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -355,7 +355,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">你应该知道的Java访问权限
+          <h1 class="post-title" itemprop="name headline">说说如何重写Java的equals方法
               
             
           </h1>
@@ -380,7 +380,7 @@
                 
               
 
-              <time title="创建时间：2019-09-17 21:43:07" itemprop="dateCreated datePublished" datetime="2019-09-17T21:43:07+08:00">2019-09-17</time>
+              <time title="创建时间：2019-09-21 21:47:51" itemprop="dateCreated datePublished" datetime="2019-09-21T21:47:51+08:00">2019-09-21</time>
             
 
             
@@ -416,7 +416,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">2k</span>
+                <span title="本文字数">3.4k</span>
               
 
               
@@ -430,7 +430,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">4 分钟</span>
+                <span title="阅读时长">6 分钟</span>
               
             </div>
           
@@ -450,25 +450,33 @@
       
 
       
-        <p>一说到Java访问权限大家想到的一定是<code>public</code>，<code>protected</code>，以及<code>private</code>。如果你心里想的也是这三个访问权限那就错了，其实还有一个访问权限是经常被大家忽视的，那就是<strong>包访问权限</strong>。</p>
+        <p>说Java的equals方法前需要先说说操作符<code>==</code>，因为很多新手都容易困惑,操作符<code>==</code>和equals方法的区别。 </p>
 <a id="more"></a>
-<h4 id="Java访问权限的基本概念。"><a href="#Java访问权限的基本概念。" class="headerlink" title="Java访问权限的基本概念。"></a>Java访问权限的基本概念。</h4><ul>
-<li>public：表示对任何成员都可见。</li>
-<li><p>protected: 只有继承的子类可以访问该关键字修饰的成员。<strong>注意同一个包内的其他类也可以访问protected修饰的成员。</strong> 也就是说在同一个包内，除了明确标记为private的，其他都能访问。</p>
-</li>
-<li><p>private：除了在定义的类内部可以访问该成员，其他类都不可以访问。</p>
-</li>
-<li><p>包访问权限：在同一个包内可以互相访问。<strong>注意没有被以上三个关键字修饰的成员，都是包访问权限</strong>。所以在Java的世界里每个属性都是有访问权限的。</p>
-</li>
-</ul>
-<p>看具体的例子。</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//注意我的包名</span></span><br><span class="line"><span class="keyword">package</span> com.frank.demo.access.box1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Cat</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String color;</span><br><span class="line">    <span class="keyword">protected</span> <span class="keyword">int</span> weight;</span><br><span class="line">    </span><br><span class="line">    <span class="comment">//没有被任何权限关键字修饰 包访问权限</span></span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">call</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(<span class="string">"喵喵"</span>);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">sayColor</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">//private color 属性只能在这个类内部被访问。</span></span><br><span class="line">        <span class="keyword">this</span>.color = <span class="string">"blue"</span>;</span><br><span class="line">        System.out.println(<span class="string">"this is a"</span> + <span class="keyword">this</span>.color + <span class="string">"cat"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>和Cat类在同一个包下的Children.</p>
-<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.demo.access.box1;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Children</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Cat cat = <span class="keyword">new</span> Cat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//public 可以访问。</span></span><br><span class="line">        cat.name = <span class="string">"tom"</span>;</span><br><span class="line">        <span class="comment">//protected weight 在同一个包下即便是protected也可以访问</span></span><br><span class="line">        cat.weight = <span class="number">30</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//包访问权限，可以访问因为在同一个包下。</span></span><br><span class="line">        cat.call();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//private color 不可以访问。</span></span><br><span class="line">        <span class="comment">//cat.color;</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>再来看另外一个Children 和Cat不在同一个包下。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.frank.demo.access.box2;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.frank.demo.access.box1.Cat;</span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Children</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line">        Cat cat = <span class="keyword">new</span> Cat();</span><br><span class="line"></span><br><span class="line">        <span class="comment">//public 可以访问</span></span><br><span class="line">        cat.name = <span class="string">"tom"</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//protected 不可以访问,不在同一个包下，而且不存在继承关系。</span></span><br><span class="line">        <span class="comment">//cat.weight;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//private 不可以访问</span></span><br><span class="line">        <span class="comment">//cat.color;</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">//包访问权限，不在同一个包下，不可以访问。</span></span><br><span class="line">        <span class="comment">//cat.call();</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>以上三段简单的代码基本说清楚了，Java访问权限的事情。大家一定要仔细看我的代码注释部分哦！</p>
-<h4 id="访问权限的意义"><a href="#访问权限的意义" class="headerlink" title="访问权限的意义"></a>访问权限的意义</h4><p>Java设计了这样一套访问控制权限的意义就在于让我们写出更灵活更具可维护性的代码。<br>比如我们设计的类库有些细节和使用者没有关系，甚至我们都不希望让使用者看到它，更别说修改它了，我们可以把它设计成private的。而且把某些属性和方法设计成private对我们自己有个好处就是随时可以改变它，而不用担心对使用者造成任何影响。</p>
-<p>每个程序员都希望自己写的代码被很多人用到，如何把自己的类库写的优雅完美，掌握Java访问权限只是一个最基本的要素点。希望大家能够在实战中多多理解这些规则，做到融会贯通。</p>
+<h4 id="Java-操作符"><a href="#Java-操作符" class="headerlink" title="Java 操作符 =="></a>Java 操作符 <code>==</code></h4><p>在Java的世界里，操作符 <code>==</code> 作用在基本数据类型(<code>int short byte long float double boolean</code>)上时比较的是逻辑相等，作用在对象上比较则是对象的内存地址。<br>其实操作符<code>==</code>对于基本数据类型比较的也是地址，只不过JVM帮我们做了一些操作，让它使用起来是逻辑相等。下面我们就来说说具体原因。<br>基本类型的定义都是发生在JVM的栈内存中的。比如我们定义一个变量 <code>int i = 7</code>,jvm将会在栈区划分一个区域存储 7，然后把地址赋给变量<code>i</code>。这样通过变量<code>i</code> 就能找到 7。假设这个时候我们又定义了一个变量 <code>int j = 7</code> jvm 在内存中发现已经有 7 这个值了；这个时候就直接把变量<code>j</code> 指向7；也就是变量<code>i</code> 和变量 <code>j</code>内存地址是一致的。所以当我们操作 <code>i == j</code> 返回的是真。在假设这个时候我们又定义 <code>i = 8</code>,编译器将会重新划分一个区域存储 8，因为JVM发现内存中没有8这个值，然后将变量<code>i</code>的地址指向 8，而变量<code>j</code>的指向不会变。</p>
+<h4 id="Java-equals-方法"><a href="#Java-equals-方法" class="headerlink" title="Java equals() 方法"></a>Java equals() 方法</h4><p>上面说了Java操作符<code>==</code>比较的是对象的内存地址。也就是验证对象的唯一性，只有个两个对象是同一个对象的时候，他们的内存地址才是相同的。但是我们日常开发中，大部分场景是想验证两个对象是否是逻辑相等。这个时候我们可以重写Object的equals()方法。<br>JAVA的世界里所有的类都继承自Object。所以每个类都包含eqauls()方法。Object中的equals()方法是这样定义的<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span> </span>&#123;</span><br><span class="line">       <span class="keyword">return</span> (<span class="keyword">this</span> == obj);</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure></p>
+<p>从代码可以看出来还是比较的对象内存地址。如何重写eqauls()方法，就变得特别重要，因为一不小心就会造成很严重的错误。还是那句话除非特别必要而且很明确的需要逻辑相等，否则不要重写equals。</p>
+<p>重写equals,应当遵守JavaSE的通用约定。</p>
+<blockquote>
+<p>自反性（reflexive）  ：对于任何非<code>null</code>的引用值x, <code>x.equals(x)</code> 必须返回 <code>true</code>。<br>对称性（symmetric）:  对于任何非<code>null</code>的引用值<code>x</code>和<code>y</code>，当且仅当<code>x.equals(y)</code>  返回<code>true</code>时，  <code>y.equals(x)</code>必须返回<code>true</code>。<br>传递性（transitive）:  对于任何非<code>null</code>的引用值<code>x</code>,<code>y</code>和<code>z</code>，如果<code>x.equals(y)</code>返回<code>true</code>,并且<code>y.equals(z)</code>也返回<code>true</code>,那么<code>x.equals(z)</code>也必须返回<code>true</code>。<br>一致性（consistent）: 对于任何非<code>null</code>的引用值x和y, 只要equals的比较操作在对象中所用的信息没有被修改，多次调用<code>x.equals(y)</code>就会一致的返回<code>true</code>,或者一致的返回<code>false</code>。<br>对于任何非<code>null</code>的引用值<code>x</code>，<code>x.equals(null)</code>必须返回<code>false</code>。</p>
+</blockquote>
+<p>如果你违反了上面的约定，你的程序也许就会变现的不正常。因为所有的集合类都依赖于传递给他的对象是否遵守equals约定。<br>根据以上原则我们尝试重写一个自定义的Java类的equals方法。假定我们定一个Book类，希望该类实现逻辑相等。然后重写equals方法。只要书名和出版社一致我们就认为是同一本书。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="keyword">private</span> String publish;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Book</span><span class="params">(String name, String publish)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">        <span class="keyword">this</span>.publish = publish;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">boolean</span> <span class="title">equals</span><span class="params">(Object obj)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//使用 == 检查参数是否为这个对象的引用。</span></span><br><span class="line">        <span class="keyword">if</span>(obj == <span class="keyword">this</span>) <span class="keyword">return</span> <span class="keyword">true</span>;</span><br><span class="line">        <span class="comment">//使用instanceof 检查参数是否为正确类型。</span></span><br><span class="line">        <span class="keyword">if</span> (!(obj <span class="keyword">instanceof</span> Book)) <span class="keyword">return</span> <span class="keyword">false</span>;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//把参数转化成正确类型</span></span><br><span class="line">        Book book = (Book) obj;</span><br><span class="line"></span><br><span class="line">        <span class="comment">//对于该类中的关键字段，检查参数中的字段是否与该对象中对应的字段匹配。</span></span><br><span class="line">        <span class="keyword">return</span> Objects.equals(name,book.name) &amp;&amp;</span><br><span class="line">                Objects.equals(publish,book.publish);</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这样通过equals方法就可以比较两本书是否是同一本书了，注意我代码中注释部分内容，可以说是重写equals的一些通用技巧。</p>
+<p>本来这篇文章写到这里应该结束了，但是说到重写equals就必须提重写hashCode<br>因为：<strong>重写equals方法一定要重写hashCode方法。</strong></p>
+<p>如果不遵守上面这条规则，会给我们的程序带来意想不到的结果。<br>关于重写hashCode方法， JavaSE 一样给出了约定，如下：</p>
+<blockquote>
+<ol>
+<li>在应用程序的执行期间，只要对象的equals方法的比较操作所用到的信息没有被修改，那么对这同一个对象调用多次hashCode方法，它必须始终如一地返回同一个整数。在同一个应用程序的多次执行过程中，这个整数可以不同。</li>
+<li>如果两个对象根据equals(Object)方法是相等的，那么调用这两个对象中任一个对象的hashCode方法必须产生同样的整数结果。</li>
+<li>如果两个对象根据equals(Object)方法是不相等的，那么调用这两个对象中任一个对象的hashCode方法，不要求必须产生不同的整数结果。然而，程序员应该意识到这样的事实，对于不相等的对象产生截然不同的整数结果，有可能提高散列表（hash table）的性能。</li>
+</ol>
+</blockquote>
+<p> 如果只重写了equals方法而没有重写hashCode方法的话，则会违反约定的第二条：相等的对象必须具有相等的散列码 hashCode</p>
+<p>两个逻辑相等的对象，如果产生不同的hashCode 将会给HashMap等容器带来意想不到的结果。</p>
+<p>举个例子：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">BookStore</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span></span>&#123;</span><br><span class="line"></span><br><span class="line">        HashMap&lt;Book,String&gt; bookStore = <span class="keyword">new</span> HashMap&lt;Book,String&gt;();</span><br><span class="line">        Book book1 = <span class="keyword">new</span> Book(<span class="string">"java"</span>,<span class="string">"frank publish"</span>);</span><br><span class="line">        Book book2 = <span class="keyword">new</span> Book(<span class="string">"java"</span>,<span class="string">"frank publish"</span>);</span><br><span class="line">        bookStore.put(book1,<span class="string">"compute"</span>);</span><br><span class="line">        String category = bookStore.get(book2);</span><br><span class="line">        <span class="comment">// print null;</span></span><br><span class="line">        System.out.println(category);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>因为HashMap是根据对象的散列值确定在HashMap中的存储位置的。如果你不重写hashCode方法，那么book1和book2在JVM中是两个完全不同的对象，他们的hashCode也将会不同，所以在HashMap看来他们就不是同一本书。</p>
+<p>所以重写完equals方法一定要重写hashCode方法，写完之后要核对是否符合上面提到的Object.hashCode通用约定。大家也可以参考《Effictive Java》这本书，书里面讲的很透彻。<br>最后还是那句话不要轻易的重写equals()方法。</p>
 
       
     </div>
@@ -530,7 +538,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2019/09/17/你应该知道的Java访问权限/" title="你应该知道的Java访问权限">http://hellofrank.github.io/2019/09/17/你应该知道的Java访问权限/</a>
+    <a href="http://hellofrank.github.io/2019/09/21/说说如何重写Java的equals方法/" title="说说如何重写Java的equals方法">http://hellofrank.github.io/2019/09/21/说说如何重写Java的equals方法/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -543,7 +551,11 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java-访问权限/" rel="tag"><i class="fa fa-tag"></i> -Java -访问权限</a>
+            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
+          
+            <a href="/tags/equals/" rel="tag"><i class="fa fa-tag"></i> equals</a>
+          
+            <a href="/tags/hashCode/" rel="tag"><i class="fa fa-tag"></i> hashCode</a>
           
         </div>
       
@@ -556,8 +568,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/13/Spring注解系列二/" rel="next" title="Spring注解系列二">
-                <i class="fa fa-chevron-left"></i> Spring注解系列二
+              <a href="/2019/09/17/你应该知道的Java访问权限/" rel="next" title="你应该知道的Java访问权限">
+                <i class="fa fa-chevron-left"></i> 你应该知道的Java访问权限
               </a>
             
           </div>
@@ -565,10 +577,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/21/说说如何重写Java的equals方法/" rel="prev" title="说说如何重写Java的equals方法">
-                说说如何重写Java的equals方法 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -772,7 +780,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java访问权限的基本概念。"><span class="nav-number">1.</span> <span class="nav-text">Java访问权限的基本概念。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#访问权限的意义"><span class="nav-number">2.</span> <span class="nav-text">访问权限的意义</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-操作符"><span class="nav-number">1.</span> <span class="nav-text">Java 操作符 ==</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Java-equals-方法"><span class="nav-number">2.</span> <span class="nav-text">Java equals() 方法</span></a></li></ol></div>
             
 
           </div>
