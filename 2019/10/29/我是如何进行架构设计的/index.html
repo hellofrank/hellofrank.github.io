@@ -128,25 +128,27 @@
 
 
 
-  <meta name="description" content="这篇文章是Java里面的String对象到底神奇在什么地方的姊妹篇。 先来说说java对象不可变。">
-<meta name="keywords" content="Java,String">
+  <meta name="description" content="很多话只有经历过才能明白其中的含义，我觉得对。 这里把我自己进行架构设计时的一些心得体会做个总结。">
+<meta name="keywords" content="架构">
 <meta property="og:type" content="article">
-<meta property="og:title" content="为什么Java里面的String对象是不可变的">
-<meta property="og:url" content="http://hellofrank.github.io/2019/10/17/为什么Java里面的String对象是不可变的/index.html">
+<meta property="og:title" content="我是如何进行架构设计的">
+<meta property="og:url" content="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="这篇文章是Java里面的String对象到底神奇在什么地方的姊妹篇。 先来说说java对象不可变。">
+<meta property="og:description" content="很多话只有经历过才能明白其中的含义，我觉得对。 这里把我自己进行架构设计时的一些心得体会做个总结。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-17T14:35:56.395Z">
+<meta property="og:image" content="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/img-01.jpeg">
+<meta property="og:updated_time" content="2019-10-29T14:27:13.231Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="为什么Java里面的String对象是不可变的">
-<meta name="twitter:description" content="这篇文章是Java里面的String对象到底神奇在什么地方的姊妹篇。 先来说说java对象不可变。">
+<meta name="twitter:title" content="我是如何进行架构设计的">
+<meta name="twitter:description" content="很多话只有经历过才能明白其中的含义，我觉得对。 这里把我自己进行架构设计时的一些心得体会做个总结。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/img-01.jpeg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2019/10/17/为什么Java里面的String对象是不可变的/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/"/>
 
 
 
@@ -156,7 +158,7 @@
   };
 </script>
 
-  <title>为什么Java里面的String对象是不可变的 | Frank's Blog</title>
+  <title>我是如何进行架构设计的 | Frank's Blog</title>
   
 
 
@@ -338,7 +340,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/10/17/为什么Java里面的String对象是不可变的/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -355,7 +357,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">为什么Java里面的String对象是不可变的
+          <h1 class="post-title" itemprop="name headline">我是如何进行架构设计的
               
             
           </h1>
@@ -380,7 +382,7 @@
                 
               
 
-              <time title="创建时间：2019-10-17 22:34:04" itemprop="dateCreated datePublished" datetime="2019-10-17T22:34:04+08:00">2019-10-17</time>
+              <time title="创建时间：2019-10-29 22:10:49" itemprop="dateCreated datePublished" datetime="2019-10-29T22:10:49+08:00">2019-10-29</time>
             
 
             
@@ -398,7 +400,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/架构/" itemprop="url" rel="index"><span itemprop="name">架构</span></a></span>
 
                 
                 
@@ -434,7 +436,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">3.5k</span>
+                <span title="本文字数">1.4k</span>
               
 
               
@@ -448,7 +450,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">6 分钟</span>
+                <span title="阅读时长">3 分钟</span>
               
             </div>
           
@@ -468,31 +470,18 @@
       
 
       
-        <p>这篇文章是<a href="https://mp.weixin.qq.com/s/TMD5Ng8CYzH5jt9edVuzXg" target="_blank" rel="noopener">Java里面的String对象到底神奇在什么地方</a>的姊妹篇。</p>
-<p>先来说说java对象不可变。</p>
+        <p>很多话只有经历过才能明白其中的含义，我觉得对。 这里把我自己进行架构设计时的一些心得体会做个总结。</p>
 <a id="more"></a>
-<p>所谓的对象不可变，可以简单的理解为，对象一旦创建后，其状态不可修改。所谓不可修改就是对象里面所有的状态属性都不能修改。<br>举个例子：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Book</span> </span>&#123;</span><br><span class="line">    <span class="comment">//书价</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">double</span> price;</span><br><span class="line">    <span class="comment">//书名</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> String name;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Book</span><span class="params">(<span class="keyword">double</span> price, String name)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.price = price;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">double</span> <span class="title">getPrice</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> price;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">return</span> name;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这个对象一旦被创建，就没有办法修改内部状态。因为没有对外提供任何方法修改属性值。而且<code>price</code>和<code>name</code>属性被声明为<code>final</code></p>
-<p>在来看看String类是如何定义的。以下源码摘自JDK1.8<br> <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="keyword">final</span> <span class="class"><span class="keyword">class</span> <span class="title">String</span></span></span><br><span class="line"><span class="class">    <span class="keyword">implements</span> <span class="title">java</span>.<span class="title">io</span>.<span class="title">Serializable</span>, <span class="title">Comparable</span>&lt;<span class="title">String</span>&gt;, <span class="title">CharSequence</span> </span>&#123;</span><br><span class="line">    <span class="comment">/** The value is used for character storage. */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">final</span> <span class="keyword">char</span> value[];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/** Cache the hash code for the string */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">int</span> hash; <span class="comment">// Default to 0</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">/** use serialVersionUID from JDK 1.0.2 for interoperability */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">long</span> serialVersionUID = -<span class="number">6849794470754667710L</span>;</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Class String is special cased within the Serialization Stream Protocol.</span></span><br><span class="line"><span class="comment">     *</span></span><br><span class="line"><span class="comment">     * A String instance is written into an ObjectOutputStream according to</span></span><br><span class="line"><span class="comment">     * &lt;a href="&#123;<span class="doctag">@docRoot</span>&#125;/../platform/serialization/spec/output.html"&gt;</span></span><br><span class="line"><span class="comment">     * Object Serialization Specification, Section 6.2, "Stream Elements"&lt;/a&gt;</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="keyword">private</span> <span class="keyword">static</span> <span class="keyword">final</span> ObjectStreamField[] serialPersistentFields =</span><br><span class="line">        <span class="keyword">new</span> ObjectStreamField[<span class="number">0</span>];</span><br><span class="line"></span><br><span class="line">    <span class="comment">/**</span></span><br><span class="line"><span class="comment">     * Initializes a newly created &#123;<span class="doctag">@code</span> String&#125; object so that it represents</span></span><br><span class="line"><span class="comment">     * an empty character sequence.  Note that use of this constructor is</span></span><br><span class="line"><span class="comment">     * unnecessary since Strings are immutable.</span></span><br><span class="line"><span class="comment">     */</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">String</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.value = <span class="string">""</span>.value;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>这段代码最关键的两个部分就是，<code>String</code>类用<code>final</code>关键字进行了修饰，还有就是字符数组<code>value</code>用<code>final</code>修饰，并且访问权限是<code>private</code>的。如果不清楚Java访问权限的，可以看我这篇关于<a href="https://mp.weixin.qq.com/s/Z3a0eeU8_dG4wYk9GBsvBQ" target="_blank" rel="noopener">Java访问权限</a>的介绍。</p>
-<p><code>String</code>类用<code>final</code>关键字修饰，证明该类是不可继承的。</p>
-<p><code>String</code>类是用字符数组表示字符串对象的。属性<code>value</code>被<code>final</code>修饰，证明<code>value</code>是不可变的。等等，这里有个小问题，<code>value</code>是个字符数组，数组是引用类型，<code>value</code>不可变只能说明字符数组的引用不可变，字符数组里面的内容是可变的。</p>
-<p>举个例子 <code>String str = “java”;</code> <code>value</code>里面的值是这样的 <code>[‘j’,’a’,’v’,’a’]</code>,我们虽然不能改变<code>value</code>到数组<code>[&#39;j&#39;,&#39;a&#39;,&#39;v&#39;,&#39;a&#39;]</code>的引用，但是我们很容易改变数组内的值，比如 <code>value[2]=’s’</code>;</p>
-<p>那为什么我们还说<code>String</code>是不可变的呢。关键就在于<code>private</code>关键字。用<code>private</code>关键字修饰之后，在java的访问权限规则里面，除了在类内部可以修改<code>value</code>的值以外，没有任何地方可以修改它了。而我们的JDK工程师，又很小心的设计了该类，在<code>String</code>类内部也没有任何一处可以修改<code>value</code>的值,真是连自己人都不信任啊。所以<code>String</code>对象一旦被创建，就再也不能被修改了。</p>
-<p>有人说貌似不是，比如你看下面的代码<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">String str = “java”;</span><br><span class="line">str = str.substring(<span class="number">1</span>,<span class="number">2</span>);</span><br></pre></td></tr></table></figure></p>
-<p>要想知道str有没有被改变我们可以看一眼substring的源码。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> String <span class="title">substring</span><span class="params">(<span class="keyword">int</span> beginIndex, <span class="keyword">int</span> endIndex)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">if</span> (beginIndex &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(beginIndex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span> (endIndex &gt; value.length) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(endIndex);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">int</span> subLen = endIndex - beginIndex;</span><br><span class="line">    <span class="keyword">if</span> (subLen &lt; <span class="number">0</span>) &#123;</span><br><span class="line">        <span class="keyword">throw</span> <span class="keyword">new</span> StringIndexOutOfBoundsException(subLen);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ((beginIndex == <span class="number">0</span>) &amp;&amp; (endIndex == value.length)) ? <span class="keyword">this</span></span><br><span class="line">            : <span class="keyword">new</span> String(value, beginIndex, subLen);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p>关健的代码就是最后一行，<code>new String(value, beginIndex, subLen)</code> 看到了吗，不是在原来的字符上进行修改，而是创建了一个新的对象，然后把变量str指向新的对象。 原来的字符串就被回收了。</p>
-<p>费了这么大力气，把<code>String</code>类搞成不可变的有什么好处吗？当然有，主要体现在两个方面。</p>
-<p>安全：</p>
-<ol>
-<li>在加载数据库用户名密码，以及类加载的时候，都是以String类型传递参数的。如果字符串是可变的，这些信息很容易被篡改，那么将会造成很大的安全问题。</li>
-<li>因为字符串是不可变的，同一个字符串实例可以被多个线程共享。所以天生就是线程安全的。</li>
-</ol>
-<p>性能：</p>
-<ol>
-<li>只有当字符串是不可变的，字符串常量池才有可能实现。字符串常量池可以节省JVM的内存空间（多份相同的String字符实际只占同一个空间）</li>
-<li>因为字符串不可变，所以在它创建的时候可以把 hashcode值缓存起来。当使用的时候就不用再重新计算了，这就使得字符串很适合作为Map中的键，字符串的处理速度要快过其它的键对象。</li>
-</ol>
+<h5 id="1-充分了解业务"><a href="#1-充分了解业务" class="headerlink" title="1.充分了解业务"></a>1.充分了解业务</h5><p>所有的技术都是为公司业务发展服务的。公司的业务发展方向是由市场发展方向来确定的。没有哪家商业公司是根据程序员的喜好来的。所以你在进行架构设计前要充分了解业务及应用场景。项目是采用单体还是微服务很大程度上由项目所服务的业务场景及业务量决定的以及你项目组拥有的软硬件资源决定的。项目前期要多跟产品商务同事进行沟通，沟通的越充分，项目后期你就会越主动。</p>
+<h5 id="2-预估一年内的业务增长量"><a href="#2-预估一年内的业务增长量" class="headerlink" title="2. 预估一年内的业务增长量"></a>2. 预估一年内的业务增长量</h5><p>为什么是一年呢，因为太久你就估不出来了，即便随便估一个也是不准的。伟大领袖毛主席不是说了吗，一万年太久只争朝夕。而且预估的量你要有自己的判断，不要完全听市场跟产品人员的。他们往往会夸大事实，对未来过于乐观，这样会导致你过度设计。另外所有的设计方案以及应用算法都是在某个数量级下讨论才有意义。所以你必须基于某个量级假设去设计你的技术方案。不然你就是耍流氓。最重要的是，你还要根据业务增长量来决定你申请多少硬件资源。 </p>
+<h5 id="3-了解组内开发人员技术栈"><a href="#3-了解组内开发人员技术栈" class="headerlink" title="3. 了解组内开发人员技术栈"></a>3. 了解组内开发人员技术栈</h5><p>巧妇难为无米之炊，最终的项目落地，是要靠技术同事去实现。在做技术栈选型时要根据组内开发同事的现有水平来进行，比如组内大部分都是玩儿java的，这个时候就不要考虑python跟go了，即便他们可能更适合目前的项目。根据我的经验影响一个项目开发进度的，往往跟语言无关。另外虽然程序员都爱学习，但你要考虑是否愿意为他的成长买单。</p>
+<h5 id="4-了解运维技术栈"><a href="#4-了解运维技术栈" class="headerlink" title="4. 了解运维技术栈"></a>4. 了解运维技术栈</h5><p>有句话说的好，生孩子容易，养孩子难。运维同事就是负责养孩子的。我们在进行架构设计时不光要考虑开发的成本，更应该考虑后续的运维成本。甚至应该更多的考虑运维成本。假设有两套技术方案，方案A开发成本低，但是运维成本高，方案B开发成本高，但是运维成本低。毫不犹豫的选择B方案。因为后续一个项目大部分时间都是处于运维状态。</p>
+<p><img src="img-01.jpeg" alt="img-01"></p>
+<h5 id="5-数据建模"><a href="#5-数据建模" class="headerlink" title="5. 数据建模"></a>5. 数据建模</h5><p>了解完业务场景，及组内成员的实力之后，该关起门来制定战术了。首先要对系统数据进行建模，他是整个系统的骨架，是对业务需求的抽象体现。这部分工作就搭建大楼的脚手架。你对业务的理解程度直接影响建模的效果，建模的效果直接决定架构的可扩展性。数据模型一旦建好，进入项目实施阶段之后就很难改变了。所以大家要慎重。 </p>
+<h5 id="6-讨论架构草图"><a href="#6-讨论架构草图" class="headerlink" title="6. 讨论架构草图"></a>6. 讨论架构草图</h5><p>经过上面那些步骤后，心中应该有个大概的架构草图了，这个时候应该把这份草图，讲给组内同事听，包括划分为哪些模块，语言编码规范，使用哪些具体技术。介绍架构草图的时候，要听大家的反馈。做到群策群力。只有方案得到大家的认可，实施起来才有效率。</p>
+<h5 id="7-重视日志"><a href="#7-重视日志" class="headerlink" title="7. 重视日志"></a>7. 重视日志</h5><p>上学时你可以不重视日志。但工作后必须重视。日志不仅是线上问题排查的根本，更是业务分析，系统监控的重要依据。好的日志应该是分类明确，职责清晰，格式工整的。比如某些日志是用来做系统运维的，有些日志是用来做监控的，有些是用于商务分析的。在做系统设计前一定要考虑清楚。否则后续运维将会事倍功半。</p>
+<h5 id="结论"><a href="#结论" class="headerlink" title="结论"></a>结论</h5><p>以上是我的一些个人心得体会，并不一定正确。水无常形，兵无常势。大家要根据自己的实际情况来进行合理的架构设计。</p>
+<p>最后优秀的架构都是根据业务的发展需要不断的改出来的。所以不要指望一步到位，每次架构调整能支持最近半年或者一年的量就OK。你需要做的就是让你的系统在不断的改进过程中一直保持高可扩展性，高可维护性。判断是否具备高可扩展性的一个方法是在需求增加和变动的时候，你是否狼狈。</p>
 
       
     </div>
@@ -554,7 +543,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2019/10/17/为什么Java里面的String对象是不可变的/" title="为什么Java里面的String对象是不可变的">http://hellofrank.github.io/2019/10/17/为什么Java里面的String对象是不可变的/</a>
+    <a href="http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/" title="我是如何进行架构设计的">http://hellofrank.github.io/2019/10/29/我是如何进行架构设计的/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -567,9 +556,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/Java/" rel="tag"><i class="fa fa-tag"></i> Java</a>
-          
-            <a href="/tags/String/" rel="tag"><i class="fa fa-tag"></i> String</a>
+            <a href="/tags/架构/" rel="tag"><i class="fa fa-tag"></i> 架构</a>
           
         </div>
       
@@ -582,8 +569,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/13/Java里面的String对象到底神奇在什么地方/" rel="next" title="Java里面的String对象到底神奇在什么地方">
-                <i class="fa fa-chevron-left"></i> Java里面的String对象到底神奇在什么地方
+              <a href="/2019/10/18/Maven依赖作用域总结/" rel="next" title="Maven依赖作用域总结">
+                <i class="fa fa-chevron-left"></i> Maven依赖作用域总结
               </a>
             
           </div>
@@ -591,10 +578,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/10/17/通过实例告诉你，什么样的代码叫做具有可读性/" rel="prev" title="通过实例告诉你，什么样的代码叫做具有可读性">
-                通过实例告诉你，什么样的代码叫做具有可读性 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -643,8 +626,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -803,6 +795,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#1-充分了解业务"><span class="nav-number">1.</span> <span class="nav-text">1.充分了解业务</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-预估一年内的业务增长量"><span class="nav-number">2.</span> <span class="nav-text">2. 预估一年内的业务增长量</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#3-了解组内开发人员技术栈"><span class="nav-number">3.</span> <span class="nav-text">3. 了解组内开发人员技术栈</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#4-了解运维技术栈"><span class="nav-number">4.</span> <span class="nav-text">4. 了解运维技术栈</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#5-数据建模"><span class="nav-number">5.</span> <span class="nav-text">5. 数据建模</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#6-讨论架构草图"><span class="nav-number">6.</span> <span class="nav-text">6. 讨论架构草图</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#7-重视日志"><span class="nav-number">7.</span> <span class="nav-text">7. 重视日志</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结论"><span class="nav-number">8.</span> <span class="nav-text">结论</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
