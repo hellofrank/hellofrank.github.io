@@ -128,27 +128,25 @@
 
 
 
-  <meta name="description" content="虽然JAVA程序不用像C和C++程序员一样自己处理内存问题。但是作为一名合格的JAVA程序员还是很有必要去了解一下JVM的内存划分和使用情况的。特别是当你遇到内存溢出的情况时候，你就会发现不掌握JVM的内存知识是玩儿不转滴！">
-<meta name="keywords" content="JVM,JAVA">
+  <meta name="description" content="此Daemontools并非windows下的Daemontools。该工具负责将你的进程在后台以daemon方式运行的。如果你的应用不小心被杀掉之后，自己就会起来。也就是会让你的程序变成杀不死的小强。 比如数据收集，监控等程序都需要不间断的运行。">
+<meta name="keywords" content="Daemontools,expect">
 <meta property="og:type" content="article">
-<meta property="og:title" content="JAVA内存模型划分">
-<meta property="og:url" content="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/index.html">
+<meta property="og:title" content="Centos下Daemontools及expect安装">
+<meta property="og:url" content="http://hellofrank.github.io/2019/11/06/Centos下Daemontools及expect安装/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="虽然JAVA程序不用像C和C++程序员一样自己处理内存问题。但是作为一名合格的JAVA程序员还是很有必要去了解一下JVM的内存划分和使用情况的。特别是当你遇到内存溢出的情况时候，你就会发现不掌握JVM的内存知识是玩儿不转滴！">
+<meta property="og:description" content="此Daemontools并非windows下的Daemontools。该工具负责将你的进程在后台以daemon方式运行的。如果你的应用不小心被杀掉之后，自己就会起来。也就是会让你的程序变成杀不死的小强。 比如数据收集，监控等程序都需要不间断的运行。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/jvm.png">
-<meta property="og:updated_time" content="2018-04-27T09:21:59.077Z">
+<meta property="og:updated_time" content="2019-11-06T14:39:49.896Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="JAVA内存模型划分">
-<meta name="twitter:description" content="虽然JAVA程序不用像C和C++程序员一样自己处理内存问题。但是作为一名合格的JAVA程序员还是很有必要去了解一下JVM的内存划分和使用情况的。特别是当你遇到内存溢出的情况时候，你就会发现不掌握JVM的内存知识是玩儿不转滴！">
-<meta name="twitter:image" content="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/jvm.png">
+<meta name="twitter:title" content="Centos下Daemontools及expect安装">
+<meta name="twitter:description" content="此Daemontools并非windows下的Daemontools。该工具负责将你的进程在后台以daemon方式运行的。如果你的应用不小心被杀掉之后，自己就会起来。也就是会让你的程序变成杀不死的小强。 比如数据收集，监控等程序都需要不间断的运行。">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2019/11/06/Centos下Daemontools及expect安装/"/>
 
 
 
@@ -158,7 +156,7 @@
   };
 </script>
 
-  <title>JAVA内存模型划分 | Frank's Blog</title>
+  <title>Centos下Daemontools及expect安装 | Frank's Blog</title>
   
 
 
@@ -340,7 +338,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/11/06/Centos下Daemontools及expect安装/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -357,7 +355,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">JAVA内存模型划分
+          <h1 class="post-title" itemprop="name headline">Centos下Daemontools及expect安装
               
             
           </h1>
@@ -382,7 +380,7 @@
                 
               
 
-              <time title="创建时间：2017-06-20 00:00:00" itemprop="dateCreated datePublished" datetime="2017-06-20T00:00:00+08:00">2017-06-20</time>
+              <time title="创建时间：2019-11-06 22:30:24" itemprop="dateCreated datePublished" datetime="2019-11-06T22:30:24+08:00">2019-11-06</time>
             
 
             
@@ -400,7 +398,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/JAVA/" itemprop="url" rel="index"><span itemprop="name">JAVA</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
 
                 
                 
@@ -470,17 +468,37 @@
       
 
       
-        <p>虽然JAVA程序不用像C和C++程序员一样自己处理内存问题。但是作为一名合格的JAVA程序员还是很有必要去了解一下JVM的内存划分和使用情况的。特别是当你遇到内存溢出的情况时候，你就会发现不掌握JVM的内存知识是玩儿不转滴！</p>
+        <p>此Daemontools并非windows下的Daemontools。该工具负责将你的进程在后台以daemon方式运行的。如果你的应用不小心被杀掉之后，自己就会起来。也就是会让你的程序变成杀不死的小强。 比如数据收集，监控等程序都需要不间断的运行。</p>
 <a id="more"></a>
-<p>下面我就简单的说下JVM的划分情况。如下图：<br><img src="jvm.png" alt="jvm"></p>
-<p>1.程序计数器：线程隔离的数据区<br>2.虚拟机栈：线程隔离的数据区<br>3.本地方法栈：线程隔离的数据区<br>4.方法区：所有线程共享的数据区<br>5.堆：所有线程共享的数据区</p>
-<p><strong>程序计数器：</strong> 记录当前线程所执行的字节码的行号指示器，在虚拟机的概念模型里，字节码解释器工作时来选取下一个需要执行的字节码指令，分支，循环，跳转，异常处理，线程恢复等基础功能等都需要这个计数器来完成。<br>每条线程都有一个独立的程序计数器，各条线程间的程序计数器互相不受影响，独立存储。这类内存是线程私有的。这个区域不会出现内存溢出情况。</p>
-<p><strong>虚拟机栈：</strong> 虚拟机栈也是线程私有的，它的生命周期与线程相同。每个方法在执行的同时都会创建一个栈帧（Stack Frame）用于存储局部变量表，操作数栈，动态链接，方法出口等信息。每个方法从调用直至执行完成的过程，就对着栈帧在虚拟机中如栈出栈的过程。大家常说的堆栈中的栈指的就是这个虚拟机栈。虚拟机栈中存有局部变量表。局部变量表存放了编译期可知的各种基本数据类型（boolean,byte,char,short,int,float,long,double）,对象引用（reference类型它不等同于对象本身，可能是指向对象起始地址的引用指针）和returnAddress（指向了一条字节码指令的地址）类型。其中Long和double会占用两个局部变量空间，其余的只占用一个空间。局部变量表在编译期完成分配。在该区域存在两种异常情况，线程请求的栈深度大于虚拟机所允许的栈深度将抛出StackOverFlowError。如果扩展无法申请到足够的内存，就会抛出OutOfMemoryError异常。</p>
-<p><strong>本地方法栈：</strong>本地方法栈与虚拟机栈所发挥的作用是相似的。区别就是虚拟机栈为虚拟机执行JAVA方法，本地方法栈执行虚拟机使用到的Native方法服务。有的虚拟机(SunHotSpot)把两个方法栈合二为一。本地方法栈也会抛出StackOverFlowError和OutoOfMemeoryError异常。</p>
-<p><strong>JAVA堆：</strong>是JAVA虚拟机中管理最大的一块内存，JAVA堆被所有线程共享。在虚拟机启动的时候创建，唯一目的就是存放对象实例。所有对象实例和数组都在这里分配。JAVA堆是垃圾收集器管理的主要区域。</p>
-<p><strong>方法区：</strong>方法区也是线程共享区域，它用于存储已被虚拟机加载的类信息，常量，静态变量，即时编译器编译后的代码等数据。虽然JAVA虚拟机规范把方法区描述为堆的一个逻辑部分，但是他却有个别名Non-Heap.目的是应该与Java堆区分开。对于HotSpot虚拟机来说，方法区就是永久代。</p>
-<p><strong>运行时常量池：</strong>运行时常量池是方法区的一部分。Class文件除了有类的版本，字段，方法，接口等信息描述外，还有一项是常量池，用于存放编译期生成的各种字面量和符号引用，这部分内容在类加载后进入方法区的运行时常量池存放。</p>
-<p><strong>直接内存：</strong>这部分是NIO操作的内存部分。NIO引入了Channel和Buffer。他可以利用Native函数库直接分配堆外内存，然后通过一个存储在堆中的DirectByteBuffer对象作为这块内存的引用进行操作。</p>
+<h5 id="Daemontools"><a href="#Daemontools" class="headerlink" title="Daemontools"></a>Daemontools</h5><p>安装方法：</p>
+<ol>
+<li>下载，解压daemontools-0.76.tar.gz</li>
+<li>进入 admin/daemontools-0.76</li>
+<li>将<code>admin/daemontools-0.76/src/error.h</code>中的<code>extern int errno</code>;替换为<code>#include &lt;errno.h&gt;</code> 不然可能会报如下错误 <code>/usr/bin/ld: errno: TLS defini tion in /lib/libc.so.6 section .tbss mismatches non-TLS reference in envdir.o</code></li>
+<li>编译安装 执行 <code>package/install</code></li>
+</ol>
+<h6 id="实例："><a href="#实例：" class="headerlink" title="实例："></a>实例：</h6><p>通过supervise启动tomcat</p>
+<ol>
+<li><p>创建<code>run</code>脚本，脚本名字必须为<code>run</code></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">mkdir -p /opt/app/tomcat-daemon</span><br><span class="line"><span class="built_in">cd</span> /opt/app/tomcat-daemon</span><br><span class="line">vim run</span><br></pre></td></tr></table></figure>
+</li>
+<li><p><code>run</code>脚本中输入如下内容</p>
+</li>
+</ol>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="meta">#!/bin/bash</span></span><br><span class="line"><span class="built_in">exec</span> /opt/app/tomcat9/bin/catalina.sh run</span><br></pre></td></tr></table></figure>
+<ol start="3">
+<li>修改脚本权限 <code>chmod +x run</code></li>
+<li>以后台方式启动 <code>nohup supervise tomcat-daemon/ &gt; /opt/app/tomcat9/logs/catalina.out &amp;</code></li>
+</ol>
+<p><em>注意：</em> supervisor只能监控前台程序， 如果程序是通过fork方式实现的daemon服务，则不能用它监控.<br><code>catalina.sh run</code>方式跟<code>start</code>启动方式不一样，<code>start</code>是以后台方式启动。</p>
+<hr>
+<h5 id="expect-安装"><a href="#expect-安装" class="headerlink" title="expect 安装"></a><code>expect</code> 安装</h5><p>这个工具是用来部署脚本完成自动SCP方式传输文件用的，文章最后会附上我写的一个小demo。</p>
+<p>先安装<code>tcl</code><br>1.下载，解压<code>tcl</code>,进入<code>unix</code>目录<br>2.编译安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">./configure</span><br><span class="line">make</span><br><span class="line">make install</span><br></pre></td></tr></table></figure></p>
+<hr>
+<p>安装<code>expect</code><br>1.下载，解压<code>expect</code><br>2.编译安装<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">./configure --with-tclinclude=/usr/src/tcl8.6.2/generic/</span><br><span class="line">           --with-tclconfig=/usr/<span class="built_in">local</span>/lib/</span><br><span class="line"> make</span><br><span class="line"> make install</span><br></pre></td></tr></table></figure></p>
+<p><em>注意:</em>  执行第一条指令时请确认 <code>&quot;/usr/src/tcl8.6.2/generic/&quot;</code> 这个路径是否存在，如果不存在请替换相应的路径</p>
+<p>安装完后，执行 <code>expect</code> 如果出现 <code>expect1.1&gt;</code>说明安装成功。</p>
+<h6 id="实例"><a href="#实例" class="headerlink" title="实例"></a>实例</h6><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">scp_cmd=`<span class="built_in">which</span> scp`</span><br><span class="line">expect_cmd=`<span class="built_in">which</span> expect`</span><br><span class="line"></span><br><span class="line"><span class="variable">$expect_cmd</span> -c <span class="string">"</span></span><br><span class="line"><span class="string">spawn <span class="variable">$scp_cmd</span> <span class="variable">$file_path</span> user@host_ip:/DATA/<span class="variable">$file_path</span></span></span><br><span class="line"><span class="string">expect \"user@host_ip's password:\"</span></span><br><span class="line"><span class="string">send \"passwords\r\"</span></span><br><span class="line"><span class="string">expect eof</span></span><br></pre></td></tr></table></figure>
 
       
     </div>
@@ -542,7 +560,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/" title="JAVA内存模型划分">http://hellofrank.github.io/2017/06/20/JAVA内存模型划分/</a>
+    <a href="http://hellofrank.github.io/2019/11/06/Centos下Daemontools及expect安装/" title="Centos下Daemontools及expect安装">http://hellofrank.github.io/2019/11/06/Centos下Daemontools及expect安装/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -555,9 +573,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/JVM/" rel="tag"><i class="fa fa-tag"></i> JVM</a>
+            <a href="/tags/Daemontools/" rel="tag"><i class="fa fa-tag"></i> Daemontools</a>
           
-            <a href="/tags/JAVA/" rel="tag"><i class="fa fa-tag"></i> JAVA</a>
+            <a href="/tags/expect/" rel="tag"><i class="fa fa-tag"></i> expect</a>
           
         </div>
       
@@ -570,8 +588,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/06/20/Zuul源码分析/" rel="next" title="Zuul源码分析">
-                <i class="fa fa-chevron-left"></i> Zuul源码分析
+              <a href="/2019/11/06/Centos下升级Python及Mongodb驱动安装/" rel="next" title="Centos下升级Python及Mongodb驱动安装">
+                <i class="fa fa-chevron-left"></i> Centos下升级Python及Mongodb驱动安装
               </a>
             
           </div>
@@ -579,10 +597,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2018/04/19/记一次常规的gitflow工作流/" rel="prev" title="记一次常规的gitflow工作流">
-                记一次常规的gitflow工作流 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -631,8 +645,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -799,6 +822,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#Daemontools"><span class="nav-number">1.</span> <span class="nav-text">Daemontools</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#实例："><span class="nav-number">1.1.</span> <span class="nav-text">实例：</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#expect-安装"><span class="nav-number">2.</span> <span class="nav-text">expect 安装</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#实例"><span class="nav-number">2.1.</span> <span class="nav-text">实例</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
