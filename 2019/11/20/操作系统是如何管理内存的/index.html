@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在计算机的世界里，有两个比较宝贵的资源，CPU和内存。这是每个进程都要争抢的资源。这篇文章说说操作系统是怎样进行内存管理的。因水平有限，加之内存管理涉及的细节又很多，所以这里只是简单的介绍内存管理的一些关键概念及发展过程。">
+<meta name="keywords" content="内存管理">
+<meta property="og:type" content="article">
+<meta property="og:title" content="操作系统是如何管理内存的">
+<meta property="og:url" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="在计算机的世界里，有两个比较宝贵的资源，CPU和内存。这是每个进程都要争抢的资源。这篇文章说说操作系统是怎样进行内存管理的。因水平有限，加之内存管理涉及的细节又很多，所以这里只是简单的介绍内存管理的一些关键概念及发展过程。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/a.png">
+<meta property="og:image" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/b.png">
+<meta property="og:image" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/c.png">
+<meta property="og:image" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/d.png">
+<meta property="og:updated_time" content="2019-11-20T14:16:34.936Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="操作系统是如何管理内存的">
+<meta name="twitter:description" content="在计算机的世界里，有两个比较宝贵的资源，CPU和内存。这是每个进程都要争抢的资源。这篇文章说说操作系统是怎样进行内存管理的。因水平有限，加之内存管理涉及的细节又很多，所以这里只是简单的介绍内存管理的一些关键概念及发展过程。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/a.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>操作系统是如何管理内存的 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">操作系统是如何管理内存的
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-11-20 22:04:14" itemprop="dateCreated datePublished" datetime="2019-11-20T22:04:14+08:00">2019-11-20</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/操作系统/" itemprop="url" rel="index"><span itemprop="name">操作系统</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.9k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在计算机的世界里，有两个比较宝贵的资源，CPU和内存。这是每个进程都要争抢的资源。这篇文章说说操作系统是怎样进行内存管理的。<br>因水平有限，加之内存管理涉及的细节又很多，所以这里只是简单的介绍内存管理的一些关键概念及发展过程。<br><a id="more"></a></p>
+<h5 id="直面物理内存"><a href="#直面物理内存" class="headerlink" title="直面物理内存"></a>直面物理内存</h5><p>在很久很久以前，内核与用户进程都是直接操作物理内存的。那个时候的物理内存模型大概可以简化成这样。物理内存按照固定大小编号，每个编号代表一个固定的二进制位。我们就像使用门牌号一样使用物理内存编号。这种模型的特点就是简单直接，但是带来的问题也很多而且很严重。</p>
+<h6 id="问题1：用户进程之间内存冲突。"><a href="#问题1：用户进程之间内存冲突。" class="headerlink" title="问题1：用户进程之间内存冲突。"></a>问题1：用户进程之间内存冲突。</h6><p>在这个模型中，如果同时运行多个进程，就会引发内存冲突。比如进程A访问16号物理内存，而这时进程B很有可能也访问16号物理，引发冲突。相当于你想进入16号房间，另一个人也想进入同样的房间，最后你俩肯定干起来。</p>
+<h6 id="问题2：破坏操作系统。"><a href="#问题2：破坏操作系统。" class="headerlink" title="问题2：破坏操作系统。"></a>问题2：破坏操作系统。</h6><p>因为内核跟用户进程都是直接操作物理内存，所以难免用户程序就跑去操作内核使用的内存了，引发系统瘫痪。</p>
+<p>其实这个模型也不是一无是处。因为足够简单，而且直接操作硬件，所以在简单的嵌入式系统，收音机，微波炉的电脑版里，还是采用的这种方式。对了BIOS也是采用的这种方式。</p>
+<p>继续前进，既然这种方案有诸多严重问题，那么我们就需要找到一个新的方案。注意，我们要解决的问题是同时运行多个进程，但不会造成访问物理内存地址冲突。</p>
+<h6 id="地址空间"><a href="#地址空间" class="headerlink" title="地址空间"></a>地址空间</h6><blockquote>
+<p><em>地址空间</em>：一个进程可用于寻址内存的一套地址空间。每个进程都有一个自己的地址空间，并且这个地址空间独立于其他进程的地址空间（除了一些特殊情况可以共享）。</p>
+</blockquote>
+<p>地址空间的概念，形象一点儿说类似于我们的电话号码，比如我们的手机号就是一个11位的阿拉伯数字组成的地址空间。生活中还有很多其他的地址空间概念的应用。</p>
+<h6 id="基址寄存器与界限寄存器"><a href="#基址寄存器与界限寄存器" class="headerlink" title="基址寄存器与界限寄存器"></a>基址寄存器与界限寄存器</h6><p>虽然每个进程都有自己的地址空间（如下图a与b），但是还没有解决访问物理地址冲突的问题。因为进程A的16号内存跟进程B的16号内存很有可能还是同一块内存。<br><img src="a.png" alt="a.png"> <img src="b.png" alt="b.png"></p>
+<p>为了解决这个问题，发明了两个特殊的硬件，基址寄存器和界限寄存器。(关键时刻还得硬件工程师) </p>
+<blockquote>
+<p><em>基址寄存器</em>：存储进程访问内存的起始地址。<br><em>界限寄存器</em>：存储进程的内存长度。</p>
+</blockquote>
+<h6 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h6><p>当第一个程序运行时，基址寄存器和界限寄存器的值分别为0,16384,运行第二个进程的的时候，这些值分别是16384和32768。如果第三个16KB的程序进来那么基址寄存器的值时32768和16384。如下图所示</p>
+<p><img src="c.png" alt="c.png"></p>
+<p>每个进程的内存地址在送到物理内存之前。都会自动加上基址寄存器的值。这样每个进程都会在固定的内存范围内活动，这样就可以解决多个进程同时在内存中的问题。<br>为了避免用户进程随意更改寄存器中的值引起内存访问错误，很多系统中基址寄存器和界限寄存器都是只有操作系统可以访问。</p>
+<p>这个模型看起来完美解决了多道程序运行问题，但是问题在于，每次访问内存都要做加法跟比较运算，加法运算速度太慢了。而且进程的内存都是动态变化的，所以这个方法也不是最优解。</p>
+<h5 id="交换内存"><a href="#交换内存" class="headerlink" title="交换内存"></a>交换内存</h5><p>我们先来看另外一个问题—-内存超载。<br>每个程序员都希望有一块无限大的内存，但是这不现实。就像你想拥有无限多的钱一样。软件膨胀的速度，跟人的欲望是一样的，永远得不到满足。</p>
+<blockquote>
+<p>交换内存：把一个进程完全载入内存，运行一段时间之后存入磁盘。然后将另外一个进程载入内存，继续运行。周期性进行交替,把空闲进程主要存储在磁盘上。</p>
+</blockquote>
+<p>这个方案既可以解决同时运行多进程的问题，又可以解决内存超载问题。因为要频繁的往磁盘写入数据，但硬盘的写入速度又远没有内存快。所以这个方案一样不是我们寻找的最优解。<br>值得一提的是，虽然这个方案不能作为主流的内存管理方案，但是<em>交换内存</em>的概念还是被保留了下来，并且在实际应用中发挥了很大作用，后面还会提到。</p>
+<h5 id="虚拟内存"><a href="#虚拟内存" class="headerlink" title="虚拟内存"></a>虚拟内存</h5><p>为了解决同时运行多个程序，以及内存超载问题。所有操作系统的终极解决方案——虚拟内存。虚拟内存概念厉害之处在于，使程序只有一部分载入内存的情况下就可以运行。不用像上面介绍的那些模型一样，要全部载入内存，才能运行进程。</p>
+<blockquote>
+<p>虚拟内存：每个程序拥有自己的<em>虚拟地址空间</em>，这个空间被分割成多块，每一块被称为<em>一页</em>或者<em>页面</em>（page）。每一页有连续的地址空间。这些页被映射到物理内存。但是并不是所有页都必须在内存中才能运行程序。当程序引用的页在物理内存时，由操作系统完成映射。当程序访问的页不在物理内存时（缺页中断），由操作系统负责把需要的页载入内存。当一个程序等待一部分内容读入内存时，可以把CPU交给其他进程。</p>
+</blockquote>
+<p>上面这段话，有几个关健点，我帮大家梳理一下。</p>
+<h6 id="虚拟地址"><a href="#虚拟地址" class="headerlink" title="虚拟地址"></a>虚拟地址</h6><p>程序能够寻址的最大空间，所谓虚拟地址就是逻辑上假想出来的，真实没有那么大。32位操作系统最大的虚拟寻址空间就是2^32 大概时4G的空间 ，64位的操作系统最大虚拟寻址空间是2^64，抱歉我算不出来有多大。</p>
+<h6 id="页面"><a href="#页面" class="headerlink" title="页面"></a>页面</h6><p>虚拟地址空间按照固定大小划分成称为页面（page）的若干单元。</p>
+<h6 id="页框"><a href="#页框" class="headerlink" title="页框"></a>页框</h6><p>在物理内存中与虚拟页面一一对应的单元称为页框（page frame）。页面和页框的大小通常是一样的。</p>
+<h6 id="如何映射–内存管理单元及页表。"><a href="#如何映射–内存管理单元及页表。" class="headerlink" title="如何映射–内存管理单元及页表。"></a>如何映射–内存管理单元及页表。</h6><p>将虚拟地址发送到<em>内存管理单元</em>（Memory Management Unit,MMU包含在CPU里），然后通过<em>页表</em>把虚拟地址映射为物理地址。页表的本质是个函数，输入虚拟地址，输出真实物理地址。</p>
+<h6 id="缺页中断"><a href="#缺页中断" class="headerlink" title="缺页中断"></a>缺页中断</h6><p>我们知道进程的虚拟寻址空间很大,但是物理内存肯定没有那么大，也就是虚拟地址不可能全部映射到物理内存。当访问的页面不在物理内存时，就发生了页面中断，这个时候需要页面调度算法帮忙，把暂时不需要的页面置换到交换区，把需要的页面加载进内存。在等待换入页面的过程中，CPU会去处理其它进程。Linux会在磁盘中专门开辟出一个区域作为内存的交换区，以区别于IO系统的磁盘空间。</p>
+<h6 id="举个例子-1"><a href="#举个例子-1" class="headerlink" title="举个例子"></a>举个例子</h6><p>我们来简单看一下，如何把虚拟内存地址映射为真实的物理内存地址。假设有一台可以产生16位地址的计算机，最大寻址范围是0到64K(2^16),这台计算机实际物理内存是32K。我们虽然可以编写64K的程序，但他们却不能完全被载入内存。在磁盘上必须有一个64K大的空间，保证程序片段在需要时可以被载入内存。如下图<br><img src="d.png" alt="d.png"></p>
+<h6 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h6><p>为了更高效的使用内存，我们希望更多的共享内存。</p>
+<ol>
+<li><p>多进程共享页面<br>在实际操作中，通常将指令空间和数据空间分开。指令空间的页面很方便共享，因为指令空间的内容是只读的。如果是数据空间共享页面，要么保证数据是只读的，要么在进行数据空间进行写操作时，复制一份副本出来。比如fork调用，只要有一个进程进行了写操作，就会拷贝一份副本，这样每个进程都是可读写的。这个过程叫做写时拷贝。</p>
+</li>
+<li><p>多进程共享库<br>这是共享内存的另外一个维度，共享页面时按照页面维度共享，这个是按照库的维度，有很多进程都会用到同样的底层库，比如windows的动态链接库(DLL).这样内存中只载入一份就OK了，大大节省了内存空间。</p>
+</li>
+</ol>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p>上面的内容大概介绍了一下操作系统管理内存的基本知识，还有很多细节没有涉及，比如页面置换算法，如何更快的将虚拟地址映射到物理地址。如何处理进程动态内存增长等问题，感兴趣的可以私下跟我交流，或者查阅相关书籍。</p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/" title="操作系统是如何管理内存的">http://hellofrank.github.io/2019/11/20/操作系统是如何管理内存的/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/内存管理/" rel="tag"><i class="fa fa-tag"></i> 内存管理</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/11/06/Centos下Daemontools及expect安装/" rel="next" title="Centos下Daemontools及expect安装">
+                <i class="fa fa-chevron-left"></i> Centos下Daemontools及expect安装
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">26</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">14</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">36</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#直面物理内存"><span class="nav-number">1.</span> <span class="nav-text">直面物理内存</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#问题1：用户进程之间内存冲突。"><span class="nav-number">1.1.</span> <span class="nav-text">问题1：用户进程之间内存冲突。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#问题2：破坏操作系统。"><span class="nav-number">1.2.</span> <span class="nav-text">问题2：破坏操作系统。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#地址空间"><span class="nav-number">1.3.</span> <span class="nav-text">地址空间</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#基址寄存器与界限寄存器"><span class="nav-number">1.4.</span> <span class="nav-text">基址寄存器与界限寄存器</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#举个例子"><span class="nav-number">1.5.</span> <span class="nav-text">举个例子</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交换内存"><span class="nav-number">2.</span> <span class="nav-text">交换内存</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#虚拟内存"><span class="nav-number">3.</span> <span class="nav-text">虚拟内存</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#虚拟地址"><span class="nav-number">3.1.</span> <span class="nav-text">虚拟地址</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#页面"><span class="nav-number">3.2.</span> <span class="nav-text">页面</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#页框"><span class="nav-number">3.3.</span> <span class="nav-text">页框</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#如何映射–内存管理单元及页表。"><span class="nav-number">3.4.</span> <span class="nav-text">如何映射–内存管理单元及页表。</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#缺页中断"><span class="nav-number">3.5.</span> <span class="nav-text">缺页中断</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#举个例子-1"><span class="nav-number">3.6.</span> <span class="nav-text">举个例子</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#共享内存"><span class="nav-number">3.7.</span> <span class="nav-text">共享内存</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">71k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:09</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
