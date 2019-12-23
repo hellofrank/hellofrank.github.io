@@ -128,25 +128,28 @@
 
 
 
-  <meta name="description" content="以下安装方法都是centos6下进行的 升级Python查看python的版本 python -V 如果是2.7以下版本就需要升级了。">
-<meta name="keywords" content="python">
+  <meta name="description" content="目前的web服务器，apache的httpd与nginx可以说是绝代双骄，一个是江湖老大哥，一个是后起之秀。虽然现在大家的首选是nginx，很多项目因为各种原因还是会选择使用apache的httpd作为web服务器。">
+<meta name="keywords" content="httpd">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Centos下升级Python及Mongodb驱动安装">
-<meta property="og:url" content="http://hellofrank.github.io/2019/11/06/Centos下升级Python及Mongodb驱动安装/index.html">
+<meta property="og:title" content="你真的了解httpd的多路复用吗">
+<meta property="og:url" content="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="以下安装方法都是centos6下进行的 升级Python查看python的版本 python -V 如果是2.7以下版本就需要升级了。">
+<meta property="og:description" content="目前的web服务器，apache的httpd与nginx可以说是绝代双骄，一个是江湖老大哥，一个是后起之秀。虽然现在大家的首选是nginx，很多项目因为各种原因还是会选择使用apache的httpd作为web服务器。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-11-06T14:18:29.834Z">
+<meta property="og:image" content="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/prefork.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/worker.jpeg">
+<meta property="og:updated_time" content="2019-12-23T14:17:50.138Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Centos下升级Python及Mongodb驱动安装">
-<meta name="twitter:description" content="以下安装方法都是centos6下进行的 升级Python查看python的版本 python -V 如果是2.7以下版本就需要升级了。">
+<meta name="twitter:title" content="你真的了解httpd的多路复用吗">
+<meta name="twitter:description" content="目前的web服务器，apache的httpd与nginx可以说是绝代双骄，一个是江湖老大哥，一个是后起之秀。虽然现在大家的首选是nginx，很多项目因为各种原因还是会选择使用apache的httpd作为web服务器。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/prefork.jpeg">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2019/11/06/Centos下升级Python及Mongodb驱动安装/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/"/>
 
 
 
@@ -156,7 +159,7 @@
   };
 </script>
 
-  <title>Centos下升级Python及Mongodb驱动安装 | Frank's Blog</title>
+  <title>你真的了解httpd的多路复用吗 | Frank's Blog</title>
   
 
 
@@ -338,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/11/06/Centos下升级Python及Mongodb驱动安装/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -355,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Centos下升级Python及Mongodb驱动安装
+          <h1 class="post-title" itemprop="name headline">你真的了解httpd的多路复用吗
               
             
           </h1>
@@ -380,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2019-11-06 22:13:03" itemprop="dateCreated datePublished" datetime="2019-11-06T22:13:03+08:00">2019-11-06</time>
+              <time title="创建时间：2019-12-23 22:05:05" itemprop="dateCreated datePublished" datetime="2019-12-23T22:05:05+08:00">2019-12-23</time>
             
 
             
@@ -398,7 +401,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/运维/" itemprop="url" rel="index"><span itemprop="name">运维</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/apache/" itemprop="url" rel="index"><span itemprop="name">apache</span></a></span>
 
                 
                 
@@ -434,7 +437,7 @@
                 
                   <span class="post-meta-item-text">本文字数：</span>
                 
-                <span title="本文字数">1.2k</span>
+                <span title="本文字数">2.7k</span>
               
 
               
@@ -448,7 +451,7 @@
                 
                   <span class="post-meta-item-text">阅读时长 &asymp;</span>
                 
-                <span title="阅读时长">2 分钟</span>
+                <span title="阅读时长">5 分钟</span>
               
             </div>
           
@@ -468,26 +471,58 @@
       
 
       
-        <p>以下安装方法都是centos6下进行的</p>
-<h5 id="升级Python"><a href="#升级Python" class="headerlink" title="升级Python"></a>升级Python</h5><p>查看python的版本 <code>python -V</code> 如果是2.7以下版本就需要升级了。</p>
+        <p>目前的<code>web</code>服务器，<code>apache</code>的<code>httpd</code>与<code>nginx</code>可以说是绝代双骄，一个是江湖老大哥，一个是后起之秀。虽然现在大家的首选是<code>nginx</code>，很多项目因为各种原因还是会选择使用<code>apache</code>的<code>httpd</code>作为<code>web</code>服务器。</p>
 <a id="more"></a>
-<p>首先去官网下载你想要的python压缩包，然后解压。进入主目录执行以下操作(需要GCC编译器支持)<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">./configure --prefix=/usr/local</span><br><span class="line">make all </span><br><span class="line">make install </span><br><span class="line">make clean </span><br><span class="line">make distclean</span><br></pre></td></tr></table></figure></p>
-<p>执行完这些命令之后，在<code>/usr/local/bin/</code>目录下就能看到<code>python2.7</code>，然后试着执行 <code>/usr/local/bin/python2.7 -V</code>如果显示版本号说明已经安装成功。但是升级工作才刚刚完成一半，你可以在终端再次执行<code>python -V</code> 你会发现还是升级前的版本号。这个时候做如下操作。</p>
-<p>建立软连接，使系统默认的 <code>python</code>指向 <code>python2.7</code></p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mv /usr/bin/python /usr/bin/python2.6.6 </span><br><span class="line">ln -s /usr/local/bin/python2.7 /usr/bin/python</span><br></pre></td></tr></table></figure>
-<p>这个时候你在执行 <code>python -V</code> 就会是你安装的版本了。</p>
-<p>python的版本升级完成，但是你离大功告成还有几步的距离。<br>这个时候你可以尝试在终端执行 <code>yum list</code> 你会发现<code>yum</code>指令不能用了，这是因为<code>yum</code>默认不兼容<code>python 2.7</code>。<br>我们需要修改 <code>/usr/bin/yum</code> 文件，用vim打开该文件(需要管理员权限)。<br>将文件头部的<br><code>!/usr/bin/python</code><br>改成<br><code>!/usr/bin/python2.6.6</code> 这个就是你之前做链接修改的文件</p>
-<p>这样python升级工作基本就算完成了。</p>
-<h5 id="安装MongoDb驱动"><a href="#安装MongoDb驱动" class="headerlink" title="安装MongoDb驱动"></a>安装MongoDb驱动</h5><p>装了python之后，我们是拿来用的，python 有的时候需要很多第三方库。这些库都需要额外安装的。安装工具主要是<code>setuptools</code>和<code>pip</code>(这两个工具的区别我就不在这里说了)。<br>下面说说在服务器上如何离线安装(我们的服务器是坚决不允许上外网，一秒中也不可以)<code>setuptools</code>及<code>MongoDb</code>驱动。</p>
-<h5 id="安装-setuptools"><a href="#安装-setuptools" class="headerlink" title="安装 setuptools"></a>安装 setuptools</h5><ol>
-<li>下载 <code>setuptools-1.4.2.tar.gz</code> </li>
-<li>解压完之后，进入主目录执行 <code>python setup.py install</code></li>
-<li>如果安装过程提示缺少相应的py包，请通过<code>yum</code>安装相应的软件包(如下)，<br>然后<strong>重新编译安装py</strong>，在继续安装就会成功了。</li>
+<p>随着最新版<code>httpd 2.4</code>的发布，<code>event</code>模块也变成了稳定版本，与<code>nginx</code>的性能差距再次缩小。</p>
+<p>Apache <code>httpd</code> 服务器有三种MPM(多路处理模块)，分别是<code>prefork</code>,<code>worker</code>及<code>event</code>。这三种模块性格迥异，不同的模块对<code>httpd</code>的性能及使用场景会产生比较大的影响。</p>
+<p>查看<code>httpd</code>服务器使用的哪个模块可以通过如下指令 <code>httpd -l</code>。从输出可以看出使用得是<code>worker</code>模式。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Compiled in modules:</span><br><span class="line">    core.c</span><br><span class="line">    mod_so.c</span><br><span class="line">    http_core.c</span><br><span class="line">    worker.c</span><br></pre></td></tr></table></figure></p>
+<h5 id="MPM介绍"><a href="#MPM介绍" class="headerlink" title="MPM介绍"></a>MPM介绍</h5><h6 id="prefork"><a href="#prefork" class="headerlink" title="prefork"></a>prefork</h6><blockquote>
+<p>进程模式。每个请求都由一个子进程来处理。线程安全。不太适合高并发服务器。</p>
+</blockquote>
+<ul>
+<li>工作原理如图：<br><img src="prefork.jpeg" alt="prefork.jpeg"></li>
+</ul>
+<h6 id="worker"><a href="#worker" class="headerlink" title="worker"></a>worker</h6><blockquote>
+<p>进程线程混合模式。父进程会创建子进程，每个子进程会创建多个工作线程以及一个监听线程。每一个线程负责处理一个http请求。</p>
+</blockquote>
+<ul>
+<li>工作原理，如图：<br><img src="worker.jpeg" alt="worker.jpeg"></li>
+</ul>
+<h6 id="event"><a href="#event" class="headerlink" title="event"></a>event</h6><blockquote>
+<p>进程线程混合模式。跟<code>worker</code>模式很像，不同的是采用<code>epoll</code>模式，在2.4之前的版本是实验版本，现在已经稳定了。性能比worker要好很多。并在<code>keepalive</code>方面做了优化。</p>
+</blockquote>
+<ul>
+<li>工作原理<br>与<code>worker</code>基本相同，这里就不放图了。</li>
+</ul>
+<p>这三种模式，在启动的时候都会启动固定数量的子进程。同时三种模式都会创建一定数量的空闲子进程，以便新的请求进来时，可以直接使用。</p>
+<h5 id="通用配置"><a href="#通用配置" class="headerlink" title="通用配置"></a>通用配置</h5><p>三种模式都有一些通用的参数指令,个别指令在不同模式下面含义有些许不同：</p>
+<p> <code>StartServers</code> ：服务器启动时建立的子进程数。</p>
+<p><code>MinSpareServers</code>：空闲子进程的最小数量。当空闲子进程小于这个值时，父进程将会创建子进程。</p>
+<p><code>MaxSpareServers</code>：空闲子进程的最大数量。当空闲子进程大于这个值时，父进程会杀死多余的子进程。 </p>
+<p><code>MaxRequestWorkders</code>：允许同时接受的最大接入请求数量；如果提升该值，也需要同时提高<code>ServerLimit</code>。任何超过了该值的请求数都要进入等待队列。在之前的版本被称为<code>MaxClients</code>。现在的版本也支持该参数。</p>
+<blockquote>
+<p>注意： 在<code>worker</code> 和 <code>event</code> 模式下<code>MaxRequestWorks</code> = <code>ServerLimit</code> * <code>ThreadsPerChild</code></p>
+</blockquote>
+<p><code>ListenBacklog</code> :半链接(pending connection)队列的最大长度。</p>
+<p><code>ServerLimit</code>: 服务器允许配置的进程数上限。</p>
+<p><code>MaxConnectionsPerChild</code>：每个子进程在其生命周期内允许最大的请求数量，如果请求总数已经达到这个数值，子进程将会结束，如果设置为<code>0</code>，子进程将永远不会结束。在之前的版本称之为<code>MaxRequestsPerChild</code>。</p>
+<p>建议设置为非零，原因：</p>
+<ol>
+<li>能够防止(偶然的)内存泄漏无限进行，从而耗尽内存。</li>
+<li>给进程一个有限寿命，从而有助于当服务器负载减轻的时候减少活动进程的数量(重生的机会)。</li>
 </ol>
-<p><em>注意一般会缺少如下包</em></p>
-<p><code>yum install zlib-devel bzip2-devel openssl-devel ncurses-devel sqlite-devel</code></p>
-<p>安装完<code>setuptools</code>，就可以安装<code>mongodb</code>的驱动了。方法同上。</p>
-<p>如果你恰巧需要安装<code>MongoDB</code>的<code>Python</code>驱动，而又从后往前看文章，你也许就可以避免安装两次<code>python</code>。</p>
+<p>配置样例 <code>prefork</code>模式<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule prefork.c&gt;</span><br><span class="line">    StartServers      5</span><br><span class="line">    MinSpareServers   10</span><br><span class="line">    MaxSpareServers   20</span><br><span class="line">    ServerLimit      1024</span><br><span class="line">    MaxRequestWorkders  1024</span><br><span class="line">    MaxRequestsPerChild  160</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure></p>
+<h5 id="worker-与-event-特有的配置参数"><a href="#worker-与-event-特有的配置参数" class="headerlink" title="worker 与 event 特有的配置参数"></a>worker 与 event 特有的配置参数</h5><p><code>ThreadsPerChild</code>：每个子进程，产生多少线程。不能超过<code>ThreadLimit</code> 。</p>
+<p><code>ThreadLimit</code>：每个子进程可配置的线程数。</p>
+<p><code>AsyncRequestWorkerFactor</code>：该参数<code>event</code>模式独有。默认值为2。可设置为小数，例如1.5。</p>
+<p>该参数用来调整每个进程允许的连接数。只有当前连接数(不包括正处于closing状态的连接)小于下面的表达式的值时，子进程才允许接收新连接。最好不要调整该值，除非你经过大量测试。<br><code>ThreadsPerChild +(AsyncRequestWorkerFactor * number of idle workers)</code></p>
+<p>配置样例 <code>worker</code>模式</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">&lt;IfModule worker.c&gt;</span><br><span class="line">    StartServers        5</span><br><span class="line">    ServerLimit         40</span><br><span class="line">    MaxRequestWorkders  2560</span><br><span class="line">    MinSpareThreads     10</span><br><span class="line">    MaxSpareThreads     20</span><br><span class="line">    ThreadsPerChild     64</span><br><span class="line">    MaxRequestsPerChild  160</span><br><span class="line">&lt;/IfModule&gt;</span><br></pre></td></tr></table></figure>
+<h5 id="web服务器常用运维指令"><a href="#web服务器常用运维指令" class="headerlink" title="web服务器常用运维指令"></a>web服务器常用运维指令</h5><p>我把我常用得一些网络运维脚本送给各位吧，有凑字数嫌疑(偷笑)。</p>
+<p>查看状态为<code>established</code> 的TCP连接:<code>netstat -na|grep ESTABLISHED|wc -l</code>。</p>
+<p>统计哪个IP地址连接最多:<br><code>netstat -na|grep ESTABLISHED|awk &#39;{print $5}&#39;|awk -F: &#39;{print $1}&#39;|sort|uniq -c|sort -r</code>。</p>
+<p>统计TCP连接状态:<br><code>netstat -n | awk &#39;/^tcp/ {++S[$NF]} END {for(a in S) print a, S[a]}&#39;</code>。</p>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p>关于<code>apache httpd</code> 的配置及MPM简介，上面的内容基本就说完了。稍微了解<code>TCP</code>及网络编程知识的同学可能会好奇，<code>TCP</code>连接对外提供服务的是一个固定端口，比如<code>httpd</code>默认是<code>80</code>端口，那<code>apache httpd</code>是如何做到同时支持多个请求的呢，也就是高并发。还有<code>worker</code>模式和<code>event</code>模式都是进程线程混合模式，为什么<code>event</code>模式就比<code>worker</code>模式优秀呢，也就是大家经常开玩笑说的，同样是九年义务教育你为什么如此优秀。我将在下篇文章中给大家详细说一说，下一篇文章才是硬核干货知识。</p>
 
       
     </div>
@@ -549,7 +584,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2019/11/06/Centos下升级Python及Mongodb驱动安装/" title="Centos下升级Python及Mongodb驱动安装">http://hellofrank.github.io/2019/11/06/Centos下升级Python及Mongodb驱动安装/</a>
+    <a href="http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/" title="你真的了解httpd的多路复用吗">http://hellofrank.github.io/2019/12/23/你真的了解httpd的多路复用吗/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -562,7 +597,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/python/" rel="tag"><i class="fa fa-tag"></i> python</a>
+            <a href="/tags/httpd/" rel="tag"><i class="fa fa-tag"></i> httpd</a>
           
         </div>
       
@@ -575,8 +610,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/10/29/我是如何进行架构设计的/" rel="next" title="我是如何进行架构设计的">
-                <i class="fa fa-chevron-left"></i> 我是如何进行架构设计的
+              <a href="/2019/12/08/Java程序员必读核心书单-基础版/" rel="next" title="Java程序员必读核心书单-基础版">
+                <i class="fa fa-chevron-left"></i> Java程序员必读核心书单-基础版
               </a>
             
           </div>
@@ -584,10 +619,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/11/06/Centos下Daemontools及expect安装/" rel="prev" title="Centos下Daemontools及expect安装">
-                Centos下Daemontools及expect安装 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -841,7 +872,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#升级Python"><span class="nav-number">1.</span> <span class="nav-text">升级Python</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装MongoDb驱动"><span class="nav-number">2.</span> <span class="nav-text">安装MongoDb驱动</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装-setuptools"><span class="nav-number">3.</span> <span class="nav-text">安装 setuptools</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#MPM介绍"><span class="nav-number">1.</span> <span class="nav-text">MPM介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#prefork"><span class="nav-number">1.1.</span> <span class="nav-text">prefork</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#worker"><span class="nav-number">1.2.</span> <span class="nav-text">worker</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#event"><span class="nav-number">1.3.</span> <span class="nav-text">event</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#通用配置"><span class="nav-number">2.</span> <span class="nav-text">通用配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#worker-与-event-特有的配置参数"><span class="nav-number">3.</span> <span class="nav-text">worker 与 event 特有的配置参数</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#web服务器常用运维指令"><span class="nav-number">4.</span> <span class="nav-text">web服务器常用运维指令</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">5.</span> <span class="nav-text">结束</span></a></li></ol></div>
             
 
           </div>
