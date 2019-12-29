@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="进行网络通信的时候，需要建立一个socket，这是大家都知道的。如果一个套接字只能被一个监听进(线)程监听，那么岂不是同一时刻httpd只能处理一个请求，处理完这个请求之后，释放80端口在给其他请求使用。可是显然httpd 没有那么笨，那么apache httpd 是如何支持高并发的呢?">
+<meta name="keywords" content="httpd">
+<meta property="og:type" content="article">
+<meta property="og:title" content="httpd是如何实现高并发服务的">
+<meta property="og:url" content="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="进行网络通信的时候，需要建立一个socket，这是大家都知道的。如果一个套接字只能被一个监听进(线)程监听，那么岂不是同一时刻httpd只能处理一个请求，处理完这个请求之后，释放80端口在给其他请求使用。可是显然httpd 没有那么笨，那么apache httpd 是如何支持高并发的呢?">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/640.png">
+<meta property="og:image" content="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/640.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/641.png">
+<meta property="og:updated_time" content="2019-12-29T02:23:22.992Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="httpd是如何实现高并发服务的">
+<meta name="twitter:description" content="进行网络通信的时候，需要建立一个socket，这是大家都知道的。如果一个套接字只能被一个监听进(线)程监听，那么岂不是同一时刻httpd只能处理一个请求，处理完这个请求之后，释放80端口在给其他请求使用。可是显然httpd 没有那么笨，那么apache httpd 是如何支持高并发的呢?">
+<meta name="twitter:image" content="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/640.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>httpd是如何实现高并发服务的 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">httpd是如何实现高并发服务的
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2019-12-29 00:00:00" itemprop="dateCreated datePublished" datetime="2019-12-29T00:00:00+08:00">2019-12-29</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/apache/" itemprop="url" rel="index"><span itemprop="name">apache</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>进行网络通信的时候，需要建立一个<code>socket</code>，这是大家都知道的。如果一个套接字只能被一个监听进(线)程监听，那么岂不是同一时刻<code>httpd</code>只能处理一个请求，处理完这个请求之后，释放<code>80</code>端口在给其他请求使用。可是显然<code>httpd</code> 没有那么笨，那么<code>apache httpd</code> 是如何支持高并发的呢?</p>
+<a id="more"></a>
+<p>简单的说就是有<em>两种套接字</em>，一种是<em>监听套接字</em>，供监听进(线)程监听使用。另一种是<em>链接套接字</em>，供传输数据使用。监听进(线)程好比丽春院里面接客的老鸨，而为客人提供弹唱服务的姑娘相当于<code>worker</code>模式下的工作线程。老鸨可以有一个，但是姑娘有很多。在<code>apache httpd</code> 的 <code>worker</code>模式下，每个进程会产生多个工作线程及一个监听线程。监听线程负责监听，其他工作线程负责传输数据。问题回答完了，就这么简单。</p>
+<p>那么<em>监听套接字</em>跟<em>连接套接字</em>是如何配合工作的呢？<br>要回答这个问题，需要有两个背景知识做铺垫，<em>网络编程</em>及<em>TCP三次握手</em>。</p>
+<h5 id="背景知识1-网络编程"><a href="#背景知识1-网络编程" class="headerlink" title="背景知识1-网络编程"></a>背景知识1-网络编程</h5><p>有过网络编程经验的同学都知道，把’大象放冰箱’一般是如下几个步骤。</p>
+<ol>
+<li>通过<code>socket()</code> 函数建立监听套接字；</li>
+<li>通过<code>bind()</code>函数绑定刚刚生成的监听套接字；</li>
+<li>通过<code>listen()</code>函数监听刚刚生成的监听套接字；</li>
+<li>通过<code>accept()</code> 函数生成连接套接字；</li>
+<li>通过<code>recv()/send()</code>函数利用连接套接字收发数据；</li>
+<li>通过<code>close()</code>函数断开连接。</li>
+</ol>
+<p>大家记住这几个步骤，后面用的到。现在来说TCP的三次握手过程。</p>
+<h5 id="背景知识2-TCP三次握手"><a href="#背景知识2-TCP三次握手" class="headerlink" title="背景知识2-TCP三次握手"></a>背景知识2-TCP三次握手</h5><p>我们经常见到的TCP三次握手过程都是这样的。<br>如下图：</p>
+<p><img src="640.png" alt="640.png"></p>
+<p>上面这张图，只是表面现象。下面我把这张图没有体现出来的细节给各位说一说，这对回答上面的问题至关重要。</p>
+<p><code>TCP</code>的协议栈中维护着两个队列。一个是半连接队列，一个是全链接队列。<br>客户端发送<code>SYN</code>报文到服务端指定端口比如<code>httpd</code>的默认<code>80</code>端口;此时客户端的状态变为<code>SYN-SEND</code>；服务端收到<code>SYN</code>报文之后，将这个连接状态，存储到半连接队列中，同时服务端的状态变更为<code>SYN-RECV</code>；然后服务端立刻回一个<code>ACK</code>报文给客户端；客户端收到<code>ACK</code>之后，回给服务端一个<code>ACK</code>，服务端收到这个<code>ACK</code>之后，客户端跟服务端都变为<code>ESTABLISHE</code>状态；表明TCP三次握手成功。这个时候会把半连接队列中的连接，转移到全链接队列。全链接队列中的连接都是已经完成三次握手的连接。监听进(线)程监听<em>监听套接字</em>，就是工作在上面这个过程的。</p>
+<p>全链接队列当中的连接都是可以用来直接进行数据传输的连接了。这个时候可以使用<code>accept()</code>函数，将全链接当中的连接取出来，生成连接<code>socket</code>，进行数据传输。传输完毕之后，经过四次挥手，关掉连接，释放资源。这就是一次完整的TCP传输过程。</p>
+<p>俗话说的好，一图胜千言。我将上面的过程简单的画了一个流程图出来。</p>
+<p><img src="640.jpeg" alt="640.jpeg"></p>
+<p>图中标绿的部分分别是三次握手过程跟四次挥手过程。这两个阶段发生在内核空间。</p>
+<blockquote>
+<p>在<code>Linux 2.2</code>以前，<code>listen()</code>函数有一个<code>backlog</code>的参数，用于设置这两个队列的最大总长度，从<code>Linux 2.2</code>开始，这个参数只表示全链接队列的最大长度，而<code>/proc/sys/net/ipv4/tcp_max_syn_backlog</code>则用于设置半连接队列的最大长度。<code>/proc/sys/net/core/somaxconn</code>则是硬限制已完成队列的最大长度，默认为<code>128</code>，如果<code>backlog</code>大于<code>somaxconn</code>，则<code>backlog</code>会被强制等于<code>somaxconn</code>。</p>
+</blockquote>
+<h5 id="回到apache-httpd"><a href="#回到apache-httpd" class="headerlink" title="回到apache httpd"></a>回到apache httpd</h5><h6 id="prefork模式"><a href="#prefork模式" class="headerlink" title="prefork模式"></a>prefork模式</h6><p><code>apache httpd</code> 的<code>prefork</code>模式会创建子进程处理<code>http</code>请求。每个子进程，即负责监听又负责处理数据。也就是说从建立三次握手到数据传输，再到四次挥手，一个子进程负责到底。如果传输的数据量比较大，同时系统高并发有比较高，那就需要建立很多子进程，对服务器的硬件资源是个不小的考验。</p>
+<h6 id="worker模式"><a href="#worker模式" class="headerlink" title="worker模式"></a>worker模式</h6><p><code>worker</code>模式是进线程混合模式，主进程会创建子进程，每个子进程会创建多个工作子线程及一个监听进程。监听进程专门负责处理监听套接字，数据传输过程交给其他工作线程。所以<code>worker</code>模式要比<code>prefork</code>模式在性能上提高不少。</p>
+<h6 id="event模式"><a href="#event模式" class="headerlink" title="event模式"></a>event模式</h6><p><code>event</code>模式跟<code>worker</code>模式基本相同，都是进线程混合模式，不同的是，该模式还会生成一个专门处理<code>keep-alive</code>的线程。<code>keep-alive</code>虽好，但是某些情况下存在站着茅坑不拉屎的情况，这样可以把保持<code>keep-alive</code>的空闲连接资源进行回收。<code>keep-alive</code>的问题可以看<a href="https://mp.weixin.qq.com/s/quo5NXzfEqgRomwX1t7zaw" target="_blank" rel="noopener">我这篇文章</a>。</p>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p><img src="641.png" alt="641.png"></p>
+<p>既然<code>event</code>和<code>worker</code>都是进线程混合模式，那么为什么<code>event</code>模块的性能要比<code>worker</code>模块的性能好很多呢?我将在下篇博文中详细说明。</p>
+<hr>
+<p>推荐阅读</p>
+<p><a href="https://mp.weixin.qq.com/s/rPpQ4rIWRj4lUcRx92Ndzw" target="_blank" rel="noopener">Javaer运维指令合集(快餐版)</a><br><a href="https://mp.weixin.qq.com/s/BZ51P6nsFQafPnm3s44Azw" target="_blank" rel="noopener">Java程序员必读核心书单—基础版</a><br><a href="https://mp.weixin.qq.com/s/NzaXo-E7PTH0FJJ-T_Qe5w" target="_blank" rel="noopener">你真的了解 apache httpd 的多路复用吗</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/" title="httpd是如何实现高并发服务的">http://hellofrank.github.io/2019/12/29/httpd是如何实现高并发服务的/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/httpd/" rel="tag"><i class="fa fa-tag"></i> httpd</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/23/你真的了解httpd的多路复用吗/" rel="next" title="你真的了解httpd的多路复用吗">
+                <i class="fa fa-chevron-left"></i> 你真的了解httpd的多路复用吗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2019/12/29/为什么httpd的event模块比worker更优秀/" rel="prev" title="为什么httpd的event模块比worker更优秀">
+                为什么httpd的event模块比worker更优秀 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">34</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">16</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#背景知识1-网络编程"><span class="nav-number">1.</span> <span class="nav-text">背景知识1-网络编程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#背景知识2-TCP三次握手"><span class="nav-number">2.</span> <span class="nav-text">背景知识2-TCP三次握手</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#回到apache-httpd"><span class="nav-number">3.</span> <span class="nav-text">回到apache httpd</span></a><ol class="nav-child"><li class="nav-item nav-level-6"><a class="nav-link" href="#prefork模式"><span class="nav-number">3.1.</span> <span class="nav-text">prefork模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#worker模式"><span class="nav-number">3.2.</span> <span class="nav-text">worker模式</span></a></li><li class="nav-item nav-level-6"><a class="nav-link" href="#event模式"><span class="nav-number">3.3.</span> <span class="nav-text">event模式</span></a></li></ol></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">4.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2019</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">87k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
