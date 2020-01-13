@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在我接触过的编程语言里面，最奇葩的两个就是JavaScript和Shell了。因为他们有着太多的语法糖跟特殊字符，总是让我措手不及，而且编程习惯跟Java和Python也大相径庭。如果你以为他们是个脚本语言而轻视他们，那么你将大错特错。 这两个奇葩比起来，Shell的奇葩之处在于特殊符号多，骚操作也多。比如你以为 . 这是个点，其实它代表的意思远不止一个点那么简单 。">
+<meta name="keywords" content="shell">
+<meta property="og:type" content="article">
+<meta property="og:title" content="shell里面的奇葩字符">
+<meta property="og:url" content="http://hellofrank.github.io/2020/01/13/shell里面的奇葩字符/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="在我接触过的编程语言里面，最奇葩的两个就是JavaScript和Shell了。因为他们有着太多的语法糖跟特殊字符，总是让我措手不及，而且编程习惯跟Java和Python也大相径庭。如果你以为他们是个脚本语言而轻视他们，那么你将大错特错。 这两个奇葩比起来，Shell的奇葩之处在于特殊符号多，骚操作也多。比如你以为 . 这是个点，其实它代表的意思远不止一个点那么简单 。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-01-13T14:51:15.831Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="shell里面的奇葩字符">
+<meta name="twitter:description" content="在我接触过的编程语言里面，最奇葩的两个就是JavaScript和Shell了。因为他们有着太多的语法糖跟特殊字符，总是让我措手不及，而且编程习惯跟Java和Python也大相径庭。如果你以为他们是个脚本语言而轻视他们，那么你将大错特错。 这两个奇葩比起来，Shell的奇葩之处在于特殊符号多，骚操作也多。比如你以为 . 这是个点，其实它代表的意思远不止一个点那么简单 。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/01/13/shell里面的奇葩字符/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>shell里面的奇葩字符 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/01/13/shell里面的奇葩字符/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">shell里面的奇葩字符
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-01-13 22:31:42" itemprop="dateCreated datePublished" datetime="2020-01-13T22:31:42+08:00">2020-01-13</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/shell/" itemprop="url" rel="index"><span itemprop="name">shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">12 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在我接触过的编程语言里面，最奇葩的两个就是JavaScript和Shell了。因为他们有着太多的语法糖跟特殊字符，总是让我措手不及，而且编程习惯跟Java和Python也大相径庭。如果你以为他们是个脚本语言而轻视他们，那么你将大错特错。</p>
+<p>这两个奇葩比起来，Shell的奇葩之处在于特殊符号多，骚操作也多。比如你以为 <code>.</code> 这是个点，其实它代表的意思远不止一个点那么简单 。</p>
+<a id="more"></a>
+<p>下面的内容是我整理的一份Shell编程中的特殊字符。如果大家觉得有用的话就点赞收藏吧。</p>
+<p><code>;</code> 单分号，一般作为命令分隔符。可以将两个命令放在同一行。如: <code>echo hello; echo there</code>，但真正写脚本的时候尽量不要这样写。</p>
+<hr>
+<p> <code>;;</code> 双分号，用在 case条件语句的结束符。如:<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">case</span> <span class="string">"<span class="variable">$variable</span>"</span> <span class="keyword">in</span></span><br><span class="line">  abc)  <span class="built_in">echo</span> <span class="string">"\$variable = abc"</span> ;;</span><br><span class="line">  xyz)  <span class="built_in">echo</span> <span class="string">"\$variable = xyz"</span> ;;</span><br><span class="line"><span class="keyword">esac</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><code>%</code> 百分号，用于表示取余操作，也用于正则表达式。</p>
+<hr>
+<p><code>~</code>  波浪线，表示家目录，等价于<code>$HOME</code>。如 <code>cd ~</code></p>
+<hr>
+<p><code>~+</code>  表示当前工作目录，等价于<code>$PWD</code>。</p>
+<hr>
+<p><code>~-</code>  表示上一个工作目录，等价于 <code>..</code>。</p>
+<hr>
+<p><code>|</code>  管道标识符，将上一个命令的输出作为下一个命令的输入，经常用到，没什么好说的。</p>
+<hr>
+<p><code>&gt;|</code>  强制重定向。强制重写已经存在的文件。</p>
+<hr>
+<p><code>||</code>  表示逻辑或操作。</p>
+<hr>
+<p><code>&amp;</code>  让命令在后台运行，例如 <code>command &amp;</code>  一般用于启动后台进程服务。</p>
+<hr>
+<p><code>&amp;&amp;</code>  表示逻辑与操作。</p>
+<hr>
+<p><code>*</code> 星号，主要用于通配符匹配，当然也用于乘法表达式。</p>
+<hr>
+<p>\ 主要用于转义特殊字符，比如想转义双引号，可以这样 <code>echo \&quot;</code> 输出 “。</p>
+<hr>
+<p><code>/</code>  文件路径分隔符,比如 <code>/opt/app/projects/</code> 。当然也用作除法表达式。</p>
+<hr>
+<p> <code>.</code> 点号，这个符号作用比较多。 首先可以等价于 <code>source</code> 命令。也可以作为文件名字，在文件名开头，表示该文件是个隐藏文件。 还可以表示当前目录， 比如拷贝某个文件到当前目录 <code>cp /opt/app/a.md .</code> 。如果是两个连续的点则表示上一级目录，比如 <code>cd ..</code>。</p>
+<p>最后，点号也是正则表达式的元字符。</p>
+<hr>
+<p> <code>&quot;</code>  双引号，双引号里面的变量一般会被解析成赋值的内容。比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name=frank</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello <span class="variable">$name</span>"</span> <span class="comment"># hello frank</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p> <code>&#39;</code> 单引号，单引号里面的变量一般不会被解析，比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name=frank</span><br><span class="line"><span class="built_in">echo</span> <span class="string">'hello $name'</span> <span class="comment">#hello $name</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p> <code>&#39;</code> 反引号（ESC键下面那个），要跟单引号区分开。反引号里面的内容会被当作指令执行，并将执行的结果赋值给变量。比如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">file=`ls ~`</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$file</span> <span class="comment">#家目录下所有文件。</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><code>!</code>  感叹号，一般用于取反。比如 <code>!=</code> 表示不等。</p>
+<p><strong>骚操作</strong><br>在终端中执行，可以表示历史指令比如 <code>!-3</code>，将会输出你刚刚输入的指令。但在脚本中不支持该种写法。</p>
+<hr>
+<p><code>**</code>  双星号，算术运算中表示求幂运算。比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">let</span> <span class="string">"a=3**2"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span> <span class="comment">#9</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>?</code>  问号，表示条件测试；也用作三元运算符。也是正则表达式元字符。</p>
+<hr>
+<p><code>$</code>  美元符，放到变量前面，即引用一个变量的内容，比如：<code>echo $PATH</code>；当然也是正则表达式的元字符。</p>
+<hr>
+<p><code>${}</code> 参数替换。用于在字符串中表示变量值。比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">name=frank</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"hello <span class="variable">$&#123;name&#125;</span>"</span> <span class="comment">#hello frank</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>$*,$@</code> 这两个特殊字符都用于获取传递给脚本的所有参数。当他们被双引号包围时，<code>&quot;$*&quot;</code>会将所有的参数从整体上看做一份数据。而<code>&quot;$@&quot;</code>仍然将每个参数都看作一份数据，彼此之间是独立的。</p>
+<hr>
+<p><code>$#</code>  表示参数个数。</p>
+<hr>
+<p><code>$?</code>  返回最近的一个命令或脚本的退出状态码，正确执行则返回0，否则返回非0。</p>
+<hr>
+<p><code>$$</code>  双美元符， 返回当前脚本的进程号。</p>
+<hr>
+<p><code>()</code> 小括号，命令组，一组圆括号括起来的命令代表一个命令组，以子shell方式运行。同时小括号里面的的变量类似局部变量，外部不能访问。比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">a=123</span><br><span class="line">( a=321; )</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>   <span class="comment"># a = 123</span></span><br><span class="line">``` </span><br><span class="line">还可以用于数组初始化。例如</span><br><span class="line">```bash</span><br><span class="line">arr=(ele1 ele2 ele3)</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;arr[1]&#125;</span> <span class="comment"># ele2</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>{xxx,yyy,zzz}</code> 有人叫花括号扩展，我举几个例子，可能大家就明白了。注意不能有空格。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> &#123;a,b,c&#125;-&#123;d,e,f&#125; <span class="comment"># a-d a-e a-f b-d b-e b-f c-d c-e c-f</span></span><br><span class="line">cat &#123;file1,file2,file3&#125; &gt; merge_file <span class="comment">#将三个file的内容一同输入merge_file</span></span><br><span class="line">cp file.&#123;txt,backup&#125; <span class="comment">#拷贝file.txt成file.backup</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>{a..z}</code>  跟上面类似，还是看例子吧。<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> &#123;a..z&#125; <span class="comment"># a b c d e f g h i j k l m n o p q r s t u v w x y z</span></span><br><span class="line"><span class="built_in">echo</span> &#123;0..3&#125; <span class="comment"># 0 1 2 3</span></span><br></pre></td></tr></table></figure></p>
+<hr>
+<p><code>{}</code>  花括号，表示代码块 ，也用于表示匿名函数。也可以结合重定向符使用。<br>例如：<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">fileline=~/a.txt</span><br><span class="line">&#123;</span><br><span class="line">    <span class="built_in">read</span> line1</span><br><span class="line">    <span class="built_in">read</span> line2</span><br><span class="line"> &#125; &lt; <span class="variable">$fileline</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="variable">$line1</span></span><br><span class="line"> <span class="built_in">echo</span> <span class="variable">$lien2</span></span><br></pre></td></tr></table></figure></p>
+<p>会将<code>a.txt</code>的前两行内容赋值给变量<code>line1</code>和<code>line2</code>;</p>
+<p><strong>骚操作</strong><br>在<code>xargs -i</code>中，还可以作为文本的占位符，用来标记输出文本的位置。<br>比如 <code>ls *.txt | xargs -i -t cp {} {}.bak</code> 会把所有txt文件拷贝一份，命名成txt.bak</p>
+<hr>
+<p><code>{} \;</code>  表示路径名字。一般跟<code>find</code>命令一起使用。<br>例如 <code>find . -name &quot;*.sh&quot; -exec rm {}  \；</code><br>找出所有sh脚本，然后删除。注意<code>{}</code> 和 \ 之间的空格，分号必须存在。</p>
+<hr>
+<p><code>[]</code>  中括号，用于在里面写判断表达式。也可以当作数组用。当然也是正则表达式元字符。</p>
+<hr>
+<p><code>[[]]</code>  双中括号，也用于在里面写判断表达式，比上面但中括号更灵活。</p>
+<hr>
+<p><code>$[]</code>  计算整数表达式，已经不推荐使用。例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a=3;</span><br><span class="line">b=7;</span><br><span class="line"><span class="built_in">echo</span> $[<span class="variable">$a</span>+<span class="variable">$b</span>]   <span class="comment"># 10</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>(())</code>  双小括号， 计算整数表达式，推荐使用。如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a = 23</span><br><span class="line">(( a++ ))</span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a (after a++) = <span class="variable">$a</span>"</span>       <span class="comment"># 24</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>&gt; ，&amp;&gt;， &gt;&amp;， &gt;&gt;</code>  这四个都是重定向符，分别举例说明。</p>
+<p><code>cat ~/a.txt &gt;a.log</code>  将文件<code>a.txt</code>的内容输出到文件<code>a.log</code>中去，如果文件存在则覆盖；</p>
+<p><code>command &amp;&gt;filename</code> 重定向<code>command</code>的标准输出(stdout)和标准错误(stderr)到文件<code>filename</code>中，一般用于启动进程脚本；</p>
+<p><code>command &gt;&amp;2</code> 把<code>command</code>的标准输出(stdout)重定向到标准错误(stderr)中；</p>
+<p><code>cat ~/a.txt &gt;&gt; a.log</code>  把<code>a.txt</code>的输出以追加得方式输入到文件<code>a.log</code>中，如果文件不存在则创建。</p>
+<hr>
+<p><code>-</code>  短横线，可用于参数选择 例如 <code>ls -al</code>。 也可以表示上一个工作目录，例如 <code>cd -</code>。当然也是数学运算符，用于表示减法操作。</p>
+<hr>
+<p><code>=</code>  等号，数学运算符，赋值操作。 例如 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">a=28</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$a</span></span><br></pre></td></tr></table></figure>
+<p>也可以用于表示比较操作，例如，<code>if [ &quot;$a&quot; = &quot;$b&quot; ]</code>  注意等号左右两侧要有空格。</p>
+<hr>
+<p> <code>#</code>  井号，一般用于注释语句前面，表示该条语句是注释。也是正则表达式的元字符。</p>
+<p> <strong>注意</strong><br> 脚本的第一行<code>#!/bin/bash</code> 不作为注释，在双引号或者单引号以及转义字符之后的也不会作为注释符使用。例如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">echo</span> <span class="string">"The # here does not begin a comment."</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">'The # here does not begin a comment.'</span></span><br><span class="line"><span class="built_in">echo</span> The  \<span class="comment"># here does not begin a comment.</span></span><br></pre></td></tr></table></figure></p>
+<p> <strong>骚操作</strong><br> 可以做进制转换，例如 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"> <span class="built_in">echo</span> $((2<span class="comment">#101)) #5</span></span><br><span class="line"> <span class="built_in">echo</span> $((8<span class="comment">#101)) #65</span></span><br><span class="line"> <span class="built_in">echo</span> $((10<span class="comment">#101)) #101</span></span><br><span class="line"></span><br><span class="line">``` </span><br><span class="line"> </span><br><span class="line"> * * * </span><br><span class="line"></span><br><span class="line"> `,`逗号，用于连接一连串的数学表达式，这串数学表达式均被求值，但只有最后一个求值结果被返回。例如</span><br><span class="line"></span><br><span class="line">```bash</span><br><span class="line"><span class="comment"># Set "a = 9" and "t2 = 15 / 3"</span></span><br><span class="line"><span class="built_in">let</span> <span class="string">"t2 = ((a = 9, 15 / 3))"</span></span><br></pre></td></tr></table></figure>
+<p>也可以用于连接字符串，比如 <code>echo {a,b}/test</code>  输出 <code>a/test b/test</code></p>
+<p><strong>骚操作</strong><br>用在变量引用中，表示首字母小写，如果是两个逗号，则表示全部小写。例如 </p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">a=<span class="string">"AFrank"</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a,&#125;</span>  <span class="comment">#aFrank</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;a,,&#125;</span>  <span class="comment">#afrank</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>+</code> 数学运算符，表示加操作。也是正则表达式元字符。<br><strong>骚操作</strong><br>用于设置变量值。使用方式 <code>${parameter+alt_value}</code>  如果变量 <code>parameter</code> 设置了值，则使用 <code>alt_value</code> 的值，否则使用空字符。</p>
+<p>举个例子，感受一下<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#param1 not set</span></span><br><span class="line">a=<span class="variable">$&#123;param1+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a =</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#parma2 set null</span></span><br><span class="line">param2=</span><br><span class="line">a=<span class="variable">$&#123;param2+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a = xyz</span></span><br><span class="line"></span><br><span class="line">param3=123</span><br><span class="line">a=<span class="variable">$&#123;param3+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a = xyz</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>注意</strong> 配合冒号使用时会有不同。举个例子，继续感受一下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">a=<span class="variable">$&#123;param4:+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a =</span></span><br><span class="line"></span><br><span class="line">param5=</span><br><span class="line">a=<span class="variable">$&#123;param5:+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a =</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#Different result from  a=$&#123;param5+xyz&#125;</span></span><br><span class="line">param6=123</span><br><span class="line">a=<span class="variable">$&#123;param6:+xyz&#125;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">"a = <span class="variable">$a</span>"</span>      <span class="comment"># a = xyz</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>^</code>  用于正则表达式。<br><strong>骚操作</strong><br>用于大小写转化。看下面的例子。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var=hellFrank</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;var^&#125;</span>           <span class="comment"># HelloFrank</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;var^^&#125;</span>          <span class="comment"># HELLOFRANK</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>&lt;&lt;</code> 双小于号，称作 here-doc。一般用于给命令提供输入多行内容。比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tr a-z A-Z &lt;&lt;EOF</span><br><span class="line"> &gt; one</span><br><span class="line"> &gt; two</span><br><span class="line"> &gt; three</span><br><span class="line"> &gt; EOF</span><br></pre></td></tr></table></figure>
+<p>输出：<br>ONE<br>TWO<br>THREE</p>
+<p>默认的，here doc里面的变量会进行替换。比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt; EOF</span><br><span class="line"> &gt; Working dir <span class="variable">$PWD</span></span><br><span class="line"> &gt; EOF</span><br></pre></td></tr></table></figure>
+<p>输出：Working dir /home/frank</p>
+<p>如果给here doc 标识符加上双引号或者单引号则会禁止变量替换。比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">cat &lt;&lt; <span class="string">"EOF"</span></span><br><span class="line"> &gt; Working dir <span class="variable">$PWD</span></span><br><span class="line"> &gt; EOF</span><br></pre></td></tr></table></figure></p>
+<p>输出：Working dir $PWD</p>
+<p><strong>骚操作</strong></p>
+<p>再 <code>&lt;&lt;</code>后面添加<code>-</code>，可以忽略<code>TAB</code>空白字符。比如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">tr a-z A-Z &lt;&lt;-EOF</span><br><span class="line"> &gt;    one</span><br><span class="line"> &gt;    two</span><br><span class="line"> &gt;    three</span><br><span class="line"> &gt; EOF</span><br></pre></td></tr></table></figure></p>
+<p>输出：<br>ONE<br>TWO<br>THREE</p>
+<hr>
+<p><code>&lt;&lt;&lt;</code>  三个小于号，称作here string，here doc的变种。比here doc更灵活。例如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">tr a-z A-Z &lt;&lt;&lt;<span class="string">"Yes it is a string"</span> <span class="comment"># YES IT IS A STRING</span></span><br><span class="line">name=frank</span><br><span class="line"><span class="comment"># 双引号里面会解析变量</span></span><br><span class="line">tr a-z A-Z &lt;&lt;&lt;<span class="string">"Yes i'm <span class="variable">$name</span>"</span> <span class="comment"># YES I'M FRANK</span></span><br><span class="line"><span class="comment"># 单引号里面不解析变量</span></span><br><span class="line">tr a-z A-Z &lt;&lt;&lt;<span class="string">'Yes i\'</span>m <span class="variable">$name</span><span class="string">' # YES I'</span>M <span class="variable">$NAME</span></span><br></pre></td></tr></table></figure>
+<hr>
+<p><code>:</code> 冒号，表示空，什么都不做，但是有返回值，返回值为0（即true）<br>例如：<code>: ; echo $?</code> 输出0。 <code>$?</code> 的意思就是返回上条指令的状态。<br>利用此特性可以作为 <code>while</code> 的无限循环条件，也可以作为 <code>if</code> 分支的占位符。<br>比如</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> : <span class="comment">#same as while true</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">   operation-1</span><br><span class="line">   operation-2</span><br><span class="line">   ...</span><br><span class="line">   operation-n</span><br><span class="line"><span class="keyword">done</span></span><br></pre></td></tr></table></figure>
+<p>或者<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> condition</span><br><span class="line"><span class="keyword">then</span> :   <span class="comment"># Do nothing and branch ahead</span></span><br><span class="line"><span class="keyword">else</span>     <span class="comment"># Or else ...</span></span><br><span class="line">   take-some-action</span><br><span class="line"><span class="keyword">fi</span></span><br></pre></td></tr></table></figure></p>
+<p>除此之外还可以结合重定向符号使用，将文件内容清空，但是不改变文件权限，如果不存在则会自动创建。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">: &gt; data.xxx <span class="comment"># File "data.xxx" now empty.</span></span><br></pre></td></tr></table></figure>
+<p>等价于 <code>cat /dev/null &gt;data.xxx</code><br>如果以追加方式的重定向，则对文件不构成任何修改。同样如果文件不存在也会新建一个。例如 <code>: &gt;&gt; data.xxx</code> 。</p>
+<p><strong>注意</strong> 这个只能在普通文件中使用，不能在管道，符号链接和其他特殊文件中使用；</p>
+<p>你也可以作为域分隔符，比如环境变量<code>$PATH</code>中，或者passwd中，都有冒号的作为域分隔符的存在；例如<br><code>usr/local/bin:/bin:/usr/bin:/sbin:/usr/sbin:/usr/games</code></p>
+<p><strong>骚操作</strong><br>设置默认值，如果param没有设置，则使用默认值，例如<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">parma=frank</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;param:=default&#125;</span> <span class="comment">#frank</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$&#123;test:=default&#125;</span> <span class="comment">#default</span></span><br></pre></td></tr></table></figure></p>
+<p>你也可以将冒号作为函数名，不过这个会将冒号的本来意义转变，所以不要这么搞。</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">:()</span><br><span class="line">&#123;</span><br><span class="line">  <span class="built_in">echo</span> <span class="string">"The name of this function is colon"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>以上内容来源参考:(<a href="http://tldp.org/LDP/abs/html/special-chars.html" target="_blank" rel="noopener">http://tldp.org/LDP/abs/html/special-chars.html</a>)</p>
+<hr>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/rPpQ4rIWRj4lUcRx92Ndzw" target="_blank" rel="noopener">Javaer运维指令合集(快餐版)</a><br><a href="https://mp.weixin.qq.com/s/LoI21d6wN96wLU4CcYQ8wg" target="_blank" rel="noopener">我是如何进行架构设计的</a><br><a href="https://mp.weixin.qq.com/s/Y6osHp8RbIWgWqd-gu525Q" target="_blank" rel="noopener">Apache httpd 是如何实现高并发服务的</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/01/13/shell里面的奇葩字符/" title="shell里面的奇葩字符">http://hellofrank.github.io/2020/01/13/shell里面的奇葩字符/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/shell/" rel="tag"><i class="fa fa-tag"></i> shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/12/29/为什么httpd的event模块比worker更优秀/" rel="next" title="为什么httpd的event模块比worker更优秀">
+                <i class="fa fa-chevron-left"></i> 为什么httpd的event模块比worker更优秀
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">35</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">94k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
