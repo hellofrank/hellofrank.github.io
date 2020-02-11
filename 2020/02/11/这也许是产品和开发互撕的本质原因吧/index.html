@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="产品经理，不是真的经理，程序员也不是真的猿。 网上一直流传着这样一个段子。“做不了程序员的，转行去做运维了，做不了运维的，改做产品了，做不了产品的，改去做运营了，做不了运营的呢，转身又去报班参加程序员培训了。” 上面的内容终归是个段子，我们应该敬畏每一个行业，因为术业有专攻，更因为人情练达皆学问。但程序员跟产品经理的互撕是这个行业永远避不开的话题，每一次的互撕就像西门吹雪跟叶孤城决战紫禁之巅一样扣">
+<meta name="keywords" content="其它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="这也许是产品和开发互撕的本质原因吧">
+<meta property="og:url" content="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="产品经理，不是真的经理，程序员也不是真的猿。 网上一直流传着这样一个段子。“做不了程序员的，转行去做运维了，做不了运维的，改做产品了，做不了产品的，改去做运营了，做不了运营的呢，转身又去报班参加程序员培训了。” 上面的内容终归是个段子，我们应该敬畏每一个行业，因为术业有专攻，更因为人情练达皆学问。但程序员跟产品经理的互撕是这个行业永远避不开的话题，每一次的互撕就像西门吹雪跟叶孤城决战紫禁之巅一样扣">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/640.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/641.jpeg">
+<meta property="og:updated_time" content="2020-02-11T10:01:16.311Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="这也许是产品和开发互撕的本质原因吧">
+<meta name="twitter:description" content="产品经理，不是真的经理，程序员也不是真的猿。 网上一直流传着这样一个段子。“做不了程序员的，转行去做运维了，做不了运维的，改做产品了，做不了产品的，改去做运营了，做不了运营的呢，转身又去报班参加程序员培训了。” 上面的内容终归是个段子，我们应该敬畏每一个行业，因为术业有专攻，更因为人情练达皆学问。但程序员跟产品经理的互撕是这个行业永远避不开的话题，每一次的互撕就像西门吹雪跟叶孤城决战紫禁之巅一样扣">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/640.jpeg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>这也许是产品和开发互撕的本质原因吧 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">这也许是产品和开发互撕的本质原因吧
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-02-11 17:52:46" itemprop="dateCreated datePublished" datetime="2020-02-11T17:52:46+08:00">2020-02-11</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/其它/" itemprop="url" rel="index"><span itemprop="name">其它</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.2k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>产品经理，不是真的经理，程序员也不是真的猿。</p>
+<p>网上一直流传着这样一个段子。“做不了程序员的，转行去做运维了，做不了运维的，改做产品了，做不了产品的，改去做运营了，做不了运营的呢，转身又去报班参加程序员培训了。”</p>
+<p>上面的内容终归是个段子，我们应该敬畏每一个行业，因为术业有专攻，更因为人情练达皆学问。但程序员跟产品经理的互撕是这个行业永远避不开的话题，每一次的互撕就像西门吹雪跟叶孤城决战紫禁之巅一样扣人心弦，杀机四起。事后便会成为大家的谈资。</p>
+<a id="more"></a>
+<p><img src="640.jpeg" alt="97daa6da889f46931f17b830f7d72461.jpeg"></p>
+<p>中国有句俗语叫做狗咬狗一嘴毛，我认为形容产品跟开发互撕最为贴切了。因为我觉得双方互撕的本质原因是双方做的都不够好，不够优秀。</p>
+<p>我们可以简单的把产品和开发分为两类，一类普通的，一类优秀的。</p>
+<p><strong>普通的产品</strong>：我要个色彩斑斓的黑，手机壳颜色根据心情改变，总之就是异想天开，想起一出是一出，完全活在自己的世界里，毫无逻辑思维可言，更没有整体规划。</p>
+<p><strong>优秀的产品</strong>：足够强的逻辑思维能力，对所负责的产品，上下游系统，数据流，业务模型及其了解，甚至有过数据建模，或者相关开发工作经验，也会积极了解市场及商务上的更多细节。</p>
+<p><strong>优秀的开发</strong>：扎实的基本功，多年的项目经验，先思考，后建模，最后写代码。</p>
+<p><strong>普通的开发</strong>：主要靠吭哧C，吭哧V，不求甚解，拿到需求之后，立刻开始写代码，不做深入思考。</p>
+<p>其实日常工作中无外乎这几类人互相组合。不同的人组合到一起，碰撞出不同的火花。所谓的优秀公司及团队只不过是优秀的人多了一些而已。</p>
+<p>这里以买鞋需求为例，给大家简单演义一下，你们感受一下。</p>
+<p><strong>普通产品VS普通开发</strong><br><em>产品</em>：帮我去商场买双鞋吧。<br><em>开发</em>：好嘞，你等着，马上就好。<br><em>开发</em>：鞋来了，正宗老北京布鞋，千层底，特舒服！<br><em>产品</em>：嗯…，我要的不是布鞋，我要的是运动鞋。<br><em>开发</em>：行，你等会儿，我在给你换一双去。<br><em>开发</em>：鞋来了，阿迪王运动鞋，最新款。<br><em>产品</em>：我不要阿迪王，要的是阿迪达斯。<br><em>开发</em>：哎，我现在去给你换。<br><em>开发</em>：鞋来了，正宗阿迪达斯，工厂店买的。<br><em>产品</em>：嗯…，还是不对，我要的是白色的运动鞋，不要黑色的休闲鞋。<br><em>开发</em>：尼玛，那你不早说。（嘴里巴拉巴拉……，但还是去换鞋了。）<br><em>产品</em>：你也没早问啊，一个需求做了这么久还没做明白，巴拉巴拉……。<br><em>开发</em>：鞋来了，阿迪达斯，白色的，运动鞋。<br><em>产品</em>：好的，我看看，咦？好像尺码小了，而且我想要个冬款的，跑步用的运动鞋。<br><em>开发</em>：我去，你故意耍老子，就这个了，老子为了改需求已经通宵好几个晚上了，爱穿就穿，不穿拉到！<br><em>产品</em>：不行，你必须现在去给我换，不然就去找领导。</p>
+<p>最后的画面你们自行脑补吧。</p>
+<p><strong>普通产品VS优秀开发</strong></p>
+<p><em>产品</em>：去商场帮我买双鞋吧。<br><em>开发</em>：把需求说具体一点，不然没法实现。<br><em>产品</em>：嗯，具体点儿的需求是给我买一双运动鞋。<br><em>开发</em>：把需求可以再说具体点儿吗，这个需求还是太模糊了。<br><em>产品</em>：我已经说了，要一双运动鞋，还不够明确吗?(已经生气了，心里在想，程序员脑子都在想什么，中国话听不懂吗？)<br><em>开发</em>：你要把品牌，颜色，尺码，价位都告诉我，最好在给我发一张图片（这叫产品原型）,如果商场没有同款，我该怎么办？（这叫产品的异常及错误处理方案）<br><em>产品</em>：哦，说的好像是那么回事儿，程序员脑子就是牛逼，想的周到。<br><em>开发</em>：你最好写个需求文档，然后发个邮件。</p>
+<p>看到了吗，优秀的程序员会在项目开始前，主动帮助产品把需求明确细化，这样可以避免开发阶段的无味加班和无效工作。</p>
+<p><strong>优秀产品VS普通开发</strong><br><em>产品</em>：给我买一双，阿迪的，白色的，42码的，价位在800-1000人民币之间，跑步用的冬款运动鞋，这是是需求文档，你可以看一下。<br><em>开发</em>：好的，你等着。马上给你买回来。风一样消失在产品的视线中。<br>过了一会儿，产品经理电话响了。<br><em>开发</em>：我在商场看到了阿迪王的鞋，你看可以吗？<br><em>产品</em>：我要的是阿迪达斯，不是阿迪王……<br><em>开发</em>：我找了好久，实在找不到，这个商场可能没有（这在技术上实现起来比较困难），我需要去另外一个商场，你等我一会儿(项目可能延期)。<br><em>产品</em>：……，独自风中凌乱。<br><em>开发</em>：我昨天加班了，找到阿迪达斯了，这里面有个春款的，你凑合穿吧(有很多bug)。项目马上deadline了，先用这个吧。<br><em>产品</em>：我天天陪你加班，最终却做出个这么个东西，完全体现不出我的想法。<br><em>开发</em>：要的需求这么刁钻，春款跟冬款有毛区别，都能跑步。</p>
+<p><img src="641.jpeg" alt="2da2245807decb09448706df329e2437.png"></p>
+<p>一个优秀的开发是多么重要，难怪一线大厂养了了那么多优秀的程序员。</p>
+<p><strong>优秀产品VS优秀开发</strong><br><em>产品</em>：帮我去商场买双鞋吧。阿迪的，白色的，42码的，价位在800-1000人民币之间，跑步用的冬款运动鞋，这是是需求文档，你可以看一下。<br><em>开发</em>：好的，我先看一下需求文档，做一下技术评估。最迟今天下班前给你结论。<br><em>产品</em>：好的，有什么不妥之处，随时沟通。<br><em>开发</em>：我看了一下，大概有几个问题需要明确，这双鞋要穿多久，每天穿着的频率，需要防水功能吗？<br><em>产品</em>：大概穿两年左右，每周穿一次，不需要防水功能。<br><em>开发</em>：好的，我去帮你到商场选鞋。</p>
+<p>优秀的开发跟优秀的产品在设计阶段就已经不断的配合了，这个过程将持续到产品的整个生命周期中，这将避免很多不必要的返工跟加班。</p>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p>上面的场景虽然是我演义的，但想现实工作中也大抵如此，我写这篇文章的目的是想表达，各位应该尽量跟优秀的人一起工作，这样自己的成长速度跟工作效率才是最高的。如何才能够跟优秀的人一起工作呢，我能想到的就是让自己变得足够优秀，优秀到可以加入一个更好的团队跟平台。</p>
+<p>下一篇给各位讲一个真实的故事，一个程序员小W的成长过程。</p>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/jQyjh1ZahrMjse4fOHnY8A" target="_blank" rel="noopener">一个程序员的自我修养</a><br><a href="https://mp.weixin.qq.com/s/LoI21d6wN96wLU4CcYQ8wg" target="_blank" rel="noopener">我是如何进行架构设计的</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/" title="这也许是产品和开发互撕的本质原因吧">http://hellofrank.github.io/2020/02/11/这也许是产品和开发互撕的本质原因吧/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/其它/" rel="tag"><i class="fa fa-tag"></i> 其它</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/11/对于远程办公的一点点思考/" rel="next" title="对于远程办公的一点点思考">
+                <i class="fa fa-chevron-left"></i> 对于远程办公的一点点思考
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">37</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">1.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">98k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">2:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
