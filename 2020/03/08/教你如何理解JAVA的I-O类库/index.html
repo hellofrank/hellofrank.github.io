@@ -1,0 +1,1120 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="这是一篇写给新手的I/O学习文章，如果你对Java I/O库已经很熟悉了，就不要浪费时间看了。 Java的I/O流，说简单也简单，说复杂也复杂。说复杂是因为进行一次常规的文件I/O操作通常要用到很多I/O基础类，这很容易让新手产生困惑。说他简单是因为它的设计思想其实很简单。只要理解了它的设计思想就很容易知道如何使用他们。">
+<meta name="keywords" content="-IO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="教你如何理解JAVA的I&#x2F;O类库">
+<meta property="og:url" content="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="这是一篇写给新手的I/O学习文章，如果你对Java I/O库已经很熟悉了，就不要浪费时间看了。 Java的I/O流，说简单也简单，说复杂也复杂。说复杂是因为进行一次常规的文件I/O操作通常要用到很多I/O基础类，这很容易让新手产生困惑。说他简单是因为它的设计思想其实很简单。只要理解了它的设计思想就很容易知道如何使用他们。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/1.jpg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/2.jpg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/3.jpg">
+<meta property="og:updated_time" content="2020-03-08T08:48:54.366Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="教你如何理解JAVA的I&#x2F;O类库">
+<meta name="twitter:description" content="这是一篇写给新手的I/O学习文章，如果你对Java I/O库已经很熟悉了，就不要浪费时间看了。 Java的I/O流，说简单也简单，说复杂也复杂。说复杂是因为进行一次常规的文件I/O操作通常要用到很多I/O基础类，这很容易让新手产生困惑。说他简单是因为它的设计思想其实很简单。只要理解了它的设计思想就很容易知道如何使用他们。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/1.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>教你如何理解JAVA的I/O类库 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">教你如何理解JAVA的I/O类库
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-08 16:40:46" itemprop="dateCreated datePublished" datetime="2020-03-08T16:40:46+08:00">2020-03-08</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">6.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">12 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>这是一篇写给新手的<code>I/O</code>学习文章，如果你对Java <code>I/O</code>库已经很熟悉了，就不要浪费时间看了。</p>
+<p><code>Java</code>的<code>I/O</code>流，说简单也简单，说复杂也复杂。说复杂是因为进行一次常规的文件<code>I/O</code>操作通常要用到很多<code>I/O</code>基础类，这很容易让新手产生困惑。说他简单是因为它的设计思想其实很简单。只要理解了它的设计思想就很容易知道如何使用他们。</p>
+<a id="more"></a>
+<p><code>Java</code>的<code>I/O</code>类库最基本的思想就是流的概念。你可以把它类比成水流，我们把数据从一个地方搬运到另一个地方就是一次<code>I/O</code>操作。比如读取文件 ‘A’ 的内容，存入文件 ‘B’ 就是一次文件<code>I/O</code>操作; 通过监听键盘输入，然后将内容存储到磁盘上也是一次<code>I/O</code>操作; 当然通过网络带宽把服务器 ‘A’ 的内容发送到 ‘B’ 服务也叫做一次<code>I/O</code>操作。</p>
+<p><code>Java</code>的<code>I/O</code>流分为<strong>输入流</strong>和<strong>输出流</strong>。跟读相关的都叫输入流，跟写相关的都叫输出流。<code>Java</code>的<code>I/O</code>不光分为输入流跟输出流，按照流的性质还分为<strong>字节流</strong>和<strong>字符流</strong>。所有继承自抽象类<code>InputStream</code>和<code>OutPutStream</code>的流都是字节流，所有继承自抽象类<code>Reader</code>和<code>Writer</code>的流都是字符流。这两种不同性质的流都能进行<code>I/O</code>操作。</p>
+<p><img src="1.jpg" alt="1.jpg"></p>
+<h4 id="为什么要分为字节流跟字符流。"><a href="#为什么要分为字节流跟字符流。" class="headerlink" title="为什么要分为字节流跟字符流。"></a>为什么要分为字节流跟字符流。</h4><p>所谓的字节流，就是里面流淌的都是字节，也就<code>byte</code>。字符流呢，里面流淌的就是字符，也就是<code>char</code>。字符是由字节通过特定的编码组成的，比如<code>GBK</code>编码，<code>ASCII</code>编码等等。同样的字节，使用不同的编码得到的内容可能不一样，这也就是编程中经常遇到的乱码问题。关于字符编码问题，这里不做深入展开，后续有机会可以单独写一下。</p>
+<p>JDK最开始支持的都是字节流，因为计算机就认字节。但是计算机是为人服务的，我们更喜欢看字符，比如‘A’，‘B’，‘C’，‘中’，‘国’，这些都叫字符。如果我们每次按字节<code>I/O</code>读取内容，然后在展示出来，是需要做编码转化的，所以为了方便程序员使用，JDK增加了字符流的相关类库，JDK底层帮我们完成转换工作。</p>
+<p>新的字符类库继承体系相比于老得字节流继承体系，有如下增强，支持国际化也就是支持16位的<code>Unicode</code>字符，老得I/O流仅支持8位的的字节流，而且在性能上也会有一定提升。在进行<code>I/O</code>操作的时候，应该优先使用字符流，当字符流不能满足我们的时候，才转化到字节流，比如进行GZIP操作的时候，就需要使用字节流。</p>
+<h4 id="字节流I-O"><a href="#字节流I-O" class="headerlink" title="字节流I/O"></a>字节流I/O</h4><p>先来认识一下字节流的<code>I/O</code>类库。</p>
+<p>所有的跟输入相关的字节流都继承自<code>InputStream</code>。这是一个抽象类。它有几个比较常用的直接子类，每个直接子类代表了一个数据源，比如 <code>ByteArrayInputStream</code> 表示将内存缓冲区中的字节数组当作输入源。 <del><code>StringBufferInputStream</code></del> 表示将<code>String</code>对象作为输入源，现在已经不推荐使用了，推荐使用<code>StringReader</code>读取<code>String</code>对象。后面介绍字符流的时候还会说到这个类。<code>FileInputStream</code> 表示将文件作为数据源，这也是大家平时用的比较多的。</p>
+<p>这些类的继承关系大概是这个样子<br><img src="2.jpg" alt="2.jpg"></p>
+<p>其中标红的直接子类<code>FilterInputStream</code>比较特殊。要想理解这个类存在的意义，需要对<strong>装饰者模式</strong>有一定了解。</p>
+<p>俗话说的好，光说不练假把式，下面来看个小例子，看看如何进行字节流的文件<code>I/O</code>操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">         <span class="comment">//打开输入流</span></span><br><span class="line">         InputStream in = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"test-io.tmp"</span>));</span><br><span class="line">         <span class="comment">//打开输入流</span></span><br><span class="line">         OutputStream out = <span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"test-io.md"</span>));</span><br><span class="line">         <span class="keyword">int</span> length;</span><br><span class="line">         <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">         <span class="comment">//输入流不断的读取，每次读取1024字节，直到文件末尾。</span></span><br><span class="line">         <span class="keyword">while</span> ((length = in.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">              out.write(buffer,<span class="number">0</span>,length);</span><br><span class="line">         &#125;</span><br><span class="line">         in.close();</span><br><span class="line">         out.close();</span><br><span class="line">     &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">     &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">         e.printStackTrace();</span><br><span class="line">     &#125;</span><br></pre></td></tr></table></figure></p>
+<p>在真正的项目中很少看到这样的<code>I/O</code>操作，因为效率比较低。都2020年了，要是还进行非缓冲的<code>I/O</code> 操作，估计会被同行狠狠的鄙视。我们针对上面的例子做一个小小的改动，使其变成带缓冲功能的<code>I/O</code>操作。主要的类就是<code>BufferedInputStream</code>.</p>
+<p>看代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">try</span> &#123;</span><br><span class="line">    InputStream in = <span class="keyword">new</span> BufferedInputStream(<span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"test-io.tmp"</span>)));</span><br><span class="line">    OutputStream out = <span class="keyword">new</span> BufferedOutputStream(<span class="keyword">new</span> FileOutputStream(<span class="keyword">new</span> File(<span class="string">"test-buffer-io.md"</span>)));</span><br><span class="line">    <span class="keyword">int</span> lenght;</span><br><span class="line">    <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">1024</span>];</span><br><span class="line">    <span class="keyword">while</span> ((lenght = in.read(buffer)) != -<span class="number">1</span>)&#123;</span><br><span class="line">        out.write(buffer,<span class="number">0</span>,lenght);</span><br><span class="line">    &#125;</span><br><span class="line">    in.close();</span><br><span class="line">    out.close();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">       e.printStackTrace();</span><br><span class="line">    &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">       e.printStackTrace();</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure>
+<h4 id="装饰者模式的应用"><a href="#装饰者模式的应用" class="headerlink" title="装饰者模式的应用"></a>装饰者模式的应用</h4><p>上面这段带缓存功能的<code>I/O</code>操作跟不带缓存的<code>I/O</code>操作唯一的区别就是把<code>FileInputStream</code>用<code>BufferedInputStream</code>给包装（装饰）了一下。下面看一下<code>BufferedInputStream</code>的继承关系。<br><img src="3.jpg" alt="3.jpg"></p>
+<p><code>FileterInputStream</code>：JDK官方文档是这样介绍这个类的。<br>把一个真正的带有数据源的输入流包装进来，并为其提供格外的功能，这个额外的功能要其子类去实现。</p>
+<p>这是典型的装饰者模式。</p>
+<p>大家可能会问，为什么不能直接让<code>BufferedInputStream</code>继承自<code>FileInputStream</code>,而偏偏引入个装饰者模式呢。</p>
+<p>我们假设让<code>BufferedInputStream</code>继承自<code>FileInputStream</code>，那么当需要对<code>ByteArrayInputStream</code>进行缓存读取的时候自然也需要在实现一个<code>ByteBufferedInputStram</code>,这样类库就会变得异常复杂跟臃肿。这也是装饰者模式比继承的方式更灵活的地方。如果你还是一头雾水的话，建议去深入的理解一下装饰者模式吧。</p>
+<p>字节流的<code>I/O</code>操作基本就这样了，下面看一下字符流。</p>
+<h4 id="字符流I-O"><a href="#字符流I-O" class="headerlink" title="字符流I/O"></a>字符流I/O</h4><p>所有跟输入相关的字符流都继承自抽象类<code>Reader</code>，跟输出相关的都继承自抽象类<code>Writer</code>。</p>
+<p>我们先看个小例子，假设不使用字符流而是使用字节流读取文件内容，然后将内容输出到控制台，看看应该怎样操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">readFileStreamToChar</span><span class="params">()</span></span>&#123;</span><br><span class="line">        <span class="comment">/**</span></span><br><span class="line"><span class="comment">         * UTF-8编码英文字符占一个字节，</span></span><br><span class="line"><span class="comment">         * 数字占一个字节，</span></span><br><span class="line"><span class="comment">         * 有的汉字占三个字节，有的占用四个字节。</span></span><br><span class="line"><span class="comment">         * 拉丁文，希腊文占两个字节。</span></span><br><span class="line"><span class="comment">         */</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            InputStream in = <span class="keyword">new</span> FileInputStream(<span class="keyword">new</span> File(<span class="string">"test-io.tmp"</span>));</span><br><span class="line">            <span class="keyword">int</span> length;</span><br><span class="line">            <span class="keyword">byte</span>[] buffer = <span class="keyword">new</span> <span class="keyword">byte</span>[<span class="number">4</span>];</span><br><span class="line">            <span class="keyword">while</span> ((length = in.read(buffer)) != -<span class="number">1</span>) &#123;</span><br><span class="line">                System.out.println(<span class="string">"the length of bytes is "</span> + length);</span><br><span class="line">                <span class="comment">//编码转化</span></span><br><span class="line">                String content = <span class="keyword">new</span> String(buffer, <span class="number">0</span>, length, Charset.forName(<span class="string">"utf-8"</span>));</span><br><span class="line">                System.out.println(<span class="string">"the content is "</span> + content);</span><br><span class="line">            &#125;</span><br><span class="line">            in.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<p>输出结果<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">the length of bytes is <span class="number">4</span></span><br><span class="line">the content is word</span><br><span class="line">the length of bytes is <span class="number">4</span></span><br><span class="line">the content is </span><br><span class="line">世</span><br><span class="line">the length of bytes is <span class="number">3</span></span><br><span class="line">the content is 界</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>说明：<figure class="highlight plain"><figcaption><span>（没拼错,故意找的这个单词）,第二行内容是'世界'</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">从代码中可以看到，将内容输出到控制台的时候必须进行编码转换。大家可以尝试把`buffer`的大小调整为2个字节看一下效果。懒得尝试的同学，就别试了，结论是中文字符会乱码，原因我已经在代码注释中说了，一个中文字符占三个字节。</span><br><span class="line"></span><br><span class="line">假设JDK只提供基于字节流操作，那么每次都要进行字节到字符的转换操作，很麻烦，所以JDK就直接提供了字符流的操作。</span><br><span class="line"></span><br><span class="line">下面来具体看看字符流类库的设计，我们还是以输入流举例，因为输出流跟输入流是一一对应关系。</span><br><span class="line"></span><br><span class="line">抽象类`Reader`同样有几个比较常用的直接子类。</span><br><span class="line">`BufferedReader`：带缓冲功能的字符流，用的比较多。</span><br><span class="line">`CharArrayReader`：跟`ByteArrayInputStream`对应，读取内存中的字符数组。</span><br><span class="line">`StringReader`：跟`StringBufferInputStream`对应，读取`String`对象，这是读取`String`对象的推荐用法。</span><br><span class="line"></span><br><span class="line">`Reader` 有个比较特殊的直接子类，就是`InputStreamReader`。这是个适配器，可以把字节流转换为字符流。`FileReader`就继承自该类,`FileReader`跟字节流的`FileInputStream`对应，表示从文件读取字符。</span><br><span class="line"></span><br><span class="line">下面来看简单看一下类的继承关系。</span><br><span class="line">![4.jpg](4.jpg)</span><br><span class="line"></span><br><span class="line">了解完类的继承关系之后，我们看个小例子，看看如何使用字符流的方式读取文件内容。注意我注释掉的代码。</span><br><span class="line"></span><br><span class="line">```java</span><br><span class="line">try &#123;</span><br><span class="line"></span><br><span class="line">            //通过 InputStreamReader 适配器，将字节流FileInputStream按照制定的编码方式转换为字符流</span><br><span class="line">            // BufferedReader in = new BufferedReader(</span><br><span class="line">            //        new InputStreamReader(</span><br><span class="line">            //                new FileInputStream(</span><br><span class="line">            //                        new File(&quot;test-io.tmp&quot;)), &quot;utf-8&quot;));</span><br><span class="line"></span><br><span class="line">            //不直接使用适配器，使用FileReader,将使用系统默认的编码</span><br><span class="line">            BufferedReader in = new BufferedReader(new FileReader(new File(&quot;test-io.tmp&quot;)));</span><br><span class="line">            String s;</span><br><span class="line">            StringBuilder sb = new StringBuilder();</span><br><span class="line"></span><br><span class="line">            //按字符读</span><br><span class="line">            int value;</span><br><span class="line">            while ((value = in.read()) != -1) &#123;</span><br><span class="line">                char c = (char) value;</span><br><span class="line">                System.out.println(c);</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">            //按行读取</span><br><span class="line">            //while ((s = in.readLine()) != null)&#123;</span><br><span class="line">            //    sb.append(s);</span><br><span class="line">            //&#125;</span><br><span class="line">            //System.out.println(sb.toString());</span><br><span class="line">            in.close();</span><br><span class="line">        &#125; catch (FileNotFoundException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125; catch (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+</blockquote>
+<p>Java的普通<code>I/O</code>就介绍到这里了。Java的<code>I/O</code>类库用到了两个经典设计模式，装饰器跟适配器。如果想更深入的理解Java <code>I/O</code>类库除了多读源码外（感兴趣的读者可以去看看底层源码，JDK如何实现字节到字符的转换的）还需要深入的理解设计模式。</p>
+<p>希望这篇文章对你理解Java <code>I/O</code>有一定帮助，下一篇打算写一下Java的NIO。</p>
+<p>推荐阅读:<br>1.<a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a><br>2.<a href="https://mp.weixin.qq.com/s/TMD5Ng8CYzH5jt9edVuzXg" target="_blank" rel="noopener">Java里面的String对象到底神奇在什么地方</a><br>3.<a href="https://mp.weixin.qq.com/s/rPpQ4rIWRj4lUcRx92Ndzw" target="_blank" rel="noopener">Javaer运维指令合集(快餐版)</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/" title="教你如何理解JAVA的I/O类库">http://hellofrank.github.io/2020/03/08/教你如何理解JAVA的I-O类库/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/IO/" rel="tag"><i class="fa fa-tag"></i> -IO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/02/11/这也许是产品和开发互撕的本质原因吧/" rel="next" title="这也许是产品和开发互撕的本质原因吧">
+                <i class="fa fa-chevron-left"></i> 这也许是产品和开发互撕的本质原因吧
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">38</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#为什么要分为字节流跟字符流。"><span class="nav-number">1.</span> <span class="nav-text">为什么要分为字节流跟字符流。</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字节流I-O"><span class="nav-number">2.</span> <span class="nav-text">字节流I/O</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#装饰者模式的应用"><span class="nav-number">3.</span> <span class="nav-text">装饰者模式的应用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#字符流I-O"><span class="nav-number">4.</span> <span class="nav-text">字符流I/O</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">105k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
