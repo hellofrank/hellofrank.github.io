@@ -1,0 +1,1162 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="上一篇文章介绍了Java的传统I/O，也就是BIO（Blocking IO）。这篇文章介绍一下NIO（Non-Block）的基本知识点，以及为什么NIO在高并发以及大文件的处理方面更有优势。">
+<meta name="keywords" content="NIO">
+<meta property="og:type" content="article">
+<meta property="og:title" content="教你如何学习Java NIO">
+<meta property="og:url" content="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="上一篇文章介绍了Java的传统I/O，也就是BIO（Blocking IO）。这篇文章介绍一下NIO（Non-Block）的基本知识点，以及为什么NIO在高并发以及大文件的处理方面更有优势。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/01.jpg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/02.jpg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/03.jpg">
+<meta property="og:updated_time" content="2020-03-09T03:08:07.782Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="教你如何学习Java NIO">
+<meta name="twitter:description" content="上一篇文章介绍了Java的传统I/O，也就是BIO（Blocking IO）。这篇文章介绍一下NIO（Non-Block）的基本知识点，以及为什么NIO在高并发以及大文件的处理方面更有优势。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/01.jpg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>教你如何学习Java NIO | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">教你如何学习Java NIO
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-08 17:08:15" itemprop="dateCreated datePublished" datetime="2020-03-08T17:08:15+08:00">2020-03-08</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">11k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">19 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><a href="https://mp.weixin.qq.com/s/dp8WPJBg7iwFKigvFuuYYg" target="_blank" rel="noopener">上一篇文章</a>介绍了<code>Java</code>的传统<code>I/O</code>，也就是<code>BIO</code>（Blocking IO）。这篇文章介绍一下<code>NIO</code>（Non-Block）的基本知识点，以及为什么<code>NIO</code>在高并发以及大文件的处理方面更有优势。</p>
+<a id="more"></a>
+<h5 id="本地文件I-O操作——NIO小试牛刀"><a href="#本地文件I-O操作——NIO小试牛刀" class="headerlink" title="本地文件I/O操作——NIO小试牛刀"></a>本地文件I/O操作——NIO小试牛刀</h5><p><strong>Channel和Buffer</strong></p>
+<p><code>BIO</code>里操作的是<code>InputStream</code>和<code>OutputStream</code>，在<code>NIO</code>中操作的则是<code>Channel</code>和<code>Buffer</code>。我们可以把<code>Channel</code>想象成矿藏，把<code>Buffer</code>想象成运矿的车。如果想移动数据，必须借助<code>Buffer</code>，这是移动数据的唯一方式。也就是说<code>Buffer</code>跟<code>Channel</code>必定形影不离。</p>
+<p><img src="01.jpg" alt="01.jpg"></p>
+<p><code>NIO</code>中用的最多的三种<code>Channel</code>，分别是<br><code>FileChannel</code>，<code>SocketChannel</code>，以及<code>ServerSocketChannel</code>。<br><code>FileChannel</code>是用来操作本地文件的，而另外两个则是进行网络<code>I/O</code>操作的。</p>
+<p><strong>FileChannel</strong><br>这里通过将文件<code>test-io.tmp</code>里面的内容移动到文件<code>test-io.md</code>中，让大家感受一下如何使用<code>Channel</code>和<code>Buffer</code>进行文件<code>I/O</code>操作。</p>
+<p>示例: <code>NIO</code>方式操作本地文件。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//通过FileInputstream拿到输入FileChannel。</span></span><br><span class="line"> FileChannel in = <span class="keyword">new</span> FileInputStream(<span class="string">"test-io.tmp"</span>).getChannel();</span><br><span class="line"> <span class="comment">//通过FileOutPutStream拿到输出FileChannel</span></span><br><span class="line">FileChannel out = <span class="keyword">new</span> FileOutputStream(<span class="string">"test-io.md"</span>).getChannel();</span><br><span class="line"><span class="comment">//创建一个字节缓冲器，用于运送数据。</span></span><br><span class="line">  ByteBuffer buffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">        <span class="keyword">while</span> (in.read(buffer) != -<span class="number">1</span>)&#123;</span><br><span class="line">            <span class="comment">//相当于缓冲器的开关，只有调用该方法，缓冲器里面的数据才能被写入到输出Channel.</span></span><br><span class="line">            buffer.flip();</span><br><span class="line">            out.write(buffer);</span><br><span class="line">            buffer.clear();</span><br><span class="line">        &#125;</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码很轻松的实现了，将文件<code>test-io.tmp</code>中的内容移动到<code>test-io.md</code>中。</p>
+<p><strong>代码解读</strong></p>
+<p>通过<code>FileInputStream</code>对象的<code>getChannel</code>方法拿到了<code>Channel</code>。</p>
+<p>通过<code>ByteBuffer</code>的<code>allocate</code>方法（也可以是<code>allocateDirecty</code>方法）声明一个缓冲器，容量是<code>1024</code>字节，用于传输数据。</p>
+<p>将数据源<code>channel</code>里面的数据通过<code>read</code>方法读取到缓冲器。<br>通过<code>out.write()</code>方法，将缓冲器里面的数据写入到输出<code>Channel</code>。最后清空缓冲器，为下次读取数据做准备。</p>
+<blockquote>
+<p>注意：将缓冲区里面的数据写入到输出<code>channel</code>前一定要调用 <code>buffer</code>的<code>flip（）</code>方法。你可以把该方法的作用理解成，打开<code>Buffer</code>的阀门。只有打开阀门数据才能被取出。</p>
+</blockquote>
+<p><strong>ByteBuffer</strong></p>
+<p><code>ByteBuffer</code>是<code>Buffer</code>的一个子类。还有很多其它子类，比如<code>CharBuffer</code>, <code>DoubleBuffer</code>等 ，<code>ByteBuffer</code>是用的最多的缓冲器。</p>
+<p>我们可以把<code>ByteBuffer</code>想象成一个字节数组。大概是这个样子。</p>
+<p><img src="02.jpg" alt="02.jpg"></p>
+<p>上图是刚刚初始化的示意图，position表示游标，每读取一个字节，position就移动一个位置。</p>
+<p><code>ByteBuffer</code>有几个比较重要的方法，如下</p>
+<p><code>allocate()</code>: 创建一个缓冲器，例如<code>ByteBuffer.allocate(1024)</code>。<br><code>allocateDirect()</code>: 创建一个与操作系统底层更耦合的缓冲器。<br><code>capacity()</code>: 返回缓冲区数组的容量。<br><code>position()</code>: 下一个要操作的元素位置。<br><code>limit()</code>:  返回limit的值。<br><code>flip()</code>：打开缓冲器的阀门，做好被读取的准备。<br><code>put()</code>：将字节存储进缓冲器。例如 <code>byteBuffer.put(&quot;hello&quot;.getBytes(&quot;utf-8&quot;));</code><br><code>wrap()</code>：将字节数组存储进缓冲器。例如 <code>ByteBuffer.wrap(&quot;hello&quot;.getBytest())</code><br><code>rewind()</code>：将position设置为0。<br><code>clear()</code>：清空缓冲区。<br><code>hasRemaining()</code> 若介于position和limit之间有值，则返回true。</p>
+<h5 id="零拷贝"><a href="#零拷贝" class="headerlink" title="零拷贝"></a>零拷贝</h5><p>上面的例子还有另外一种实现，看代码。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ChannelTransfer</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        FileChannel in = <span class="keyword">new</span> FileInputStream(<span class="string">"test-io.tmp"</span>).getChannel();</span><br><span class="line">        FileChannel out = <span class="keyword">new</span> FileOutputStream(<span class="string">"test-io.md"</span>).getChannel();</span><br><span class="line">        in.transferTo(<span class="number">0</span>,in.size(),out);</span><br><span class="line">        <span class="comment">//或者</span></span><br><span class="line">        <span class="comment">//out.transferFrom(in,0,in.size());</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>直接将输入端和输出端进行对接，不经过操作系统的内核态。这就是大名鼎鼎的零拷贝技术的运用。Kafka的性能之所以那么生猛，很大一部分原因是运用了零拷贝技术。</p>
+<h5 id="超大内存文件读取"><a href="#超大内存文件读取" class="headerlink" title="超大内存文件读取"></a>超大内存文件读取</h5><p>所谓超大文件就是，要操作的文件比你系统的可用内存还大，此时可以使用<code>NIO</code>提供的类库方法进行如下操作。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        FileChannel fileChannel = <span class="keyword">new</span> FileInputStream(<span class="string">"test-io.tmp"</span>).getChannel();</span><br><span class="line">        <span class="comment">//通过map()方法产生一个缓冲器.</span></span><br><span class="line">        MappedByteBuffer mappedByteBuffer = fileChannel.map(FileChannel.MapMode.READ_ONLY, <span class="number">0</span>, fileChannel.size());</span><br><span class="line"></span><br><span class="line">        <span class="keyword">if</span> (mappedByteBuffer != <span class="keyword">null</span>)&#123;</span><br><span class="line">            CharBuffer charBuffer = Charset.forName(<span class="string">"utf-8"</span>).decode(mappedByteBuffer);</span><br><span class="line">            System.out.println(charBuffer.toString());</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br></pre></td></tr></table></figure></p>
+<blockquote>
+<p>注意map()函数有三个参数，分别表示读写模式，初始位置以及映射长度。   因为我的测试文件很小，所以就全部映射了。如果源文件较大(100G)可以每次映射500M或1G，根据机器性能不同找到一个最优值。</p>
+</blockquote>
+<p><code>FileChannel</code>的知识点基本就这些了,相信通过上面的介绍，各位对<code>NIO</code>的<code>Channel</code>和<code>Buffer</code>已经有了一个基本的认识。</p>
+<h5 id="网络I-O——NIO大显身手。"><a href="#网络I-O——NIO大显身手。" class="headerlink" title="网络I/O——NIO大显身手。"></a>网络I/O——NIO大显身手。</h5><p>我们一直在说<code>NIO</code>是非阻塞<code>I/O</code>，但是上面介绍的<code>FileChanel</code>并不能设置成非阻塞模式，你说搞笑不。<code>FileChannel</code>相比于传统的（BIO）来说，最大的优势在于大文件的处理，以及零拷贝等技术的运用和处理。如果你问我这些技术的底层实现原理是什么，其实我也不知道，只知道<code>FileChannel</code>提供的很多方法，以一种更迎合操作系统的方式来工作。所谓马屁拍的好，升职加薪来的早。</p>
+<p>如果各位真想深究底层原理，建议先去了解操作系统的知识，然后再去扒<code>JDK</code>的源码。</p>
+<p>真正支持非阻塞操作的是<code>ServerSocketChannel</code>和<code>SocketChannel</code>。也只有在进行网络<code>I/O</code>的时候，非阻塞<code>I/O</code>的优势才能被最大程度的发挥出来。</p>
+<p>如果想了解各种<code>I/O</code>的详细内容可以看我<a href="https://mp.weixin.qq.com/s/ypBFV4l8uEtX2RR2kOCrHw" target="_blank" rel="noopener">这篇文章</a>。</p>
+<h5 id="需求提出"><a href="#需求提出" class="headerlink" title="需求提出"></a>需求提出</h5><p>假设我们要实现一个简单的服务端程序，唯一的功能是接收客户端发过来的请求，然后将请求内容转换为大写之后在发回给客户端。</p>
+<h5 id="BIO实现方式"><a href="#BIO实现方式" class="headerlink" title="BIO实现方式"></a>BIO实现方式</h5><p>当客户端发送一个请求的时候，服务端则创建一个线程进行处理。当客户端同时发送100个请求的时候，服务端就创建100个线程进行处理。这看起来还不错，但如果请求数量有几千或者更高的时候，那么服务端可能就会有点儿吃不消了。</p>
+<p>原因如下：</p>
+<ol>
+<li>线程的创建和销毁很占用系统资源，即便有线程池技术，也不能从根本上解决问题，而且在Linux里面线程就是轻量级进程</li>
+<li>线程不可以无限制的创建下去，Java里面每个线程要占用512K-1M的内存空间。</li>
+<li>线程间的不断切换很消耗系统资源，因为要保留上下文等内容。</li>
+</ol>
+<h5 id="BIO是个实在孩子。"><a href="#BIO是个实在孩子。" class="headerlink" title="BIO是个实在孩子。"></a>BIO是个实在孩子。</h5><p><code>BIO</code>选择多线程的方式也是无奈之选。因为<code>Socket.write</code>和<code>Socket.read</code>都是阻塞的。所谓的阻塞的意思就是一旦线程开始执行<code>socket.read</code>操作了，那么就需要等这个读操作执行完成。如果这个时候没有数据可以读，那么就需要等待，等到有数为止。这是<code>BIO</code>的天然属性，没有办法，简直太实在了。所以如果想充分的利用CPU，就得多创建几个线程，一个线程没有数据，另外一个总有吧，这就叫东方不亮西方亮。</p>
+<p>来一段简简单单的伪代码，大家稍微感受一下吧。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//整个线程池</span></span><br><span class="line">ExecutorService executor = Executors.newFixedThreadPool(<span class="number">100</span>);</span><br><span class="line">ServerSocket serverSocket = <span class="keyword">new</span> ServerSocket();</span><br><span class="line">serverSocket.bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8888</span>));</span><br><span class="line"><span class="comment">//循环监听等待新连接到来</span></span><br><span class="line"><span class="keyword">while</span>(<span class="keyword">true</span>) &#123;</span><br><span class="line">    Socket socket = serverSocket.accept();</span><br><span class="line">    <span class="comment">//为新的连接创建新的线程</span></span><br><span class="line">    executor.submit(<span class="keyword">new</span> Task(socket));</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Socket socket;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">Task</span><span class="params">(Socket socket)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.socket = socket;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">while</span> (!socket.isClosed()) &#123;</span><br><span class="line">            <span class="comment">//读数据，阻塞</span></span><br><span class="line">            String someThing = socket.read();</span><br><span class="line">            <span class="keyword">if</span> (someThing != <span class="keyword">null</span>) &#123;</span><br><span class="line">                <span class="comment">//处理数据,返回客户端，阻塞</span></span><br><span class="line">                socket.write();</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="NIO是个聪明孩子。"><a href="#NIO是个聪明孩子。" class="headerlink" title="NIO是个聪明孩子。"></a>NIO是个聪明孩子。</h5><p><code>BIO</code>的问题出在了阻塞的读和写上面。因为阻塞<code>I/O</code>太实在，没有数据就死等数据，造成<code>CPU</code>没有被充分利用的尴尬局面。相比于<code>BIO</code>，<code>NIO</code>就聪明多，因为它根本就不会等，而是有数据的时候，你通知我一下，我派<code>CPU</code>去取。到哪儿就取，取完就走，一点儿不废话，速度那叫一个快。以<code>CPU</code>的（智商）运算速度，一个人管理几千个通道根本不是事儿。这就是<code>Reactor</code>编程模型，也叫基于事件编程。</p>
+<p>既然是基于事件编程，那么<code>NIO</code>里面比较重要的几个事件分别是，<code>Read</code>，<code>Write</code>，<code>Accept</code>，<code>Connect</code>。</p>
+<p>在<code>NIO</code>编程模型中，每个客户端跟服务端建立的连接都是一个<code>Channel</code>，这些<code>Channel</code>一旦有数据了，就会通知<code>CPU</code>去对应的通道取数。所以根本不会像<code>BIO</code>那样，发生线程死等数据的情况。这也就是<code>CPU</code>利用高的原因。</p>
+<p>NIO的网络编程模型有点儿类似于孙悟空的悬丝诊脉。</p>
+<p><img src="03.jpg" alt="03.jpg"></p>
+<h5 id="使用NIO进行网络编程"><a href="#使用NIO进行网络编程" class="headerlink" title="使用NIO进行网络编程"></a>使用NIO进行网络编程</h5><p>上面提到了，NIO网络编程是基于事件编程，那么就得有人负责事件的监听。这个工作由<code>Select</code>完成。当有感兴趣的事情发生，<code>Select</code>就会第一时间知道。</p>
+<p><code>SelectionKey</code>也是一个相当重要的角色，相当于<code>Select</code>和<code>Channel</code>沟通的桥梁。因为<code>Select</code>不光要知道有感兴趣的事情发生了，还要知道哪个<code>Channel</code>发生了什么事件。</p>
+<p><code>NIO</code>网络编程里面的主角就给大家都介绍完了，分别是选择器<code>Selector</code>，通道 <code>ServerSocketChannel</code>和<code>SocketChanel</code>，以及在上面提到的缓冲器<code>ByteBuffer</code>，还有<code>SelectionKey</code>。</p>
+<p>下面给大家简单演绎一下，如何用NIO的方式，实现上文中提到的那个服务端程序。先看代码吧。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EchoNioServer</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUF_SIZE = <span class="number">1024</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line"></span><br><span class="line">        ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Selector selector = Selector.open();</span><br><span class="line"></span><br><span class="line">            ServerSocketChannel serverSocketChannel = ServerSocketChannel.open();</span><br><span class="line">            serverSocketChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">            serverSocketChannel.bind(<span class="keyword">new</span> InetSocketAddress(<span class="number">8888</span>));</span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"正在8888端口监听..."</span>);</span><br><span class="line">            serverSocketChannel.register(selector, SelectionKey.OP_ACCEPT, byteBuffer);</span><br><span class="line"></span><br><span class="line">            <span class="keyword">while</span> (<span class="keyword">true</span>) &#123;</span><br><span class="line">                selector.select();</span><br><span class="line">                Iterator&lt;SelectionKey&gt; iterator = selector.selectedKeys().iterator();</span><br><span class="line">                <span class="keyword">while</span> (iterator.hasNext()) &#123;</span><br><span class="line">                    SelectionKey key = iterator.next();</span><br><span class="line">                    iterator.remove();</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (!key.isValid()) &#123;</span><br><span class="line">                        <span class="keyword">continue</span>;</span><br><span class="line">                    &#125;</span><br><span class="line"></span><br><span class="line">                    <span class="keyword">if</span> (key.isAcceptable()) &#123;</span><br><span class="line">                        ServerSocketChannel serverSocketChannel1 = (ServerSocketChannel) key.channel();</span><br><span class="line">                        SocketChannel socketChannel = serverSocketChannel1.accept();</span><br><span class="line">                        socketChannel.configureBlocking(<span class="keyword">false</span>);</span><br><span class="line">                        socketChannel.register(selector, SelectionKey.OP_READ, byteBuffer);</span><br><span class="line"></span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isReadable()) &#123;</span><br><span class="line">                        SocketChannel socketChannel = (SocketChannel) key.channel();</span><br><span class="line">                        ByteBuffer readBuffer = (ByteBuffer) key.attachment();</span><br><span class="line">                        readBuffer.clear();</span><br><span class="line">                        socketChannel.read(readBuffer);</span><br><span class="line">                        readBuffer.flip();</span><br><span class="line">                        System.out.println(<span class="string">"received from client: "</span> + <span class="keyword">new</span> String(readBuffer.array()).trim());</span><br><span class="line">                        socketChannel.register(selector, SelectionKey.OP_WRITE, readBuffer);</span><br><span class="line"></span><br><span class="line">                    &#125; <span class="keyword">else</span> <span class="keyword">if</span> (key.isWritable()) &#123;</span><br><span class="line">                        SocketChannel socketChannel = (SocketChannel) key.channel();</span><br><span class="line">                        ByteBuffer writeBuffer = (ByteBuffer) key.attachment();</span><br><span class="line">                        String msg = <span class="keyword">new</span> String(writeBuffer.array()).trim().toUpperCase();</span><br><span class="line">                        writeBuffer.clear();</span><br><span class="line">                        writeBuffer.put(msg.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">                        writeBuffer.flip();</span><br><span class="line">                        socketChannel.write(writeBuffer);</span><br><span class="line">                        writeBuffer.clear();</span><br><span class="line">                        socketChannel.close();</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line"></span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>代码解读</strong><br>帮大家做个简单的解读。方便大家理解。</p>
+<ol>
+<li>先创建一个选择器及缓冲器备用，一个用于监听感兴趣的事件，一个用于运送数据。<br><code>Selector select = Selector.open();</code><br><code>ByteBuffer byteBuffer = ByteBuffer.allocate(1024);</code></li>
+<li>创建一个<code>ServerSocketChannel
+ServerSocketChannel ssc = ServerSocketChannel.open();</code></li>
+<li>设置为非阻塞模式（必须设置为非阻塞，不然你还是什么NIO）<br><code>ssc.configureBlocking(false)</code></li>
+<li>绑定端口<br><code>ssc.bind(8888)</code></li>
+<li>将通道注册到选择器，并告诉选择器，我对哪些些事件感兴趣。当事件到来就调用相应的逻辑进行处理。<br><code>sss.register(select,SelectionKey.Accept)</code></li>
+<li>调用<code>select.selct()</code>方法，找出可用的通道，这个方法是阻塞的，所以放到while（true）也不会造成CPU空转。</li>
+<li>针对不同的事件做不同的处理。</li>
+</ol>
+<p>与上面服务端代码配套的客户端代码，我就不做过多解释了。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">EchoNioClient</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> </span>&#123;</span><br><span class="line">        ExecutorService executor = Executors.newFixedThreadPool(<span class="number">5</span>);</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">10</span>; i++) &#123;</span><br><span class="line">            executor.submit(<span class="keyword">new</span> Task());</span><br><span class="line">        &#125;</span><br><span class="line">        executor.shutdown();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">    InetSocketAddress remoteAddress = <span class="keyword">new</span> InetSocketAddress(<span class="number">8888</span>);</span><br><span class="line">    <span class="keyword">static</span> <span class="keyword">final</span> <span class="keyword">int</span> BUF_SIZE = <span class="number">1024</span>;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            String msg = <span class="string">"hello I'm "</span> + Thread.currentThread().getName();</span><br><span class="line">            SocketChannel socketChannel = SocketChannel.open(remoteAddress);</span><br><span class="line">            ByteBuffer byteBuffer = ByteBuffer.allocate(BUF_SIZE);</span><br><span class="line">            byteBuffer.clear();</span><br><span class="line">            byteBuffer.put(msg.getBytes(<span class="string">"utf-8"</span>));</span><br><span class="line">            byteBuffer.flip();</span><br><span class="line">            socketChannel.write(byteBuffer);</span><br><span class="line">            byteBuffer.clear();</span><br><span class="line">            ByteBuffer receiveBuffer = ByteBuffer.allocate(<span class="number">1024</span>);</span><br><span class="line">            <span class="keyword">while</span> (socketChannel.read(receiveBuffer) != -<span class="number">1</span>) &#123;</span><br><span class="line">                receiveBuffer.flip();</span><br><span class="line">                System.out.println(<span class="string">"received from server: "</span> + <span class="keyword">new</span> String(receiveBuffer.array()).trim());</span><br><span class="line">                receiveBuffer.clear();</span><br><span class="line">            &#125;</span><br><span class="line">            socketChannel.close();</span><br><span class="line">        &#125; <span class="keyword">catch</span> (IOException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p>希望这篇文章能帮助你更好的理解NIO基础编程。了解了这些基础知识之后，无聊的时候就可以去看看Tomcat的源码，有机会也可以跟那些经常用Netty写高性能网关服务的大牛聊聊天了。</p>
+<p>最后强烈建议各位，把文中的例子放到自己的IDE里面，跑一遍，最好自己在动手写一写，千万不要一看我都会，一写就蒙圈，眼高手低可不好。</p>
+<hr>
+<p>推荐阅读:<br>1.<a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a><br>2.<a href="https://mp.weixin.qq.com/s/Y6osHp8RbIWgWqd-gu525Q" target="_blank" rel="noopener">Apache httpd 是如何实现高并发服务的</a><br>3.<a href="https://mp.weixin.qq.com/s/rPpQ4rIWRj4lUcRx92Ndzw" target="_blank" rel="noopener">Javaer运维指令合集(快餐版)</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/" title="教你如何学习Java NIO">http://hellofrank.github.io/2020/03/08/教你如何学习Java-NIO/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/NIO/" rel="tag"><i class="fa fa-tag"></i> NIO</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/08/教你如何理解JAVA的I-O类库/" rel="next" title="教你如何理解JAVA的I/O类库">
+                <i class="fa fa-chevron-left"></i> 教你如何理解JAVA的I/O类库
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">39</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#本地文件I-O操作——NIO小试牛刀"><span class="nav-number">1.</span> <span class="nav-text">本地文件I/O操作——NIO小试牛刀</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#零拷贝"><span class="nav-number">2.</span> <span class="nav-text">零拷贝</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#超大内存文件读取"><span class="nav-number">3.</span> <span class="nav-text">超大内存文件读取</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#网络I-O——NIO大显身手。"><span class="nav-number">4.</span> <span class="nav-text">网络I/O——NIO大显身手。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#需求提出"><span class="nav-number">5.</span> <span class="nav-text">需求提出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BIO实现方式"><span class="nav-number">6.</span> <span class="nav-text">BIO实现方式</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BIO是个实在孩子。"><span class="nav-number">7.</span> <span class="nav-text">BIO是个实在孩子。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#NIO是个聪明孩子。"><span class="nav-number">8.</span> <span class="nav-text">NIO是个聪明孩子。</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#使用NIO进行网络编程"><span class="nav-number">9.</span> <span class="nav-text">使用NIO进行网络编程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">10.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">115k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
