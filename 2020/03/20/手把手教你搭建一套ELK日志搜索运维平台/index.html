@@ -1,0 +1,1160 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="有些事情，当我们勇敢的迈出第一步的时候，其实就已经完成了50%。很显然，学习ELK就属于这样的事情。很多对ELK不了解的同学，每当想学习的时候，就会因为涉及的组件比较多，导致自己不知道如何开始，最后的结果就是永远没有开始，让自己一直处于临渊羡鱼的状态。">
+<meta name="keywords" content="ELK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="手把手教你搭建一套ELK日志搜索运维平台">
+<meta property="og:url" content="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="有些事情，当我们勇敢的迈出第一步的时候，其实就已经完成了50%。很显然，学习ELK就属于这样的事情。很多对ELK不了解的同学，每当想学习的时候，就会因为涉及的组件比较多，导致自己不知道如何开始，最后的结果就是永远没有开始，让自己一直处于临渊羡鱼的状态。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/01.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/02.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/03.jpeg">
+<meta property="og:updated_time" content="2020-03-20T03:04:49.649Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="手把手教你搭建一套ELK日志搜索运维平台">
+<meta name="twitter:description" content="有些事情，当我们勇敢的迈出第一步的时候，其实就已经完成了50%。很显然，学习ELK就属于这样的事情。很多对ELK不了解的同学，每当想学习的时候，就会因为涉及的组件比较多，导致自己不知道如何开始，最后的结果就是永远没有开始，让自己一直处于临渊羡鱼的状态。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/01.jpeg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>手把手教你搭建一套ELK日志搜索运维平台 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">手把手教你搭建一套ELK日志搜索运维平台
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-20 10:59:15" itemprop="dateCreated datePublished" datetime="2020-03-20T10:59:15+08:00">2020-03-20</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">7.1k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">13 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>有些事情，当我们勇敢的迈出第一步的时候，其实就已经完成了50%。很显然，学习ELK就属于这样的事情。很多对ELK不了解的同学，每当想学习的时候，就会因为涉及的组件比较多，导致自己不知道如何开始，最后的结果就是永远没有开始，让自己一直处于临渊羡鱼的状态。</p>
+<a id="more"></a>
+<p>大部分程序员学一门新语言的时候都是从“hello world”开始的。其实ELK也有自己的“hello world”。只不过这个“hello world”需要的组件及配置有点儿多。</p>
+<p>这边文章我会带着大家搭建一个实时的日志搜索平台。将业务系统产生的日志(模拟)，源源不断的收集到<code>Elasticsearch</code> 中，最后通过<code>Kibana</code> 进行查询展示。</p>
+<p>如果这篇文章中出现的一些细节使你困惑，那么就暂时放过自己，争取先把这一切都跑通，毕竟你刚开始学<code>Java</code> 的时候，对”hello world”程序里面的每一行代码也不是真正的理解。</p>
+<p>ELK是 <code>Elasticsearch</code>,<code>Logstash</code>,<code>Kibana</code> 三个组件的首字母缩写，这是原来的叫法，现在新的叫法是Elastic Stack，除了<code>Elasticsearch</code>、<code>Kibana</code>、<code>Logstash</code>还增加了<code>Beats</code>，主要用于数据收集。</p>
+<p><img src="01.jpeg" alt="01.jpeg"></p>
+<p>一点点说明：<br>本文基于<code>centos7.5</code> 的操作系统，Elastic Stack基于最新的7.6版本。<br>本文只涉及单点的搭建及配置，至于集群的配置及调优不在本文讨论范围内。<br>本文假定的业务系统产生的日志格式如下：</p>
+<p><code>|07801302020021914554950568859|127.0.0.1|2020-02-19    14:55:49[INFO][Thread-4][com.hello.frank.test.TestUser]-user msg jack</code></p>
+<h4 id="Elasticsearch"><a href="#Elasticsearch" class="headerlink" title="Elasticsearch"></a>Elasticsearch</h4><h5 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h5><p><code>Elasticsearch</code> 是一款提供分布式数据存储，搜索及分析的数据引擎。有很多的应用场景，但是使用最多的还是存储日志信息，用于日常运维及商业分析。</p>
+<h5 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">curl -L -O https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.6.1-linux-x86_64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">解压</span></span><br><span class="line">tar -xzvf elasticsearch-7.6.1-linux-x86_64.tar.gz</span><br><span class="line">cd elasticsearch-7.6.1</span><br><span class="line"><span class="meta">#</span><span class="bash">启动</span></span><br><span class="line">./bin/elasticsearch</span><br></pre></td></tr></table></figure>
+<p><code>Elasticsearch</code> 的配置文件是<code>config/elasticsearch.yml</code>。默认情况下，<code>Elasticsearch</code> 只允许本机访问，所以我们只需要简单的修改一下配置文件，将 <code>network.host</code> 前面的注释去掉，同时将值改成 <code>0.0.0.0</code>，表示所有机器都可以访问，然后重启一下就OK了。</p>
+<p>启动后，可以通过<br><code>curl http://hostIp:9200</code> 进行测试，如果看到如下信息就证明<code>Elasticsearch</code> 安装完了。</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">"name"</span> : <span class="string">"localhost"</span>,</span><br><span class="line">  <span class="attr">"cluster_name"</span> : <span class="string">"elasticsearch"</span>,</span><br><span class="line">  <span class="attr">"cluster_uuid"</span> : <span class="string">"1ew0o-aXSpq8Tfv0zCWE3Q"</span>,</span><br><span class="line">  <span class="attr">"version"</span> : &#123;</span><br><span class="line">    <span class="attr">"number"</span> : <span class="string">"7.6.0"</span>,</span><br><span class="line">    <span class="attr">"build_flavor"</span> : <span class="string">"default"</span>,</span><br><span class="line">    <span class="attr">"build_type"</span> : <span class="string">"tar"</span>,</span><br><span class="line">    <span class="attr">"build_hash"</span> : <span class="string">"7f634e9f44834fbc12724506cc1da681b0c3b1e3"</span>,</span><br><span class="line">    <span class="attr">"build_date"</span> : <span class="string">"2020-02-06T00:09:00.449973Z"</span>,</span><br><span class="line">    <span class="attr">"build_snapshot"</span> : <span class="literal">false</span>,</span><br><span class="line">    <span class="attr">"lucene_version"</span> : <span class="string">"8.4.0"</span>,</span><br><span class="line">    <span class="attr">"minimum_wire_compatibility_version"</span> : <span class="string">"6.8.0"</span>,</span><br><span class="line">    <span class="attr">"minimum_index_compatibility_version"</span> : <span class="string">"6.0.0-beta1"</span></span><br><span class="line">  &#125;,</span><br><span class="line">  <span class="attr">"tagline"</span> : <span class="string">"You Know, for Search"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<blockquote>
+<p>注意：<code>Elasticsearch</code> 启动的时候，如果报错”max virtual memory areas vm.maxmapcount [65530] is too low”，需要执行<code>$ sudo sysctl -w vm.max_map_count=262144</code>，来修改最大虚拟内存数。</p>
+</blockquote>
+<h4 id="FileBeat"><a href="#FileBeat" class="headerlink" title="FileBeat"></a>FileBeat</h4><h5 id="介绍-1"><a href="#介绍-1" class="headerlink" title="介绍"></a>介绍</h5><p>ELK平台提供了很多 <code>Beat</code> 组件，目的是为了收集各种不同的数据源，比如有针对日志文件的<code>FileBeat</code>，也有针对系统运行信息的<code>MetricBeat</code>，还有针对网络包的<code>PacketBeat</code>。<br>这里我拿<code>FileBeat</code> 的安装和使用来举例，演示一下如何收集应用的日志信息。</p>
+<h5 id="安装-1"><a href="#安装-1" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">curl -L -O https://artifacts.elastic.co/downloads/beats/filebeat/filebeat-7.6.1-linux-x86_64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">解压</span></span><br><span class="line">tar xzvf filebeat-7.6.1-linux-x86_64.tar.gz</span><br></pre></td></tr></table></figure>
+<h5 id="配置"><a href="#配置" class="headerlink" title="配置"></a>配置</h5><p>使用 <code>Filebeat</code> 进行日志收集，只需要对配置文件进行简单的修改就OK。<br><code>Filebeat</code> 的配置文件是<code>filebeat.yml</code>。所有的配置都在这个文件下进行。</p>
+<p><strong>输入配置</strong>。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filebeat.inputs:</span></span><br><span class="line"><span class="attr">- type:</span> <span class="string">log</span></span><br><span class="line"><span class="attr">  enabled:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">/var/log/*.log</span></span><br></pre></td></tr></table></figure></p>
+<p>上面这段简单的配置，表示收集<code>/var/log</code>下面的所有<code>.log</code>文件。同时还可以这样配置<code>/var/log/*/*.log</code> ，来抓取<code>log</code>子目录下的所有<code>.log</code>文件。注意不会抓取<code>log</code>目录下的<code>.log</code>文件。</p>
+<p><strong>输出配置</strong><br>·<code>Filebeat</code>支持很多输出配置，最常用的就是输出到<code>Kafka</code>和<code>logstash</code>,当然了也可以直接输入到<code>Elasticsearch</code>。</p>
+<p>输出到<code>Elasticsearch</code> 的配置<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">output.elasticsearch:</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">["ES-host:9200"]</span></span><br></pre></td></tr></table></figure></p>
+<p>输出到<code>Logstash</code>的配置。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">output.logstash:</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">["logstash-host:5044"]</span></span><br></pre></td></tr></table></figure>
+<p><code>Logstash</code>可以对日志进行过滤和清洗，如果日志量太大，单节点的<code>Logstash</code>很可能满足不了需求。<code>Filebeat</code>支持同时输出到多个<code>Logstash</code>。</p>
+<p><strong>负载均衡配置</strong><br>支持负载均衡的配置也很简单，配置如下。<br><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">output.logstash:</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">["localhost:5044",</span> <span class="string">"localhost:5045"</span><span class="string">]</span></span><br><span class="line"><span class="attr">  loadbalance:</span> <span class="literal">true</span></span><br></pre></td></tr></table></figure></p>
+<p>相比单节点的配置，只是增加了一个<code>loadbalance</code>的属性，同时将新增的节点加到<code>hosts</code>数组里就OK了。</p>
+<blockquote>
+<p>注意 <code>loadbalance</code>属性只对<code>Redis</code>,<code>Logstash</code>,和<code>Elasticsearch</code>起作用，<code>Kafka</code>自己就可以实现负载均衡，不用<code>Filebeat</code>来操心。</p>
+</blockquote>
+<p>此外<code>Filebeat</code>还支持多个线程工作模式，默认的<code>work</code> 是1，如果想增加<code>worker</code> 数量，只许增加<code>work</code> 属性的配置就OK。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filebeat.inputs:</span></span><br><span class="line"><span class="attr">- type:</span> <span class="string">log</span></span><br><span class="line"><span class="attr">  paths:</span></span><br><span class="line"><span class="bullet">    -</span> <span class="string">/var/log/*.log</span></span><br><span class="line"><span class="string">output.logstash:</span></span><br><span class="line"><span class="attr">  hosts:</span> <span class="string">["localhost:5044",</span> <span class="string">"localhost:5045"</span><span class="string">]</span></span><br><span class="line"><span class="attr">  loadbalance:</span> <span class="literal">true</span></span><br><span class="line"><span class="attr">  worker:</span> <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<p>上面的配置表示一共有4(host * work)个worker在工作。</p>
+<h5 id="启动"><a href="#启动" class="headerlink" title="启动"></a>启动</h5><p>通过 <code>./filebeat -e -c filebeat.yml -d &quot;publish&quot;</code> 启动<code>Filebeat</code>。<br>如果上面已经成功启动ES，同时你的<code>FileBeat</code>的配置又是输出到<code>Elasticsearch</code>。启动之后，你的日志就会源源不断的存储到<code>Elasticsearch</code>。</p>
+<blockquote>
+<p><code>Filebeat</code>是通过<code>FileBeat</code>安装目录下的<code>data</code>目录进行日志文件信息管理的，如果在测试阶段，想重复收集相同的日志，需要每次把<code>data</code>目录下的信息清空然后在重新启动。</p>
+</blockquote>
+<h4 id="Logstash"><a href="#Logstash" class="headerlink" title="Logstash"></a>Logstash</h4><h5 id="介绍-2"><a href="#介绍-2" class="headerlink" title="介绍"></a>介绍</h5><p><code>Logstash</code>是一款强大的数据处理工具，可以帮助我们处理从数据源发送过来的数据。同时将加工之后的信息发送到<code>Elasticsearch</code>。在ELK里面扮演者承上启下的作用。</p>
+<h5 id="安装-2"><a href="#安装-2" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">curl -L -O https://artifacts.elastic.co/downloads/logstash/logstash-7.6.1.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">解压</span></span><br><span class="line">tar -xzvf logstash-7.6.1.tar.gz</span><br></pre></td></tr></table></figure>
+<h5 id="配置-1"><a href="#配置-1" class="headerlink" title="配置"></a>配置</h5><p><code>Logstash</code>提供了<code>input</code>插件，用于读取各种数据源的数据。这里配置一个接收<code>FileBeat</code>发送过来的数据，然后将数据做简单之后发送到ES进行存储的配置。</p>
+<p>先在<code>Logstash</code> 的<code>config</code> 目录下，创建一个配置文件，假设叫<code>blog-pipeline.conf</code>，文件中的内容是这个样子。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">input</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="string">beats&#123;</span></span><br><span class="line">        <span class="string">port</span> <span class="string">=&gt;</span> <span class="string">"5044"</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="string">output&#123;</span></span><br><span class="line">    <span class="comment">#stdout &#123; codec =&gt; rubydebug &#125;</span></span><br><span class="line">    <span class="string">elasticsearch&#123;</span></span><br><span class="line">        <span class="string">hosts</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"localhost"</span> <span class="string">]</span></span><br><span class="line">	    <span class="string">index</span> <span class="string">=&gt;</span> <span class="string">"blog-demo"</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p>配置很简单，分为输入和输出两个部分。输入部分的<code>port</code>端口号就是上面提到的<code>Filebeat</code>的端口号。output的配置部分表示输出到ES。<br>配置文件中注释的那一行，是方便大家调试用的，打开那一行，可以把输出打印到控制台，方便我们调试，以免调试阶段产生的数据污染ES中生产数据。</p>
+<blockquote>
+<p><code>Elasticsearch</code>中 index的概念可以简单的理解成关系数据库中表的概念。如果不配置index项，默认值是logstash。</p>
+</blockquote>
+<h5 id="启动-1"><a href="#启动-1" class="headerlink" title="启动"></a>启动</h5><p>通过 <code>./bin/logstash -f ./config/blog-pipeline.conf</code> 启动<code>Logstash</code><br>如果一切都正常，你可以在启动<code>Logstash</code> 的控制台看到收集的日志了（记得调试的时候使用<code>stdout { codec =&gt; rubydebug }</code>）。</p>
+<h4 id="Grok-filter"><a href="#Grok-filter" class="headerlink" title="Grok filter"></a>Grok filter</h4><p>如果只是原样的将日志信息存入ES，那么就没有必要使用<code>Logstash</code>了。因为<code>FileBeat</code> 也可以很好的完成相关工作。如果想对日志信息做一些处理，那么<code>Grok</code> 的<code>filter</code>插件，就有必要了解一下。</p>
+<p>grok是一款方便大家使用的正则表达式库，里面封装了很多常用的正则，当然了我们也可以自定义。具体预定义了哪些正则，我们可以去这里看（<a href="https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns），如果需要对grok进行调试，可以使用这个网址(https://grokdebug.herokuapp.com/),调试的网址需要翻强使用。" target="_blank" rel="noopener">https://github.com/logstash-plugins/logstash-patterns-core/blob/master/patterns/grok-patterns），如果需要对grok进行调试，可以使用这个网址(https://grokdebug.herokuapp.com/),调试的网址需要翻强使用。</a></p>
+<p>下面我们针对文章开头提到的日志样例，进行正则匹配。当然了这个过滤只是为了演示grok如何使用，并没有过滤掉日志中任何一部分信息，实际使用中可以提取感兴趣的日志信息进行入库。</p>
+<p>Grok的插件使用很简单，只需要在<code>Logstash</code>的配置文件中增加如下信息就OK。</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">filter</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="string">grok</span> <span class="string">&#123;</span></span><br><span class="line">		<span class="string">match</span> <span class="string">=&gt;</span> <span class="string">&#123;</span> <span class="string">"message"</span> <span class="string">=&gt;</span> <span class="string">"\|<span class="template-variable">%&#123;GREEDYDATA:traceid&#125;</span>\|<span class="template-variable">%&#123;IPV4:serverip&#125;</span>\|<span class="template-variable">%&#123;GREEDYDATA:logdate&#125;</span>\[<span class="template-variable">%&#123;LOGLEVEL:loglevel&#125;</span>\]\[<span class="template-variable">%&#123;GREEDYDATA:thread&#125;</span>\]\[<span class="template-variable">%&#123;GREEDYDATA:classname&#125;</span>\]-<span class="template-variable">%&#123;GREEDYDATA:logmessage&#125;</span>"</span> <span class="string">&#125;</span></span><br><span class="line">        <span class="string">overwrite</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"message"</span> <span class="string">]</span></span><br><span class="line">		 <span class="string">remove_field</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"host"</span><span class="string">,"ecs",</span></span><br><span class="line">			  <span class="string">"agent"</span><span class="string">,"version",</span></span><br><span class="line">			  <span class="string">"log"</span><span class="string">,</span> <span class="string">"input"</span><span class="string">,</span> <span class="string">"tags"</span><span class="string">,</span></span><br><span class="line">			  <span class="string">"@version"</span><span class="string">,"message"</span> <span class="string">]</span></span><br><span class="line">	<span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<p><code>Logstash</code> 的完整配置如下</p>
+<figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">input</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="string">beats&#123;</span></span><br><span class="line">        <span class="string">port</span> <span class="string">=&gt;</span> <span class="string">"5044"</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="string">filter</span> <span class="string">&#123;</span></span><br><span class="line">    <span class="string">grok</span> <span class="string">&#123;</span></span><br><span class="line">		<span class="string">match</span> <span class="string">=&gt;</span> <span class="string">&#123;</span> <span class="string">"message"</span> <span class="string">=&gt;</span> <span class="string">"\|<span class="template-variable">%&#123;GREEDYDATA:traceid&#125;</span>\|<span class="template-variable">%&#123;IPV4:serverip&#125;</span>\|<span class="template-variable">%&#123;GREEDYDATA:logdate&#125;</span>\[<span class="template-variable">%&#123;LOGLEVEL:loglevel&#125;</span>\]\[<span class="template-variable">%&#123;GREEDYDATA:thread&#125;</span>\]\[<span class="template-variable">%&#123;GREEDYDATA:classname&#125;</span>\]-<span class="template-variable">%&#123;GREEDYDATA:logmessage&#125;</span>"</span> <span class="string">&#125;</span></span><br><span class="line">        <span class="string">overwrite</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"message"</span> <span class="string">]</span></span><br><span class="line">		 <span class="string">remove_field</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"host"</span><span class="string">,"ecs",</span></span><br><span class="line">			  <span class="string">"agent"</span><span class="string">,"version",</span></span><br><span class="line">			  <span class="string">"log"</span><span class="string">,</span> <span class="string">"input"</span><span class="string">,</span> <span class="string">"tags"</span><span class="string">,</span></span><br><span class="line">			  <span class="string">"@version"</span><span class="string">,"message"</span> <span class="string">]</span></span><br><span class="line">	<span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="string">output&#123;</span></span><br><span class="line">    <span class="comment">#stdout &#123; codec =&gt; rubydebug &#125;</span></span><br><span class="line">    <span class="string">elasticsearch&#123;</span></span><br><span class="line">        <span class="string">hosts</span> <span class="string">=&gt;</span> <span class="string">[</span> <span class="string">"10.220.46.94"</span> <span class="string">]</span></span><br><span class="line">	    <span class="string">index</span> <span class="string">=&gt;</span> <span class="string">"blog-demo"</span></span><br><span class="line">    <span class="string">&#125;</span></span><br><span class="line"><span class="string">&#125;</span></span><br></pre></td></tr></table></figure>
+<h5 id="启动-2"><a href="#启动-2" class="headerlink" title="启动"></a>启动</h5><p>再次启动<code>Logstash</code>。如果你使用的是<code>stdout { codec =&gt; rubydebug }</code>，那么屏幕上的输出如下。</p>
+<p><img src="02.jpeg" alt="02.jpeg"></p>
+<h4 id="Kibana"><a href="#Kibana" class="headerlink" title="Kibana"></a>Kibana</h4><h5 id="介绍-3"><a href="#介绍-3" class="headerlink" title="介绍"></a>介绍</h5><p><code>Kibana</code>是一款开源的，用于数据分析展示的平台。经常跟<code>ElasticSearch</code>配合使用。简单的说就是为<code>ElasticSearch</code>提供前端的数据搜索及分析的展示界面，功能强大，各种图表样式丰富。</p>
+<h5 id="安装-3"><a href="#安装-3" class="headerlink" title="安装"></a>安装</h5><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash">下载</span></span><br><span class="line">curl -L -O https://artifacts.elastic.co/downloads/kibana/kibana-7.6.1-linux-x86_64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">解压</span></span><br><span class="line">tar xzvf kibana-7.6.1-linux-x86_64.tar.gz</span><br><span class="line"><span class="meta">#</span><span class="bash">启动</span></span><br><span class="line">cd kibana-7.6.1-linux-x86_64/</span><br><span class="line">./bin/kibana</span><br></pre></td></tr></table></figure>
+<h5 id="配置-2"><a href="#配置-2" class="headerlink" title="配置"></a>配置</h5><p><code>Kibana</code> 的配置文件是，<code>config/kibana.yml</code>。默认端口号是<code>5601</code>。启动<code>Kibana</code> 之前需要告诉<code>Kibana</code> 连接哪个ES。在配置文件中修改如下配置<code>elasticsearch.hosts:[&quot;http://ES-host:9200&quot;]</code> 即可</p>
+<p>现在你可以通过浏览器访问<code>Kibana</code>了，如果你想查询刚刚存入<code>Elasticsearch</code> 的日志信息，还需要在<code>Kibana</code>的页面做如下配置。</p>
+<p>在<code>Kibana</code>的左侧边栏找到<code>management</code>，点击进去之后，找到<code>kibana</code>的索引管理，添加<code>blog-demo</code>索引(Logstash中配置的索引名称)。添加完成后就可以搜索了。下面我放一个截图，大家感受一下,重点关注地方都用箭头标出了。<br><img src="03.jpeg" alt="03.jpeg"></p>
+<h4 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h4><p>这仅仅是一篇抛砖引玉的文章，Elastic Stack里面的每个组件都大有乾坤，如果各位有精力，建议深入的研究，会有颇多收获。</p>
+<hr>
+<p>推荐阅读<br><a href="https://mp.weixin.qq.com/s/p4pz4VKo76fbzJo62czaXw" target="_blank" rel="noopener">教你如何学习Java的 NIO</a><br><a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a><br><a href="https://mp.weixin.qq.com/s/BZ51P6nsFQafPnm3s44Azw" target="_blank" rel="noopener">Java程序员必读核心书单—基础版</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/" title="手把手教你搭建一套ELK日志搜索运维平台">http://hellofrank.github.io/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/ELK/" rel="tag"><i class="fa fa-tag"></i> ELK</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/20/程序员小W的成长故事/" rel="next" title="程序员小W的成长故事">
+                <i class="fa fa-chevron-left"></i> 程序员小W的成长故事
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">41</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">17</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Elasticsearch"><span class="nav-number">1.</span> <span class="nav-text">Elasticsearch</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#介绍"><span class="nav-number">1.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装"><span class="nav-number">1.2.</span> <span class="nav-text">安装</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#FileBeat"><span class="nav-number">2.</span> <span class="nav-text">FileBeat</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#介绍-1"><span class="nav-number">2.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装-1"><span class="nav-number">2.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置"><span class="nav-number">2.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动"><span class="nav-number">2.4.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Logstash"><span class="nav-number">3.</span> <span class="nav-text">Logstash</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#介绍-2"><span class="nav-number">3.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装-2"><span class="nav-number">3.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-1"><span class="nav-number">3.3.</span> <span class="nav-text">配置</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#启动-1"><span class="nav-number">3.4.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Grok-filter"><span class="nav-number">4.</span> <span class="nav-text">Grok filter</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#启动-2"><span class="nav-number">4.1.</span> <span class="nav-text">启动</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Kibana"><span class="nav-number">5.</span> <span class="nav-text">Kibana</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#介绍-3"><span class="nav-number">5.1.</span> <span class="nav-text">介绍</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#安装-3"><span class="nav-number">5.2.</span> <span class="nav-text">安装</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#配置-2"><span class="nav-number">5.3.</span> <span class="nav-text">配置</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#结束"><span class="nav-number">6.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">124k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
