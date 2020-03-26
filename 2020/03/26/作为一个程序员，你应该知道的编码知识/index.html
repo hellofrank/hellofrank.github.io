@@ -1,0 +1,1131 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="在谍战剧里，我们经常看到这样一个桥段，特工人员，千辛万苦拿到一条信息，打开一看是一串数字，然后赶紧跑到一个秘密地方，拿出一个密码本（也可能是一本唐诗选），按照一定规则（只有自己人知道），比如第一个数字表示页数，第二个数字表示行数，第三个数字表示第几个字，逐一将信息翻译出来。如果这个过程中用了错误的密码本，或者不知道规则，那么将会解码失败。">
+<meta name="keywords" content="编码">
+<meta property="og:type" content="article">
+<meta property="og:title" content="作为一个程序员，你应该知道的编码知识">
+<meta property="og:url" content="http://hellofrank.github.io/2020/03/26/作为一个程序员，你应该知道的编码知识/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="在谍战剧里，我们经常看到这样一个桥段，特工人员，千辛万苦拿到一条信息，打开一看是一串数字，然后赶紧跑到一个秘密地方，拿出一个密码本（也可能是一本唐诗选），按照一定规则（只有自己人知道），比如第一个数字表示页数，第二个数字表示行数，第三个数字表示第几个字，逐一将信息翻译出来。如果这个过程中用了错误的密码本，或者不知道规则，那么将会解码失败。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-03-26T12:25:24.681Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="作为一个程序员，你应该知道的编码知识">
+<meta name="twitter:description" content="在谍战剧里，我们经常看到这样一个桥段，特工人员，千辛万苦拿到一条信息，打开一看是一串数字，然后赶紧跑到一个秘密地方，拿出一个密码本（也可能是一本唐诗选），按照一定规则（只有自己人知道），比如第一个数字表示页数，第二个数字表示行数，第三个数字表示第几个字，逐一将信息翻译出来。如果这个过程中用了错误的密码本，或者不知道规则，那么将会解码失败。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/03/26/作为一个程序员，你应该知道的编码知识/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>作为一个程序员，你应该知道的编码知识 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/03/26/作为一个程序员，你应该知道的编码知识/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">作为一个程序员，你应该知道的编码知识
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-03-26 20:22:19" itemprop="dateCreated datePublished" datetime="2020-03-26T20:22:19+08:00">2020-03-26</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/编码/" itemprop="url" rel="index"><span itemprop="name">编码</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.3k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>在谍战剧里，我们经常看到这样一个桥段，特工人员，千辛万苦拿到一条信息，打开一看是一串数字，然后赶紧跑到一个秘密地方，拿出一个密码本（也可能是一本唐诗选），按照一定规则（只有自己人知道），比如第一个数字表示页数，第二个数字表示行数，第三个数字表示第几个字，逐一将信息翻译出来。如果这个过程中用了错误的密码本，或者不知道规则，那么将会解码失败。</p>
+<a id="more"></a>
+<p>计算机的编解码过程跟上面的过程是一样一样的。</p>
+<p>计算机只认 <code>0</code> 和 <code>1</code>，所有的影像和字符最终都会转换成计算机能够认识的二进制。一个二进制位（bit）可以表示两种状态 <code>0</code> 和 <code>1</code>，一个字节(byte)由八个二进制位组成，所以一个字节一共可以表示256（<code>2^8</code>）种状态。如果我们规定每种状态代表一个字符，那么一个字节就可以表达出 <code>256</code> 个字符。</p>
+<h4 id="ASCII"><a href="#ASCII" class="headerlink" title="ASCII"></a>ASCII</h4><p>计算机是由美国人发明的，所以在最初设计编码的时候，就只考虑了英文的编码。英文字符很少，加上一些特殊字符，一共也就100个左右，确切的说是128个。这样的话用一个字节进行编码就完全够了，不仅够用了，而且还富裕出一位，即第一位一直没有参与编码，统一定为 <code>0</code>。这就是所谓的 <code>ASCII</code> 编码。在 <code>ASCII</code>  编码中，空格<code>SPACE</code>是<code>32</code>（二进制 <code>00100000</code> ），大写的字母 <code>A</code> 是 <code>65</code> （二进制<code>01000001</code>）。</p>
+<h4 id="非ASCII"><a href="#非ASCII" class="headerlink" title="非ASCII"></a>非ASCII</h4><p>随着计算机的普及，欧洲也开始普及计算机，欧洲人发现 <code>ASCII</code> 规定的 <code>128</code> 个字符不能满足他们的使用，比如，在法语中，字母上方有注音符号，就无法用 <code>ASCII</code> 码表示。于是，一些欧洲国家就决定，把字节中闲置的第一位编入新的符号。比如，法语中的 <code>é</code> 的编码为 <code>130</code> （二进制<code>10000010</code>）。这样一来，这些欧洲国家使用的编码体系，最多可以表示 <code>256</code> 个符号。这就是大家经常见到的<code>ISO-8859-1</code> 编码，也叫<code>Latin1</code> 编码。</p>
+<h4 id="中文编码"><a href="#中文编码" class="headerlink" title="中文编码"></a>中文编码</h4><p>随着计算机的普及，国人也开始使用计算机，但是发现按照之前的编码方式，根本就没有汉字什么事儿，也就是计算机根本没办法认识汉字。</p>
+<h5 id="GB2312"><a href="#GB2312" class="headerlink" title="GB2312"></a>GB2312</h5><p>为了能够让计算机认识汉字，我们决定对汉字进行编码，本着敢想敢干的精神，我们规定用两个字节表示一个汉字。<br>具体规则是这样的：一个小于 <code>127</code> 的字节代表的意义与原来的 <code>ASCII</code> 相同，但两个大于<code>127</code> 的字节连在一起时，就表示这是一个汉字，前面的一个字节称为高字节，后面一个字节称为低字节，这样我们就可以组合出<code>6763</code> 个简体汉字。这就是大家常说的<code>GB2312</code> 编码。</p>
+<h5 id="GBK"><a href="#GBK" class="headerlink" title="GBK"></a>GBK</h5><p>很显然 <code>GB2312</code> 编码的 <code>6763</code> 个汉字，并不能适应所有的使用场景，比如“喆”字就不再其中，于是在 <code>GB2312</code> 的基础上又进行了新的扩展，规定只要第一个字节是大于 <code>127</code> 的就OK，至于第二个字节是大于 <code>127</code> 还是小于 <code>127</code> 都无所谓了。经过这样的改动之后，收录的汉字及符号就可以达到 <code>2W</code> 多个，这就是我们常说的<code>GBK</code> 编码。</p>
+<p>再后来，人们继续对第二个字节进行扩展，发展出了 <code>GB18030</code> 编码，比 <code>GBK</code> 又多出了一些字符编码。</p>
+<p>至此，所有的汉字编码都是用两个字节表示的，但是英文是用一个字节表示。上了一些年纪的程序员都体验过，一个汉字算两个英文字符的经历。</p>
+<h5 id="BIG-5"><a href="#BIG-5" class="headerlink" title="BIG-5"></a>BIG-5</h5><p>上面提到的都是简体中文编码，虽然 <code>GBK</code> 及 <code>GB18030</code> 包含了部分繁体字，但是也不全面，于是台湾同胞就发了专门支持繁体字的 <code>Big5</code> 编码，也就是大家经常说的大五码。</p>
+<h4 id="一个小问题"><a href="#一个小问题" class="headerlink" title="一个小问题"></a>一个小问题</h4><p>不知道大家有没有注意到一个问题，在单字节编码的时候，对于那些大于 <code>127</code> 小于 <code>256</code> 的编码，在不同的国家代表的字母很可能不一样。比如，<code>130</code> 在法语编码中代表了<code>é</code>，在希伯来语编码中却代表了字母<code>Gimel (ג)</code>，在俄语编码中又会代表另一个符号。在汉字的双字节编码中也存在这样的问题，比如<code>BIG5</code>编码跟<code>GBK</code> 编码都是双字节编码，但是代表的汉字却不一样。</p>
+<p>这就相当于，同样一串二进制数值，A特工组织按照他们的规则解析出来可能是“你好”，而B特工组织按照他们的规则解析出来可能是“滚蛋”。特工组织之间的翻译标准不一样是相当有必要的，但是计算机的编码规则如果各不相同就比较麻烦了。比如你跟台湾的志玲姐姐聊天，志玲姐姐用<code>BIG5</code> 编码给你发了一封信，然后你用 <code>GBK</code> 去解码，……，也许就没有然后了。</p>
+<h4 id="Unicode"><a href="#Unicode" class="headerlink" title="Unicode"></a>Unicode</h4><p>为了解决上面的问题，有个叫<code>ISO</code> 的国际标准组织，决定放弃所有区域性编码，如<code>BIG5</code>，<code>GBK</code>  等，重新制定一个新的编码，这个编码集将包含所有字符的编码，这样大家就都统一了，这套编码的英文全称“Universal Multiple-Octet Coded Character Set”，简称UCS, 俗称 “Unicode“。<code>Unicode</code> 的出现相当于秦始皇对度量衡跟货币进行了统一。</p>
+<p><code>Unicdoe</code> 按照日常字符的使用频繁度划分了<code>17</code> 个平面，编号为<code>0-16</code> ，<code>0</code> 号平面称为基本多语言平面（Basic Multilingual Plane，简称 <code>BMP</code> ），包含了日常使用最频繁的字符，编码范围从<code>0000</code> 到 <code>FFFF</code>，这样该平面可以表示<code>2^16=65536</code> 个字符；其它平面的编码范围也是从<code>0000</code> 到 <code>FFFF</code>，所以其它平面也可以编码 <code>65535</code> 个字符，这样 <code>17</code> 个平面一共可以编码 <code>17×65,536 = 1,114,112</code> 个符号。</p>
+<p>我们最常用的 <code>Unicode</code> 编码使用的是多语言平面的编码，即所有字符都用两个字节进行编码（其它平面可能需要三个或四个字节）。举个例子比如中国的’中’字<code>Unicode</code> 码是 <code>4E2D</code>，小写’a’的 <code>Unicode</code> 码是 <code>0061</code>.</p>
+<p>这里面存在两个问题，如果所有英文字符都是按照 <code>Unicode</code> 编码，那么会出现浪费存储空间的问题。明明一个字节可以搞定的事情，偏偏要用两个字节。<br>第二个问题就是计算机如何知道这是<code>Unicode</code> 编码还是<code>ASCII</code> 编码，也就是<code>2</code> 个字节表示的一个字符，还是<code>2</code> 个字符呢。</p>
+<h4 id="UTF"><a href="#UTF" class="headerlink" title="UTF"></a>UTF</h4><p><code>UTF</code> 的全称是<code>Unicode Transformation Format</code>，也就是<code>Unicode</code> 的转换格式。上面提到了，如果直接使用 <code>Unicode</code> 码进行存储会存在浪费空间的问题，而<code>UTF-8</code> 的出现就是为了解决该问题，<code>UTF-8</code> 使用变长的方式存储 <code>Unicode</code> 码，也就是英文字符继续使用一个字节进行存储，但是汉字要使用 <code>3</code> 个字节。那么<code>UTF-8</code> 是如何做到的呢。</p>
+<p>首先，对于单字节的符号，字节的第一位设为 <code>0</code> ，后面 <code>7</code> 位为这个符号的 <code>Unicode</code> 码。因此对于英语字母，<code>UTF-8</code> 编码和 <code>ASCII</code> 码是相同的。</p>
+<p>其次，对于 <code>n</code> 字节的符号（<code>n &gt; 1</code>），第一个字节的前 <code>n</code> 位都设为 <code>1</code>，第 <code>n + 1</code> 位设为 <code>0</code>，后面字节的前两位一律设为<code>10</code>。剩下的没有提及的二进制位，全部为这个符号的 <code>Unicode</code> 码。</p>
+<p>下表总结了编码规则，字母 <code>x</code> 代表可用的编码位。<br>|Unicode符号范围（十六进制） |  UTF-8编码方式（二进制）|<br>| — | —|<br><code>0000 0000-0000 007F</code> | <code>0xxxxxxx</code><br><code>0000 0080-0000 07FF</code> | <code>110xxxxx 10xxxxxx</code><br><code>0000 0800-0000 FFFF</code> | <code>1110xxxx 10xxxxxx 10xxxxxx</code><br><code>0001 0000-0010 FFFF</code> | <code>11110xxx 10xxxxxx 10xxxxxx 10xxxxxx</code></p>
+<p>根据上表，对<code>UTF-8</code> 编码进行解读会发现，如果一个字节的第一位是 <code>0</code>，则这个字节单独就是一个字符；如果第一位是 <code>1</code>，则连续有多少个 <code>1</code>，就表示当前字符占用多少个字节。</p>
+<p><strong>举个例子</strong><br>假设“hello世界”这样一个字符串，他们的 <code>Unicode</code> 的编码分别是<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">h--0068</span><br><span class="line">e--0065</span><br><span class="line">l--006C</span><br><span class="line">l--006C</span><br><span class="line">o--006F</span><br><span class="line">世--4E16</span><br><span class="line">界--754C</span><br></pre></td></tr></table></figure></p>
+<p>按照 <code>UTF-8</code> 的编码规则可以得到如下<code>UTF-8</code> 编码<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">h--01101000</span><br><span class="line">e--01100101</span><br><span class="line">l--01101100</span><br><span class="line">l--01101100</span><br><span class="line">o--01101111</span><br><span class="line">世--11100100-10111000-10010110</span><br><span class="line">界--11100111-10010101-10001100</span><br></pre></td></tr></table></figure></p>
+<p>可以看到用<code>UTF-8</code> 编码之后，英文字符占用一个字节，而汉字占用了三个字节，一共需要 <code>11</code> 个字节，而如果直接存储 <code>Unicode</code> 码则需要 <code>14</code> 个字节。<code>UTF-8</code> 编码对于英文来说节省了很大空间，但是对于中文来说增加了空间。</p>
+<h5 id="Little-endian-和-Big-endian"><a href="#Little-endian-和-Big-endian" class="headerlink" title="Little endian 和 Big endian"></a>Little endian 和 Big endian</h5><p>上面提到<code>Unicode</code> 是用两个字节表示字符，如果第一个字节在前，就是”大端方式”（Big endian），第二个字节在前就是”小端方式”（Little endian）。’世’字的<code>Unicode</code> 码是 <code>4E16</code>，一个字节是 <code>4E</code>，一个字节是 <code>16</code> , 存储的时候如果<code>4E</code> 在前就是大端存储，如果是<code>16</code> 在前就是小端存储。</p>
+<p>那么计算机是怎么知道一个文件是采用哪种编码方式呢？</p>
+<p><code>Unicode</code> 规范定义，每一个文件的最前面分别加入一个表示编码顺序的字符，这个字符的名字叫做”零宽度非换行空格”（zero width no-break space），用<code>FEFF</code> 表示。这正好是两个字节，而且<code>FF</code> 比 <code>FE</code> 大<code>1</code>。</p>
+<p>如果一个文本文件的头两个字节是<code>FE FF</code>，就表示该文件采用大头方式；如果头两个字节是<code>FF FE</code>，就表示该文件采用小头方式。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p><code>UTF-8</code> 编码是基于<code>Unicode</code> 字符集的一种编码实现。现在几乎所有的编程语言和操作系统都支持 <code>Unicode</code> 编码，使用<code>Unicode</code> 编码之后，再也不会出现上文提到的一个汉字等于两个英文字符的尴尬局面。</p>
+<p><code>GBK</code>，<code>BIG5</code> 等都属于区域性编码只能在固定范围内使用，比如<code>GBK</code> 只适合在简体中文环境使用，虽然 <code>GBK</code> 相比于<code>UTF-8</code> 更节省空间，但现在全世界都变成地球村了，所以还是建议大家都使用<code>UTF-8</code> 编码。</p>
+<p><code>ANSI</code>：在<code>window</code>下，如果我们用记事本打开文档，经常会见到<code>ANSI</code> 编码方式，这是<code>Windows</code> 默认的编码方式。对于英文文档采用<code>ASCII</code>编码，对于简体中文文档采用 <code>GB2312</code> 编码（只针对 <code>Windows</code> 简体中文版，如果是繁体中文版会采用 <code>Big5</code> 码）。</p>
+<hr>
+<p>推荐阅读<br><a href="https://mp.weixin.qq.com/s/yaRvdAWvau2M60QBK7njvw" target="_blank" rel="noopener">手把手教你搭建一套ELK日志搜索运维平台</a></p>
+<p><a href="https://mp.weixin.qq.com/s/p4pz4VKo76fbzJo62czaXw" target="_blank" rel="noopener">教你如何学习Java的 NIO</a></p>
+<p><a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/03/26/作为一个程序员，你应该知道的编码知识/" title="作为一个程序员，你应该知道的编码知识">http://hellofrank.github.io/2020/03/26/作为一个程序员，你应该知道的编码知识/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/编码/" rel="tag"><i class="fa fa-tag"></i> 编码</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/20/手把手教你搭建一套ELK日志搜索运维平台/" rel="next" title="手把手教你搭建一套ELK日志搜索运维平台">
+                <i class="fa fa-chevron-left"></i> 手把手教你搭建一套ELK日志搜索运维平台
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">42</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#ASCII"><span class="nav-number">1.</span> <span class="nav-text">ASCII</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非ASCII"><span class="nav-number">2.</span> <span class="nav-text">非ASCII</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#中文编码"><span class="nav-number">3.</span> <span class="nav-text">中文编码</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#GB2312"><span class="nav-number">3.1.</span> <span class="nav-text">GB2312</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#GBK"><span class="nav-number">3.2.</span> <span class="nav-text">GBK</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#BIG-5"><span class="nav-number">3.3.</span> <span class="nav-text">BIG-5</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#一个小问题"><span class="nav-number">4.</span> <span class="nav-text">一个小问题</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Unicode"><span class="nav-number">5.</span> <span class="nav-text">Unicode</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#UTF"><span class="nav-number">6.</span> <span class="nav-text">UTF</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#Little-endian-和-Big-endian"><span class="nav-number">6.1.</span> <span class="nav-text">Little endian 和 Big endian</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">7.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">128k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
