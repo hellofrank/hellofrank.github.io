@@ -1,0 +1,1132 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="Spark整体介绍Spark是一个快速的，多用途的计算系统。这是来自官网的自我介绍。一般敢自称系统的都是有两把刷子的，况且还是多用途的计算系统。Spark计算系统包含如下功能组件">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark Streaming精进之前必须了解的基本概念">
+<meta property="og:url" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="Spark整体介绍Spark是一个快速的，多用途的计算系统。这是来自官网的自我介绍。一般敢自称系统的都是有两把刷子的，况且还是多用途的计算系统。Spark计算系统包含如下功能组件">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/01.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/02.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/03.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/04.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/05.jpeg">
+<meta property="og:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/06.jpeg">
+<meta property="og:updated_time" content="2020-04-04T09:34:22.450Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark Streaming精进之前必须了解的基本概念">
+<meta name="twitter:description" content="Spark整体介绍Spark是一个快速的，多用途的计算系统。这是来自官网的自我介绍。一般敢自称系统的都是有两把刷子的，况且还是多用途的计算系统。Spark计算系统包含如下功能组件">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/01.jpeg">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Spark Streaming精进之前必须了解的基本概念 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Spark Streaming精进之前必须了解的基本概念
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-04 17:26:35" itemprop="dateCreated datePublished" datetime="2020-04-04T17:26:35+08:00">2020-04-04</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/大数据/" itemprop="url" rel="index"><span itemprop="name">大数据</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.2k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">4 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h4 id="Spark整体介绍"><a href="#Spark整体介绍" class="headerlink" title="Spark整体介绍"></a>Spark整体介绍</h4><p><code>Spark</code>是一个快速的，多用途的计算系统。这是来自官网的自我介绍。一般敢自称系统的都是有两把刷子的，况且还是多用途的计算系统。<code>Spark</code>计算系统包含如下功能组件<br><a id="more"></a></p>
+<p><img src="01.jpeg" alt="01.jpeg"></p>
+<p><code>Spark Core</code>: <code>Spark</code>的核心功能模块。<br><code>Spark SQL</code>: 用于处理结构化数据。<br><code>MLlib</code>：用于机器学习。<br><code>GraphX</code>：用于图像处理。<br><code>Spark Streaming</code>：用于处理实时数据流。</p>
+<p>包含如此多的功能，自称多功能计算系统也是可以的。这篇文章帮大家梳理一下学习<code>Spark Streaming</code>过程中可能会让你产生困惑的基本概念。</p>
+<h4 id="RDD"><a href="#RDD" class="headerlink" title="RDD"></a>RDD</h4><p><code>Spark Core</code> 是 <code>Spark</code>的核心模块，这个模块提供了一个核心概念叫做<code>RDD</code>(resilient distributed dataset)。你可以简单的把它理解成一个数据片段集合，你要处理的源数据文件可以分解成很多个<code>RDD</code>。<code>Spark</code>为<code>RDD</code>提供了两种类型的操作，一种是<code>transformations</code>，一种是 <code>action</code>。</p>
+<p><code>transformations</code>：如果一个<code>RDD</code>经过某种操作之后，生成一个新的<code>RDD</code>，那么这个操作就是<code>transaction</code>的。比如，<code>map</code>,<code>flatMap</code>,<code>filter</code>等。<br><code>action</code>：对一个<code>RDD</code>进行计算操作，以生成某种结果，比如<code>reduce</code>，<code>count</code>等操作。</p>
+<blockquote>
+<p>注意：所有的<code>transformations</code>都是Lazy的，也就是说只有碰到<code>action</code>操作的时候才会执行前面的<code>transformations</code>操作。</p>
+</blockquote>
+<h4 id="DStream"><a href="#DStream" class="headerlink" title="DStream"></a>DStream</h4><p><code>Spark Streaming</code> 是用来处理流式数据的，假设我们规定每隔一秒钟（通过duration设置）取一次数据，那么这段时间内积赞的数据就称为一个<code>batch</code>，里面的数据就用<code>DStream</code>表示。从编写代码的角度来看，你可以把<code>DStream</code>和<code>RDD</code>同等对待，因为他们的算子操作都是一样的。但是他们的数据结构还是有着本质不同的，我们可以把<code>DStream</code>简单的理解成是<code>RDD</code>加上了时间戳。如下图<br><img src="02.jpeg" alt="639af0660ec3f19f7ebfaceea2b190c4.jpeg"></p>
+<h4 id="DAG"><a href="#DAG" class="headerlink" title="DAG"></a>DAG</h4><p><code>Spark</code> 使用<code>DAG</code> 进行数据建模，<code>DAG</code> 被称为有向无环图，有向无环图的定义是这样的 “在图论中，如果一个有向图从任意顶点出发无法经过若干条边回到该点，则这个图是一个有向无环图（DAG,directed acyclic graph）”，我们通过一个简单的例子来感受一下，<code>Spark</code>是如何使用<code>DAG</code>建模的。</p>
+<p>下面的代码可以完成一段文本内容的各个单词的数量统计。</p>
+<figure class="highlight scala"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"><span class="keyword">var</span> textFile = sc.textFile(args[<span class="number">1</span>]);</span><br><span class="line"><span class="keyword">var</span> result = textFile.flatMap(line =&gt; line.split(<span class="string">" "</span>)).map(word =&gt; (word, <span class="number">1</span>)).reduceByKey((a, b) =&gt; a + b);</span><br><span class="line">result.saveAsTextFile(args[<span class="number">2</span>]);</span><br></pre></td></tr></table></figure>
+<p>上面这段代码可以用下面这个图表示<br><img src="03.jpeg" alt="2e5c9768878981c757b09ecf169bad7f.jpeg"></p>
+<p>这就是一个简单的<code>DAG</code>模型，数据按照方向流动，再也回不到原点。<code>Spark Streaming</code>将这个<code>DAG</code>模型，不断的应用到每一个<code>Batch</code>里面的数据中。大家可以把<code>DAG</code>模型理解成类，它是数据处理的模版，而每个<code>Batch</code>里面的数据就是不同的实例对象。</p>
+<h4 id="Job-Stage-Task"><a href="#Job-Stage-Task" class="headerlink" title="Job,Stage,Task"></a>Job,Stage,Task</h4><p><code>Spark</code>应用程序启动之后，我们会利用<code>Spark</code>提供的监控页面来查看程序的运行情况。在页面上会看到<code>Job</code>，<code>Stage</code>，<code>Task</code>等内容展示，如果不理解他们代表什么意思，那么<code>Spark</code>好心好意提供的监控页面对我们来说就毫无意义。<br>下面给大家简单说一下这些概念到底什么意思，以及他们之间的关系。</p>
+<p>先来看个图</p>
+<p><img src="04.jpeg" alt="bc6e1622b41a1581aadf4ebf4a19ab33.jpeg"></p>
+<p>从图中可以看出，一个<code>Application</code>被分解成多个<code>Job</code>，每个<code>Job</code>又分解成多个<code>Stage</code>，<code>Stage</code>又会分解成多个<code>Task</code>，而<code>Task</code>是任务运行的最小单元，最终会被<code>Executor</code>执行。</p>
+<p><strong>Application</strong>：简单的说就是我们写的应用代码，启动起来之后就是一个<code>Application</code>。<br><strong>Job</strong>：由<code>Spark</code>的<code>action</code>算子触发。也就是每遇到一个<code>action</code>算子就会触发一个<code>Job</code>任务，这个时候就会执行前面的一系列<em>transformations</em>操作。<br><strong>Stage</strong>：<code>Job</code>任务会继续分解成<code>Stage</code>，<code>Stage</code>是根据<code>DAG</code>的宽窄依赖来划分，也就是<code>RDD</code>之间的依赖关系。从后往前，每遇到一个宽依赖就划分为一个<code>Stage</code>。</p>
+<blockquote>
+<p><strong>宽依赖</strong>（Shuffle/Wide Dependency）：父<code>RDD</code>的分区和子<code>RDD</code>的分区是一对多或者多对多的关系。比如<code>groupByKey</code>,<code>reduceByKey</code>,<code>join</code>等操作</p>
+</blockquote>
+<blockquote>
+<p><strong>窄依赖</strong>（Narrow Dependency）：父<code>RDD</code>的分区和子<code>RDD</code>的分区的关系是一对一或者多对一的关系,比如<code>map</code>,<code>flatmap</code>,<code>filter</code>等操作。</p>
+</blockquote>
+<p>宽窄依赖的定义可以用如下图，形象的展示。<br><img src="05.jpeg" alt="f5091f5a3c7ab328e73874a4a353bf2b.jpeg"><br>拿文章开头的单词统计程序为例，<code>Stage</code>划分情况应该是这样的。<br><img src="06.jpeg" alt="925b647d2db16dd3423e5bee162c315d.jpeg"><br><strong>task</strong>：<code>Stage</code>包含很多<code>Task</code>，每个<code>Task</code>会执行<code>Stage</code>中包含的算子。</p>
+<p>以上就是<code>Spark</code>精进之路上必须了解的基本概念，希望对各位有帮助。</p>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/yaRvdAWvau2M60QBK7njvw" target="_blank" rel="noopener">手把手教你搭建一套ELK日志搜索运维平台</a><br><a href="https://mp.weixin.qq.com/s/p4pz4VKo76fbzJo62czaXw" target="_blank" rel="noopener">教你如何学习Java的 NIO</a><br><a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/" title="Spark Streaming精进之前必须了解的基本概念">http://hellofrank.github.io/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Spark/" rel="tag"><i class="fa fa-tag"></i> Spark</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/26/作为一个程序员，你应该知道的编码知识/" rel="next" title="作为一个程序员，你应该知道的编码知识">
+                <i class="fa fa-chevron-left"></i> 作为一个程序员，你应该知道的编码知识
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">43</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">18</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">48</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#Spark整体介绍"><span class="nav-number">1.</span> <span class="nav-text">Spark整体介绍</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RDD"><span class="nav-number">2.</span> <span class="nav-text">RDD</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DStream"><span class="nav-number">3.</span> <span class="nav-text">DStream</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#DAG"><span class="nav-number">4.</span> <span class="nav-text">DAG</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#Job-Stage-Task"><span class="nav-number">5.</span> <span class="nav-text">Job,Stage,Task</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">130k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">3:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
