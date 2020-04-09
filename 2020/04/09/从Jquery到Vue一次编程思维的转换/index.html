@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="已经很多年没有写前端代码了，我的前端水平还停留在Jquery一统天下的年代。最近想趁着假期，恶补一下前端的知识，于是就看了一下最近特别流行的Vue.js。这一看不要紧，发现自己已经落后了整整一个时代。">
+<meta name="keywords" content="-Jquery -Vue">
+<meta property="og:type" content="article">
+<meta property="og:title" content="从Jquery到Vue一次编程思维的转换">
+<meta property="og:url" content="http://hellofrank.github.io/2020/04/09/从Jquery到Vue一次编程思维的转换/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="已经很多年没有写前端代码了，我的前端水平还停留在Jquery一统天下的年代。最近想趁着假期，恶补一下前端的知识，于是就看了一下最近特别流行的Vue.js。这一看不要紧，发现自己已经落后了整整一个时代。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-09T07:34:49.795Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="从Jquery到Vue一次编程思维的转换">
+<meta name="twitter:description" content="已经很多年没有写前端代码了，我的前端水平还停留在Jquery一统天下的年代。最近想趁着假期，恶补一下前端的知识，于是就看了一下最近特别流行的Vue.js。这一看不要紧，发现自己已经落后了整整一个时代。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/04/09/从Jquery到Vue一次编程思维的转换/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>从Jquery到Vue一次编程思维的转换 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/04/09/从Jquery到Vue一次编程思维的转换/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">从Jquery到Vue一次编程思维的转换
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-09 15:30:45" itemprop="dateCreated datePublished" datetime="2020-04-09T15:30:45+08:00">2020-04-09</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/前端/" itemprop="url" rel="index"><span itemprop="name">前端</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">3.5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">6 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>已经很多年没有写前端代码了，我的前端水平还停留在<code>Jquery</code>一统天下的年代。最近想趁着假期，恶补一下前端的知识，于是就看了一下最近特别流行的<code>Vue.js</code>。这一看不要紧，发现自己已经落后了整整一个时代。<br><a id="more"></a></p>
+<p>前端编程思想已经由<code>Jquery</code> 时代的<em>事件驱动编程</em> 模型过渡到了以<code>Vue.js</code> 为代表的<em>数据驱动编程</em> 时代。</p>
+<p>前端编程思想由<em>事件驱动</em> 到 <em>数据驱动</em> 的转变我觉得意义重大，跟后端的<code>MVC</code>的思想一样，都具有划时代的意义。</p>
+<p>可以说所有新的技术及编程思想的出现都是时代发展的必然产物。后端的<code>MVC</code> 思想出现，是因为当时后端逻辑变得越来越复杂，代码维护起来难度越来越大。为了让项目结构更清晰，维护起来更容易，人们提出了代码分层的概念; 所以出现了<code>Model</code> 层，<code>View</code> 层，以及<code>Controller</code>层。</p>
+<p>现在前端页面也变得越来越复杂，特别是随着移动互联网时代的到来，为了能够更好的维护越来越复杂的前端代码，前端也提出了分层的概念，将代码也分为三层，分别是<code>Model</code> 层，<code>VIew</code> 层，以及<code>ViewModel</code>层。这就是<code>VUE</code> 框架的指导思想，简称<code>MVVC</code>。</p>
+<p>前端的 <code>MVVC</code>跟后端的 <code>MVC</code>本质是一样的，这也印证了很多朴素的真理其实都是通用的这句话。</p>
+<p>跟很多后端程序员都聊过，他们表示前端很难学，甚至无意中还会流露出某种羡慕嫉妒恨的表情。有个知名技术大咖曾经开玩笑说，你连JavaScript都学的会，还学不会C++。</p>
+<p>其实后端程序员觉得前端难学的原因，大概有两点，其一是因为<code>JavaScript</code>语法本身的特性，灵活多变，并且<code>JavaScript</code>走的是原型继承的路线，跟其他面向对象语言截然不同；第二点原因就是编程思维方式不一样，大部分前端程序员都是<em>事件驱动</em>的编程思维，而很多后端程序员都是<em>数据驱动</em>的编程思维。</p>
+<h4 id="数据驱动VS事件驱动"><a href="#数据驱动VS事件驱动" class="headerlink" title="数据驱动VS事件驱动"></a>数据驱动VS事件驱动</h4><h5 id="数据驱动编程："><a href="#数据驱动编程：" class="headerlink" title="数据驱动编程："></a>数据驱动编程：</h5><p>所谓的数据驱动编程，就是一切从数据的角度出发，把所有的东西都抽象成数据模型，然后进行数据建模。后端程序员大部分都是这种数据驱动的编程思维。<br>举个简单的例子。如果要实现一个博客系统，那么后端程序员，特别是<code>Java</code>程序员，首先考虑的是先创建一个<code>Blog</code> 对象模型，该模型包含了，标题，作者，内容，发布时间等属性。然后才会考虑针对 <code>Blog</code> 有哪些操作，比如新增 <code>Blog</code>，查询 <code>Blog</code>，删除以及修改 <code>Blog</code>。这就是典型的<em>数据驱动编程</em>，编程之前思考的更多的是数据模型，以及数据模型之间的关系和变化。</p>
+<h5 id="事件驱动编程："><a href="#事件驱动编程：" class="headerlink" title="事件驱动编程："></a>事件驱动编程：</h5><p>所谓的事件驱动编程，就是一切从事件的角度出发，以事件为思考点。因为前端更多的是处理页面与用户的互动关系，比如点击某个元素呈现不同的页面内容，点击某个按钮进行表单提交等，这些都是由事件触发的，所以前端程序员大部分都是事件驱动编程的思维方式。</p>
+<h4 id="VUE的出现"><a href="#VUE的出现" class="headerlink" title="VUE的出现"></a>VUE的出现</h4><p><code>Jquery</code> 是事件编程的代表，而<code>VUE</code> 则是数据驱动编程的代表，也是前端<code>MVVC</code>思想的具体体现。</p>
+<p>下面我们通过“监听页面表单元素变化”这个小功能，来体会一下两种编程方式的区别。</p>
+<h5 id="事件驱动编程Demo"><a href="#事件驱动编程Demo" class="headerlink" title="事件驱动编程Demo"></a>事件驱动编程Demo</h5><p><strong>1. 实现静态页面表单</strong><br><figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">&lt;!-- 实现静态页面 --&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">  Name:</span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"name-value"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"text"</span> <span class="attr">name</span>=<span class="string">"name"</span> <span class="attr">id</span>=<span class="string">"name-input"</span> /&gt;</span></span><br><span class="line">  Email:</span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span> <span class="attr">id</span>=<span class="string">"email-value"</span>&gt;</span><span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"email"</span> <span class="attr">name</span>=<span class="string">"email"</span> <span class="attr">id</span>=<span class="string">"email-input"</span> /&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> /&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>2. 事件绑定</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nameInputEl = <span class="built_in">document</span>.getElementById(<span class="string">"name-input"</span>);</span><br><span class="line"><span class="keyword">var</span> emailInputEl = <span class="built_in">document</span>.getElementById(<span class="string">"email-input"</span>);</span><br><span class="line"><span class="comment">// 监听输入事件，此时 updateValue 函数未定义</span></span><br><span class="line">nameInputEl.addEventListener(<span class="string">"input"</span>, updateNameValue);</span><br><span class="line">emailInputEl.addEventListener(<span class="string">"input"</span>, updateEmailValue);</span><br></pre></td></tr></table></figure></p>
+<p><strong>3. 事件触发，更新页面内容</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> nameValueEl = <span class="built_in">document</span>.getElementById(<span class="string">"name-value"</span>);</span><br><span class="line"><span class="keyword">var</span> emailValueEl = <span class="built_in">document</span>.getElementById(<span class="string">"email-value"</span>);</span><br><span class="line"><span class="comment">// 定义 updateValue 函数，用来更新页面内容</span></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateNameValue</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  nameValueEl.innerText = e.srcElement.value;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">updateEmailValue</span>(<span class="params">e</span>) </span>&#123;</span><br><span class="line">  emailValueEl.innerText = e.srcElement.value;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>这就是事件驱动编程方式。整个编写代码的过程中，我们一直围绕事件在思考，也就是触发了什么事件，这个事件将带来什么结果。</p>
+<h5 id="数据驱动编程Demo"><a href="#数据驱动编程Demo" class="headerlink" title="数据驱动编程Demo"></a>数据驱动编程Demo</h5><p><strong>1. 数据建模</strong><br>表单中包含了两个数据数据框，name及Email，所以我们定义一个数据模型。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 包括一个 name 和 一个 email 的值</span></span><br><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data： &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      name: <span class="string">""</span>,</span><br><span class="line">      email: <span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;&#125;;</span><br></pre></td></tr></table></figure>
+<p><strong>2. 将数据与前端展示建立联系，并为相应元素绑定事件</strong></p>
+<figure class="highlight html"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">form</span>&gt;</span></span><br><span class="line">  Name:</span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; name &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">"text"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">name</span>=<span class="string">"name"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-bind:value</span>=<span class="string">"name"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-on:input</span>=<span class="string">"updateNameValue"</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line">  Email:</span><br><span class="line">  <span class="tag">&lt;<span class="name">p</span>&gt;</span>&#123;&#123; email &#125;&#125;<span class="tag">&lt;/<span class="name">p</span>&gt;</span></span><br><span class="line">  <span class="tag">&lt;<span class="name">input</span></span></span><br><span class="line"><span class="tag">    <span class="attr">type</span>=<span class="string">"email"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">name</span>=<span class="string">"email"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-bind:value</span>=<span class="string">"email"</span></span></span><br><span class="line"><span class="tag">    <span class="attr">v-on:input</span>=<span class="string">"updateEmailValue"</span></span></span><br><span class="line"><span class="tag">  /&gt;</span></span><br><span class="line"> <span class="tag">&lt;<span class="name">input</span> <span class="attr">type</span>=<span class="string">"submit"</span> /&gt;</span></span><br><span class="line"> <span class="tag">&lt;/<span class="name">form</span>&gt;</span></span><br></pre></td></tr></table></figure>
+<p><strong>3. 给数据模型添加相应的处理逻辑</strong><br><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">export</span> <span class="keyword">default</span> &#123;</span><br><span class="line">  data: &#123;</span><br><span class="line">    <span class="keyword">return</span> &#123;</span><br><span class="line">      name: <span class="string">""</span>,</span><br><span class="line">      email: <span class="string">""</span></span><br><span class="line">    &#125;;</span><br><span class="line">  &#125;,</span><br><span class="line">  methods: &#123;</span><br><span class="line">    <span class="comment">// 绑定 input 事件，获取到输入值，设置到对应的数据中</span></span><br><span class="line">    updateNameValue(event) &#123;</span><br><span class="line">      <span class="keyword">this</span>.name = event.target.value;</span><br><span class="line">    &#125;,</span><br><span class="line">    updateEmailValue(event) &#123;</span><br><span class="line">      <span class="keyword">this</span>.email = event.target.value;</span><br><span class="line">    &#125;</span><br><span class="line">  &#125;&#125;;</span><br></pre></td></tr></table></figure></p>
+<p>这就是<code>VUE</code> 的数据驱动编程思想的体现。一直以数据为思考中心，考虑的是数据的变化，并不是事件的变化。如果你是个后端程序员，特别是<code>Java</code>程序员，应该很容易接受这种编程方式。</p>
+<p>以上就是我学习<code>Vue</code>的一些体会，<em>事件驱动编程</em>跟<em>数据驱动编程</em> 可以混合使用，毕竟我们的世界不是非黑即白，主要看我们真实项目的使用场景。另外本篇文章主要参考《深入理解Vue.js实战》这本书，文中代码样例也来自于此。</p>
+<hr>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/PrShfNpDxrvakheUefvzcw" target="_blank" rel="noopener">这也许就是产品和开发互撕的本质原因吧</a><br><a href="https://mp.weixin.qq.com/s/BZ51P6nsFQafPnm3s44Azw" target="_blank" rel="noopener">Java程序员必读核心书单—基础版</a><br><a href="https://mp.weixin.qq.com/s/j1aJQpu05wdr5wKw_4UG4A" target="_blank" rel="noopener">作为一个程序员，你应该知道的编码知识</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/04/09/从Jquery到Vue一次编程思维的转换/" title="从Jquery到Vue一次编程思维的转换">http://hellofrank.github.io/2020/04/09/从Jquery到Vue一次编程思维的转换/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Jquery-Vue/" rel="tag"><i class="fa fa-tag"></i> -Jquery -Vue</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/04/Spark-Streaming精进之前必须了解的基本概念/" rel="next" title="Spark Streaming精进之前必须了解的基本概念">
+                <i class="fa fa-chevron-left"></i> Spark Streaming精进之前必须了解的基本概念
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">44</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">49</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#数据驱动VS事件驱动"><span class="nav-number">1.</span> <span class="nav-text">数据驱动VS事件驱动</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#数据驱动编程："><span class="nav-number">1.1.</span> <span class="nav-text">数据驱动编程：</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#事件驱动编程："><span class="nav-number">1.2.</span> <span class="nav-text">事件驱动编程：</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#VUE的出现"><span class="nav-number">2.</span> <span class="nav-text">VUE的出现</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#事件驱动编程Demo"><span class="nav-number">2.1.</span> <span class="nav-text">事件驱动编程Demo</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#数据驱动编程Demo"><span class="nav-number">2.2.</span> <span class="nav-text">数据驱动编程Demo</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">134k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">4:03</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
