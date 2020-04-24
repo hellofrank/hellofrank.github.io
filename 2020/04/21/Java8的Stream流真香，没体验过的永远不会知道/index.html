@@ -136,7 +136,7 @@
 <meta property="og:site_name" content="Frank&#39;s Blog">
 <meta property="og:description" content="虽然现在Oacle官方发布的最新JDK版本已经到了JDK14。但我相信很多团队的生产系统上还是JDK8，甚至有的团队还是JDK7或者JDK6。即便很多团队已经将生产环境升级为JDK8，但是代码却还是老代码，也就是说根本没有使用JDK8提供的新特性。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2020-04-21T09:35:08.514Z">
+<meta property="og:updated_time" content="2020-04-21T09:38:26.309Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java8的Stream流真香，没体验过的永远不会知道">
 <meta name="twitter:description" content="虽然现在Oacle官方发布的最新JDK版本已经到了JDK14。但我相信很多团队的生产系统上还是JDK8，甚至有的团队还是JDK7或者JDK6。即便很多团队已经将生产环境升级为JDK8，但是代码却还是老代码，也就是说根本没有使用JDK8提供的新特性。">
@@ -475,7 +475,7 @@
 <p>下面我列举几个简单的小场景，让各位感受一下<code>Java8</code>提供的<code>Stream</code>API是多么的方便优雅，也算是抛砖引玉了。</p>
 <p>日常编码的时候用的最多的应该就是集合了。比如从数据库里查询出一天卖出去多少本书，一般我们会这样写,<code>List&lt;Book&gt; books = query.find(date);</code> 然后针对这个集合会做各种各样的操作来满足产品层面的需求。</p>
 <h5 id="场景一：打印出每本书的详情。"><a href="#场景一：打印出每本书的详情。" class="headerlink" title="场景一：打印出每本书的详情。"></a>场景一：打印出每本书的详情。</h5><p><strong>JDK8之前</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印出每本书的详情</span></span><br><span class="line"><span class="keyword">for</span> (Book book : books)&#123;</span><br><span class="line">    System.out.println(book.toString());</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
-<p><strong>使用Stream之后</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印每本书详情</span></span><br><span class="line">books.stream().forEach(book -&gt; book.toString());</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用Stream之后</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//打印每本书详情</span></span><br><span class="line">books.stream().forEach(System.out.println);</span><br></pre></td></tr></table></figure></p>
 <h5 id="场景二：选出价格高于20元的"><a href="#场景二：选出价格高于20元的" class="headerlink" title="场景二：选出价格高于20元的"></a>场景二：选出价格高于20元的</h5><p><strong>JDK8之前</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">List&lt;Book&gt; highPriceBooks = <span class="keyword">new</span> ArrayList&lt;&gt;();</span><br><span class="line"><span class="keyword">for</span> (Book book : books)&#123;</span><br><span class="line">    <span class="keyword">if</span> (book.getPrice()&gt;<span class="number">20</span>)&#123;</span><br><span class="line">        highPriceBooks.add(book);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
 <p><strong>使用Stream之后</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">highPriceBooks = books.stream().filter(book -&gt; book.getPrice()&gt;<span class="number">20</span>).collect(Collectors.toList());</span><br></pre></td></tr></table></figure></p>
 <h5 id="场景三-按照书价排序"><a href="#场景三-按照书价排序" class="headerlink" title="场景三: 按照书价排序"></a>场景三: 按照书价排序</h5><p><strong>JDK8之前</strong><br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">Collections.sort(books, <span class="keyword">new</span> Comparator&lt;Book&gt;() &#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">int</span> <span class="title">compare</span><span class="params">(Book o1, Book o2)</span> </span>&#123;</span><br><span class="line">        <span class="keyword">if</span> (o1.getPrice() &gt; o2.getPrice())&#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> <span class="keyword">if</span> (o1.getPrice() &lt; o2.getPrice())&#123;</span><br><span class="line">            <span class="keyword">return</span> -<span class="number">1</span>;</span><br><span class="line">        &#125;<span class="keyword">else</span> &#123;</span><br><span class="line">            <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;    </span><br><span class="line"> &#125;);</span><br></pre></td></tr></table></figure></p>
@@ -587,6 +587,10 @@
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2020/04/21/Awk这件上古神兵你会用了吗/" rel="prev" title="Awk这件上古神兵你会用了吗">
+                Awk这件上古神兵你会用了吗 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -663,7 +667,7 @@
                 
                   <a href="/archives">
                 
-                    <span class="site-state-item-count">45</span>
+                    <span class="site-state-item-count">46</span>
                     <span class="site-state-item-name">日志</span>
                   </a>
                 </div>
@@ -827,7 +831,9 @@
                     
                       
                     
-                    <span class="site-state-item-count">50</span>
+                      
+                    
+                    <span class="site-state-item-count">51</span>
                     <span class="site-state-item-name">标签</span>
                   </a>
                 </div>
@@ -895,7 +901,7 @@
       <i class="fa fa-area-chart"></i>
     </span>
     
-    <span title="站点总字数">136k</span>
+    <span title="站点总字数">141k</span>
   
 
   
@@ -904,7 +910,7 @@
       <i class="fa fa-coffee"></i>
     </span>
     
-    <span title="站点阅读时长">4:07</span>
+    <span title="站点阅读时长">4:false</span>
   
 </div>
 

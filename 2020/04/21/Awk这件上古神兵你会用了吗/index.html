@@ -1,0 +1,1141 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="AWK诞生于1977的贝尔实验室，是由 Alfred Aho，Peter Weinberger和Brian Kernighan三位大神开发，AWK的命名是由三位作者的Family Name的首字母组成。">
+<meta name="keywords" content="AWK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Awk这件上古神兵你会用了吗">
+<meta property="og:url" content="http://hellofrank.github.io/2020/04/21/Awk这件上古神兵你会用了吗/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="AWK诞生于1977的贝尔实验室，是由 Alfred Aho，Peter Weinberger和Brian Kernighan三位大神开发，AWK的命名是由三位作者的Family Name的首字母组成。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2020-04-21T09:42:37.501Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Awk这件上古神兵你会用了吗">
+<meta name="twitter:description" content="AWK诞生于1977的贝尔实验室，是由 Alfred Aho，Peter Weinberger和Brian Kernighan三位大神开发，AWK的命名是由三位作者的Family Name的首字母组成。">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/04/21/Awk这件上古神兵你会用了吗/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Awk这件上古神兵你会用了吗 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/04/21/Awk这件上古神兵你会用了吗/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Awk这件上古神兵你会用了吗
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-04-21 17:41:10" itemprop="dateCreated datePublished" datetime="2020-04-21T17:41:10+08:00">2020-04-21</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/shell/" itemprop="url" rel="index"><span itemprop="name">shell</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">5k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">9 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p><code>AWK</code>诞生于1977的贝尔实验室，是由 Alfred Aho，Peter Weinberger和Brian Kernighan三位大神开发，<code>AWK</code>的命名是由三位作者的Family Name的首字母组成。</p>
+<a id="more"></a>
+<p>三位大神开发<code>AWK</code>的初衷是为了方便快速的处理文本及数据信息，在当年那个即没有<code>python</code>也没有<code>go</code>的年代，这是一个很酷也很有意义的事情；不过话说回来，即便是现在有了<code>Python</code>跟<code>Go</code>，<code>AWK</code>在日常线上运维方面仍然占据一席之地，而且几乎不可替代。</p>
+<p>如果你对<code>AWK</code>还是不甚了解，那么希望通过这篇博文，能够让各位做个简单入门，如果这篇文章还能提起你学习<code>AWK</code>的兴趣就更好了。</p>
+<p><code>AWK</code>的程序一般都很短，但并不是说<code>AWK</code>写不出逻辑复杂的程序。<code>AWK</code>像你学过的其它语言一样，支持变量自定义，数组结构，<code>for</code>循环等等，同时也支持自定义函数。</p>
+<p>假设我们打算处理一个在线商店的后台日志，内容如下:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">python基础教程 山治 34.50 5</span><br><span class="line">python高级教程 索隆 40.00 6</span><br><span class="line">python实战 娜美 38 3</span><br><span class="line">java编程思想 弗兰克 48.00 6</span><br><span class="line">Vue教程 javascript小组 55.00 8</span><br><span class="line">awk基础教程 路飞 42 3</span><br></pre></td></tr></table></figure>
+<p>第一列为书名，第二列为作者，第三列为价格，第四列为当日销售数量。我们将该文件命名为<code>awk_books.log</code>。接下来我们将通过一些实际的案例需求来学习<code>AWK</code></p>
+<p><strong>找出价格大于40的书籍</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$3&gt;40 &#123;print $0&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$3&gt;40 &#123;print $0&#125;'</span> awk_books.log</span></span><br><span class="line">java编程思想 弗兰克 48.00 6</span><br><span class="line">Vue教程 javascript小组 55.00 8</span><br><span class="line">awk基础教程 路飞 42 3</span><br></pre></td></tr></table></figure></p>
+<p><strong>解释</strong><br><code>awk</code>的意思是告诉操作系统我要执行<code>awk</code>程序，请做好准备。单引号里面的内容为具体的程序逻辑。<code>awk_books.log</code>为要处理的文件。</p>
+<p>写<code>awk</code>的程序其实很简单，因为是有固定套路的。套路就是 <code>&#39;pattern {action}&#39;</code>,<code>pattern</code>称为模式，<code>action</code>称为动作。</p>
+<p><code>awk</code>会自动读入要处理文件的每一行内容，依次用<code>pattern</code>去匹配，如果匹配成功，则执行<code>action</code>。对于上面的例子，<code>pattern</code>为<code>$3&gt;40</code>,<code>action</code>为<code>{print $0}</code>。</p>
+<blockquote>
+<p>注意: <code>pattern</code>跟<code>action</code>不必同时存在，后面我会有例子给大家解释什么意思。</p>
+</blockquote>
+<p>到此为止，对于上面的小例子，除了<code>$3</code>和<code>$0</code>你还不理解以外，其它应该都了解了。</p>
+<p><code>awk</code>会将输入的每一行按照空白字符进行分隔，因此分隔之后的第一列就是<code>$1</code>,第二列就是<code>$2</code>,以此类推，我们的例子中书价在第三列，自然就是<code>$3</code>,变量<code>$0</code>则代表整行记录。</p>
+<p>如果要处理的文本内容不是按照空白字符分隔怎么办？你可以这样处理。</p>
+<figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">echo <span class="string">"hello-world"</span> | awk <span class="string">'BEGIN&#123;FS="-"&#125; &#123;print $1&#125;'</span></span><br></pre></td></tr></table></figure>
+<p>输出的结果都为<code>hello</code></p>
+<p><code>FS</code>为<code>awk</code>的内置变量，表示输入列的分隔符，默认为空白符。上面的例子中我们将<code>FS</code>的默认值设置成我们希望的样子，也就是<code>-</code>。除了<code>FS</code>以外,跟分隔符相关的内置变量还有输出列分隔符<code>OFS</code>，输入行分隔符<code>RS</code>,输出行分隔符<code>ORS</code>。我就不依依举例展示了。</p>
+<p><code>BEGIN</code>表示的意思是<code>AWK</code>程序开始执行之前执行<code>BEGIN</code>关键字之后的语句，而且只执行一次，所以经常用来初始化变量或者文件头。除了<code>BEGIN</code>，还有<code>END</code>，我后面还会有样列介绍，大家不要着急。</p>
+<p>好了,这里先做个简单的小结，然后继续出发。<br>1.我们知道了如何在命令行终端调用<code>AWK</code>程序。<br>2.知道了<code>AWK</code>程序的固定套路为 <code>&#39;pattern {action}&#39;</code> 格式<br>3.了解了内置变量<code>$0</code>,<code>$1</code>,以及<code>FS</code>的作用。</p>
+<p>接下来通过一些具体的样例继续学习。</p>
+<p><strong>打印出每一行最后一列</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'&#123;print $NF&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'&#123;print $NF&#125;'</span> awk_books.log</span></span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">3</span><br><span class="line">6</span><br><span class="line">8</span><br><span class="line">3</span><br></pre></td></tr></table></figure></p>
+<p>这个例子中，明显没有<code>pattern</code> 而只有<code>action</code>。<code>AWK</code>中如果没有<code>pattern</code>,则默认匹配所有行。而<code>NF</code>为<code>AWK</code>的内置变量，表示每一行有多少列。所以<code>$NF</code>自然就代表着最后一列的输出内容。基于这个例子，你可以尝试着打印出每一行的倒数第二列内容，代码如下：<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'&#123;print $(NF-1) &#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p><strong>只打印出第二行内容</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'NR == 2'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'NR == 2'</span> awk_books.log</span></span><br><span class="line">python高级教程 索隆 40.00 6</span><br></pre></td></tr></table></figure></p>
+<p>这个例子明显没有<code>action</code>只有<code>pattern</code>，如果没有写<code>action</code>则执行默认<code>action</code>，默认的<code>action</code>就是打印匹配的行内容。<code>NR</code>也是内置变量，表示<code>AWK</code>已经读取的行数。</p>
+<p><strong>打印每一行的内容及行号</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'&#123;print NR,$0&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'&#123;print NR,$0&#125;'</span> awk_books.log</span></span><br><span class="line">1 python基础教程 山治 34.50 5</span><br><span class="line">2 python高级教程 索隆 40.00 6</span><br><span class="line">3 python实战 娜美 38 3</span><br><span class="line">4 java编程思想 弗兰克 48.00 6</span><br><span class="line">5 Vue教程 javascript小组 55.00 8</span><br><span class="line">6 awk基础教程 路飞 42 3</span><br></pre></td></tr></table></figure></p>
+<p><code>print</code>里面用逗号分隔要打印的多个内容，输出的时候逗号会被空格替代。</p>
+<p><strong>更好的输出</strong><br>接上面的例子，我们让输出结果更易读一些。<br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'BEGIN&#123;print"编号    书名    作者 价格 销量"; print""&#125; &#123;print NR,$0&#125; END&#123;print"";print "输出结束!"&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'BEGIN&#123;print"编号    书名    作者 价格 销量"; print""&#125; &#123;print NR,$0&#125; END&#123;print"";print "输出结束!"&#125;'</span> awk_books.log</span></span><br><span class="line">编号    书名    作者 价格 销量</span><br><span class="line"></span><br><span class="line">1 python基础教程 山治 34.50 5</span><br><span class="line">2 python高级教程 索隆 40.00 6</span><br><span class="line">3 python实战 娜美 38 3</span><br><span class="line">4 java编程思想 弗兰克 48.00 6</span><br><span class="line">5 Vue教程 javascript小组 55.00 8</span><br><span class="line">6 awk基础教程 路飞 42 3</span><br><span class="line"></span><br><span class="line">输出结束!</span><br></pre></td></tr></table></figure></p>
+<p><code>BEGIN</code>,在前面已经提到了过了，这里是为了加深一下大家的理解。<code>BEGIN</code>和<code>END</code>后面跟随的语句都只执行一次，即在程序的开头和结束。</p>
+<p><strong>打印包含Java的行</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'/java/ &#123;print $0&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'/java/ &#123;print $0&#125;'</span> awk_books.log</span></span><br><span class="line">java编程思想 弗兰克 48.00 6</span><br><span class="line">Vue教程 javascript小组 55.00 8</span><br></pre></td></tr></table></figure></p>
+<p>这个样例的匹配模式是个正则表达式，只要有匹配的内容就会输出对应的行。你可以根据业务需求写出更复杂的正则表达式。</p>
+<p><strong>打印第一列包含java的行</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$1 ~/java/ &#123;print $0&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$1 ~/java/ &#123;print $0&#125;'</span> awk_books.log</span></span><br><span class="line">java编程思想 弗兰克 48.00 6</span><br></pre></td></tr></table></figure></p>
+<p><strong>打印第一列不包含Java的行</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$1 !~/java/ &#123;print $0&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$1 !~/java/ &#123;print $0&#125;'</span> awk_books.log</span></span><br><span class="line">python基础教程 山治 34.50 5</span><br><span class="line">python高级教程 索隆 40.00 6</span><br><span class="line">python实战 娜美 38 3</span><br><span class="line">Vue教程 javascript小组 55.00 8</span><br><span class="line">awk基础教程 路飞 42 3</span><br></pre></td></tr></table></figure></p>
+<p><strong>统计输入文本的总行数</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'END &#123;print NR&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'END &#123;print NR&#125;'</span> awk_books.log</span></span><br><span class="line">6</span><br></pre></td></tr></table></figure></p>
+<p><strong>输出字符数超过33的行</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'length($0)&gt; 33'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果:<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'length($0)&gt; 33'</span> awk_books.log</span></span><br><span class="line">java编程思想 弗兰克 48.00 6</span><br><span class="line">Vue教程 javascript小组 55.00 8</span><br></pre></td></tr></table></figure></p>
+<p><code>length</code>为内置函数，此外还有很多内置函数，不在此一一列举了，感兴趣的可以去查。</p>
+<p><strong>输出价格最高的行</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$3&gt;max &#123;max = $3; maxline=$0&#125; END &#123;print max,maxline&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$3&gt;max &#123;max = $3; maxline=$0&#125; END &#123;print max,maxline&#125;'</span> awk_books.log</span></span><br><span class="line">55.00 Vue教程 javascript小组 55.00 8</span><br></pre></td></tr></table></figure></p>
+<p>这里<code>max</code>及<code>maxline</code>为自定义变量，<code>AWK</code>里面的变量不用事先声明，直接用就OK，默认值为空或者0。</p>
+<p><strong>计算当天销售总价并输出</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'&#123;total += $3*$4&#125; END &#123; print total&#125;'</span> awk_books.log</span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'&#123;total += $3*$4&#125; END &#123; print total&#125;'</span> awk_books.log</span></span><br><span class="line">1380.5</span><br></pre></td></tr></table></figure></p>
+<p><strong>找出所有Python的书目，然后按照价格排序</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$1 ~/python/ &#123;print $0&#125;'</span> awk_books.log|sort -n -k <span class="number">3</span> -t <span class="string">' '</span></span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$1 ~/python/ &#123;print $0&#125;'</span> awk_books.log|sort -n -k 3 -t <span class="string">' '</span></span></span><br><span class="line">python基础教程 山治 34.50 5</span><br><span class="line">python实战 娜美 38 3</span><br><span class="line">python高级教程 索隆 40.00 6</span><br></pre></td></tr></table></figure></p>
+<p><strong>找出所有Python的书目，按照价格排序，并输出价格最高的两条</strong><br><figure class="highlight awk"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">awk <span class="string">'$1 ~/python/ &#123;print $0&#125;'</span> awk_books.log|sort -r -n -k <span class="number">3</span> -t <span class="string">' '</span>|head -n <span class="number">2</span></span><br></pre></td></tr></table></figure></p>
+<p>输出结果：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> awk <span class="string">'$1 ~/python/ &#123;print $0&#125;'</span> awk_books.log|sort -r -n -k 3 -t <span class="string">' '</span>|head -n 2</span></span><br><span class="line">python高级教程 索隆 40.00 6</span><br><span class="line">python实战 娜美 38 3</span><br></pre></td></tr></table></figure></p>
+<p>最后两个列子借住了<code>sort</code>和<code>head</code>,不了解两个指令的可以去查一下，这里不做过多的介绍了。</p>
+<p>好了，以上这些<code>AWK</code>知识应该够各位应付日常的工作需求了。如果还不够怎么办呢？去买两本书，继续深入学啊！</p>
+<hr>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/j1aJQpu05wdr5wKw_4UG4A" target="_blank" rel="noopener">作为一个程序员，你应该知道的编码知识</a><br><a href="https://mp.weixin.qq.com/s/BZ6ECzAQAvKAWNvs4xSISA" target="_blank" rel="noopener">Shell编程里面的奇葩字符</a><br><a href="https://mp.weixin.qq.com/s/rPpQ4rIWRj4lUcRx92Ndzw" target="_blank" rel="noopener">Javaer运维指令合集(快餐版)</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/04/21/Awk这件上古神兵你会用了吗/" title="Awk这件上古神兵你会用了吗">http://hellofrank.github.io/2020/04/21/Awk这件上古神兵你会用了吗/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/AWK/" rel="tag"><i class="fa fa-tag"></i> AWK</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/21/Java8的Stream流真香，没体验过的永远不会知道/" rel="next" title="Java8的Stream流真香，没体验过的永远不会知道">
+                <i class="fa fa-chevron-left"></i> Java8的Stream流真香，没体验过的永远不会知道
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">46</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">51</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">141k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">4:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
