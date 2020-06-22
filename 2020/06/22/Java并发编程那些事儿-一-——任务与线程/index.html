@@ -1,0 +1,1147 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="原创：花括号MC(微信公众号：huakuohao-mc)。关注JAVA基础编程及大数据，注重经验分享及个人成长。  这是Java并发编程系列的第一篇文章，因为并发编程涉及的内容太多，很难用一篇或者两篇文章就说清楚，所以会分成多篇进行讲述。">
+<meta name="keywords" content="并发编程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java并发编程那些事儿(一)——任务与线程">
+<meta property="og:url" content="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="原创：花括号MC(微信公众号：huakuohao-mc)。关注JAVA基础编程及大数据，注重经验分享及个人成长。  这是Java并发编程系列的第一篇文章，因为并发编程涉及的内容太多，很难用一篇或者两篇文章就说清楚，所以会分成多篇进行讲述。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/01.png">
+<meta property="og:updated_time" content="2020-06-22T03:02:09.687Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Java并发编程那些事儿(一)——任务与线程">
+<meta name="twitter:description" content="原创：花括号MC(微信公众号：huakuohao-mc)。关注JAVA基础编程及大数据，注重经验分享及个人成长。  这是Java并发编程系列的第一篇文章，因为并发编程涉及的内容太多，很难用一篇或者两篇文章就说清楚，所以会分成多篇进行讲述。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/01.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>Java并发编程那些事儿(一)——任务与线程 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Java并发编程那些事儿(一)——任务与线程
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-06-22 10:56:31" itemprop="dateCreated datePublished" datetime="2020-06-22T10:56:31+08:00">2020-06-22</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Java/" itemprop="url" rel="index"><span itemprop="name">Java</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">4.4k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">8 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>原创：花括号MC(微信公众号：huakuohao-mc)。关注JAVA基础编程及大数据，注重经验分享及个人成长。</p>
+</blockquote>
+<p>这是<strong>Java并发编程系列</strong>的第一篇文章，因为并发编程涉及的内容太多，很难用一篇或者两篇文章就说清楚，所以会分成多篇进行讲述。<br><a id="more"></a><br>针对并发编程，我大概列了一份简要的提纲，后面的文章基本会按照这个顺序来写。具体能不能全部写完，我也不太清楚；主要是因为自己的能力水平有限，加之写技术文章确实很占用休息时间。</p>
+<p><strong>简要提纲</strong></p>
+<p><img src="01.png" alt="01.png"></p>
+<p><strong>正文开始</strong></p>
+<p>提到并发编程，很多人会想到多线程；希望让多个线程共同完成一项任务，以提高生产效率。</p>
+<p>所以要聊并发编程之前，就要先说一下什么是线程，要说什么是线程就需要说一下什么是进程。</p>
+<p><strong>进程</strong>：在现代操作系统中，每一个独立运行的程序都是一个进程，比如运行中的word，微信等等都是一个独立进程。</p>
+<p><strong>线程</strong>：在现代操作系统中，线程也叫轻量级进程，每个进程里面可以包含多个线程。CPU资源可以在多个线程之间不断切换，仿佛所有线程在并行执行。每个线程都有自己的计数器，堆栈，和局部变量等属性。这些线程也能够访问共享的内存变量。这将成为日后阻碍我们写出健壮且安全的并发程序的最大障碍。</p>
+<h5 id="如何理解线程和进程"><a href="#如何理解线程和进程" class="headerlink" title="如何理解线程和进程"></a>如何理解线程和进程</h5><p>上面介绍的进程和线程，对于某些人来说可能比较抽象，为了方便大家更好的理解线程和进程关系，我们可以做这样一个比喻。一个进程相当于一条运行中的汽车生产线，主要任务是生产汽车；生产线上有很多工人，每个工人负责不同的工作，有的给汽车拧螺丝，有的给车刷漆。每个工人就是一个线程。汽车就是共享变量。</p>
+<h5 id="任务和线程的关系"><a href="#任务和线程的关系" class="headerlink" title="任务和线程的关系"></a>任务和线程的关系</h5><p>在<code>Java</code>里面，任务和线程是两个完全独立的概念，所谓的线程就是你通过 <code>Thread thread = new Thread()</code> 方式创建的一个线程，如果你只是这样创建一个线程，那么什么意义都没有。因为这个线程什么都不会做，这条语句的意义，仅仅是创建了一个线程。你可以理解成，只创建了生产线上的一个工人，但是没给工人安排任务。</p>
+<p>我们创建线程的目的显然是为了更高效的完成一些任务。所以我们需要把任务和线程进行关联。<code>Java</code>里面的任务是通过<code>Runnable</code>或者<code>Callable</code>接口来表达的。线程是驱动任务的媒介，必须将线程和任务进行绑定才有意义，他们才能各自发挥价值，真正的做到一加一大于二的效果。如果你不理解我说的这段话，没关系，下面会通过一些代码示例帮助大家理解线程和任务之间的关系。</p>
+<h5 id="如何创建线程"><a href="#如何创建线程" class="headerlink" title="如何创建线程"></a>如何创建线程</h5><p>创建线程的方式很多人都会说有两种，一种通过继承<code>Thread</code>类来实现，另外一种是实现<code>Runnable</code>接口。从某种角度来看，这么说是没有错，但我更愿意说只有一种方式。因为<code>Thread</code>类也实现了<code>Runnable</code>接口。所以归根到底还都是通过实现<code>Runnable</code>接口来描述任务，然后将任务和线程进行绑定。</p>
+<p><strong>什么都不做的线程</strong><br>创建一个线程并启动其实很简单，只需要两行代码。但是下面的线程什么都做不了。因为我们没有让他跟任何任务关联。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建线程</span></span><br><span class="line">Thread thread = <span class="keyword">new</span> Thread();</span><br><span class="line"><span class="comment">//启动线程</span></span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure></p>
+<p><strong>会说 hello world 的多线程</strong><br>上面新建的线程，什么工作都做不了，显然不是我们想要的，下面我们再来创建一个线程，这个线程会打印出线程名字，并且说一句hello world。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">Thread thread = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread() + <span class="string">"hello world!"</span>);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure></p>
+<p>上面的代码，<code>new</code>了一<code>Thread</code>对象，并且重写了<code>run</code>方法，将要执行的业务逻辑写到了<code>run</code>方法里面。这样就建立了线程和任务的关系。</p>
+<p><strong>通过继承实现自己的Thread</strong></p>
+<p>我们也可以通过继承的方式自定义一个<code>Thread</code>，如下：<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HelloThread</span> <span class="keyword">extends</span> <span class="title">Thread</span> </span>&#123;</span><br><span class="line">    <span class="keyword">private</span> String name;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">HelloThread</span><span class="params">(String name)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.name = name;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println( Thread.currentThread() + <span class="string">" hello "</span> + name);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>通过HelloThread()创建线程，并启动。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread thread = <span class="keyword">new</span> HelloThread(<span class="string">"Frank"</span>);</span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure></p>
+<p><strong>通过Runnable接口定义任务</strong></p>
+<p>上面示例都是通过重写<code>Thread</code>类的<code>run</code>方法，来完成业务逻辑的描述。我们也可以通过实现<code>Runnable</code>接口的方式，来实现业务逻辑的描述。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Task</span> <span class="keyword">implements</span> <span class="title">Runnable</span> </span>&#123;</span><br><span class="line">  <span class="meta">@Override</span></span><br><span class="line">  <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println(Thread.currentThread().getName()+<span class="string">"hello world"</span>);</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>将<code>Runnable</code>和<code>Thread</code>进行关联，让<code>Thread</code>驱动<code>Runnable</code>.<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建线程，并绑定相应的业务逻辑</span></span><br><span class="line">Thread thread = <span class="keyword">new</span> Thread(<span class="keyword">new</span> Task());</span><br><span class="line"><span class="comment">//启动线程，让线程驱动任务</span></span><br><span class="line">thread.start();</span><br></pre></td></tr></table></figure></p>
+<p><strong>使用Executors将线程和任务进行绑定</strong></p>
+<p>上面讲解的样例代码，在实际生产上很少用到，生产用的最多的是<code>JDK1.5</code>以后开始提供的<code>Executor</code>并发框架。这里先放一段代码示例，先简单感受一下，后面还会有专门的文章进行介绍。<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//创建一个容量为2的线程池</span></span><br><span class="line">ExecutorService exec = Executors.newFixedThreadPool(<span class="number">2</span>);</span><br><span class="line"><span class="comment">//向线程池提交5个任务</span></span><br><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)&#123;</span><br><span class="line">    exec.execute(<span class="keyword">new</span> Task());</span><br><span class="line">&#125;</span><br><span class="line">exec.shutdown();</span><br></pre></td></tr></table></figure></p>
+<h5 id="与线程相关的一些方法"><a href="#与线程相关的一些方法" class="headerlink" title="与线程相关的一些方法"></a>与线程相关的一些方法</h5><p><strong>yield()</strong><br>yield这个单词在英语里面有放弃，停止争论的意思，所以当我们执行<code>Thread.yield();</code>方法的时候,表示当前线程愿意尝试放弃CPU资源，但是否放弃不确定。这个方法在日常工作中很少用到，主要用于debug,或者测试。</p>
+<p><strong>sleep()</strong><br>sleep这个单词大家应该很熟悉，睡眠的意思。所以当我们执行<code>Thread.sleep(1000);</code> 表示当前线程休眠1秒钟，然后继续执行。</p>
+<p><strong>join()</strong><br>join这个单词有连接，加入的意思。所以当调用<code>join()</code>方法的时候，表示当前线程会等待调用<code>join()</code>这个方法的线程执行完成之后在继续执行。这么说会比较抽象，下面我写个简单的例子，让各位感受一下。</p>
+<p>定义一个任务，该任务接收一个外部传入的线程，并调用传入线程的<code>join()</code>方法<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JoinTask</span> <span class="keyword">implements</span> <span class="title">Runnable</span></span>&#123;</span><br><span class="line">    <span class="keyword">private</span> Thread thread;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="title">JoinTask</span><span class="params">(Thread thread)</span></span>&#123;</span><br><span class="line">        <span class="keyword">this</span>.thread = thread;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span> </span>&#123;</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            thread.join();</span><br><span class="line">            &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">                e.printStackTrace();</span><br><span class="line">            &#125;</span><br><span class="line">            System.out.println(Thread.currentThread() + <span class="string">"currentTime "</span> + System.currentTimeMillis());</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>在main方法里面启动两个线程</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">Thread thread1 = <span class="keyword">new</span> Thread()&#123;</span><br><span class="line">    <span class="meta">@Override</span></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">run</span><span class="params">()</span></span>&#123;</span><br><span class="line">        System.out.println( currentThread() + <span class="string">"currentTime "</span> + System.currentTimeMillis());</span><br><span class="line">        <span class="keyword">try</span> &#123;</span><br><span class="line">            Thread.sleep(<span class="number">1000</span>);</span><br><span class="line">        &#125; <span class="keyword">catch</span> (InterruptedException e) &#123;</span><br><span class="line">            e.printStackTrace();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"></span><br><span class="line">Thread thread2 = <span class="keyword">new</span> Thread(<span class="keyword">new</span> JoinTask(thread1));</span><br><span class="line"></span><br><span class="line"><span class="comment">//启动两个线程</span></span><br><span class="line">thread1.start();</span><br><span class="line">thread2.start();</span><br></pre></td></tr></table></figure>
+<p>这段代码的输出结果为<br><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Thread[Thread-<span class="number">0</span>,<span class="number">5</span>,main]currentTime <span class="number">1588752684516</span></span><br><span class="line">Thread[Thread-<span class="number">1</span>,<span class="number">5</span>,main]currentTime <span class="number">1588752685516</span></span><br></pre></td></tr></table></figure></p>
+<p>从结果可以看出线程2等待线程1执行结束后，才继续执行。大家可以把<code>join()</code>方法注释掉之后在运行一下，感受一下<code>join()</code>的作用。</p>
+<p>这个方法理论上可以实现简单的任务间协作(实际生产很少这样用)，比如洗完盘子才能进行烘干。烘干线程要等待洗盘子线程结束才能开始工作。</p>
+<h5 id="结束"><a href="#结束" class="headerlink" title="结束"></a>结束</h5><p>好了，这篇文章就写到这里了。本篇的核心要点就是理解线程和任务的关系，知道如何将线程和任务建立联系。至于文章最后提到的几个方法，大家知道一下就OK，真实生产上如果真的要用的话，一定要特别清楚你想要做什么。下一篇按照计划会写锁相关的内容。</p>
+<hr>
+<p>推荐阅读：<br><a href="https://mp.weixin.qq.com/s/v2uZnkWhGKXvTJu87iUWLg" target="_blank" rel="noopener">Java8的Stream流真香，没体验过的永远不知道</a><br><a href="https://mp.weixin.qq.com/s/xcwUDlmw2ABvcqaBMGmt0w" target="_blank" rel="noopener">Awk这件上古神兵你会用了吗</a><br><a href="https://mp.weixin.qq.com/s/yaRvdAWvau2M60QBK7njvw" target="_blank" rel="noopener">手把手教你搭建一套ELK日志搜索运维平台</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/" title="Java并发编程那些事儿(一)——任务与线程">http://hellofrank.github.io/2020/06/22/Java并发编程那些事儿-一-——任务与线程/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/并发编程/" rel="tag"><i class="fa fa-tag"></i> 并发编程</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/21/Awk这件上古神兵你会用了吗/" rel="next" title="Awk这件上古神兵你会用了吗">
+                <i class="fa fa-chevron-left"></i> Awk这件上古神兵你会用了吗
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">47</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">19</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">52</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-5"><a class="nav-link" href="#如何理解线程和进程"><span class="nav-number">1.</span> <span class="nav-text">如何理解线程和进程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#任务和线程的关系"><span class="nav-number">2.</span> <span class="nav-text">任务和线程的关系</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#如何创建线程"><span class="nav-number">3.</span> <span class="nav-text">如何创建线程</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#与线程相关的一些方法"><span class="nav-number">4.</span> <span class="nav-text">与线程相关的一些方法</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#结束"><span class="nav-number">5.</span> <span class="nav-text">结束</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">145k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">4:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
