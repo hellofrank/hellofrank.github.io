@@ -1,0 +1,1163 @@
+<!DOCTYPE html>
+
+
+
+
+
+
+  
+
+
+<html class="theme-next pisces use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2"/>
+<meta name="theme-color" content="#222">
+
+
+
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=6.2.0" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=6.2.0">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=6.2.0">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=6.2.0" color="#222">
+
+
+
+
+
+
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Pisces',
+    version: '6.2.0',
+    sidebar: {"position":"left","display":"always","offset":12,"b2t":false,"scrollpercent":true,"onmobile":false},
+    fancybox: false,
+    fastclick: false,
+    lazyload: false,
+    tabs: true,
+    motion: {"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+  
+
+
+
+
+  <meta name="description" content="说到消息中间件，大部分人的第一印象可能是Kafka。毕竟Kafka自问世以来，就顶着高并发，大流量的光环。当然了Kafka也不负众望，在大数据处理方面独领风骚。 这里想说说另一款同样优秀的消息中间件RabbitMQ。">
+<meta name="keywords" content="其它">
+<meta property="og:type" content="article">
+<meta property="og:title" content="一篇小文带你走进RabbitMQ的世界">
+<meta property="og:url" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/index.html">
+<meta property="og:site_name" content="Frank&#39;s Blog">
+<meta property="og:description" content="说到消息中间件，大部分人的第一印象可能是Kafka。毕竟Kafka自问世以来，就顶着高并发，大流量的光环。当然了Kafka也不负众望，在大数据处理方面独领风骚。 这里想说说另一款同样优秀的消息中间件RabbitMQ。">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_01.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_02.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_03.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_05.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_06.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_07.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_04.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_08.png">
+<meta property="og:updated_time" content="2020-08-02T15:11:15.699Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一篇小文带你走进RabbitMQ的世界">
+<meta name="twitter:description" content="说到消息中间件，大部分人的第一印象可能是Kafka。毕竟Kafka自问世以来，就顶着高并发，大流量的光环。当然了Kafka也不负众望，在大数据处理方面独领风骚。 这里想说说另一款同样优秀的消息中间件RabbitMQ。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/rabbit_mq_01.png">
+
+
+
+
+
+
+  <link rel="canonical" href="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/"/>
+
+
+
+<script type="text/javascript" id="page.configurations">
+  CONFIG.page = {
+    sidebar: "",
+  };
+</script>
+
+  <title>一篇小文带你走进RabbitMQ的世界 | Frank's Blog</title>
+  
+
+
+
+
+
+
+
+
+
+  <noscript>
+  <style type="text/css">
+    .use-motion .motion-element,
+    .use-motion .brand,
+    .use-motion .menu-item,
+    .sidebar-inner,
+    .use-motion .post-block,
+    .use-motion .pagination,
+    .use-motion .comments,
+    .use-motion .post-header,
+    .use-motion .post-body,
+    .use-motion .collection-title { opacity: initial; }
+
+    .use-motion .logo,
+    .use-motion .site-title,
+    .use-motion .site-subtitle {
+      opacity: initial;
+      top: initial;
+    }
+
+    .use-motion {
+      .logo-line-before i { left: initial; }
+      .logo-line-after i { right: initial; }
+    }
+  </style>
+</noscript>
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/" class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">Frank's Blog</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button aria-label="切换导航栏">
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+
+
+
+<nav class="site-nav">
+  
+    <ul id="menu" class="menu">
+      
+        
+        
+        
+          
+          <li class="menu-item menu-item-首页">
+    <a href="/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-home"></i> <br />首页</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-关于">
+    <a href="/about/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-user"></i> <br />关于</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-标签">
+    <a href="/tags/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />标签</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-分类">
+    <a href="/categories/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-th"></i> <br />分类</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-归档">
+    <a href="/archives/" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />归档</a>
+  </li>
+        
+        
+        
+          
+          <li class="menu-item menu-item-公益404">
+    <a href="/404.html" rel="section">
+      <i class="menu-item-icon fa fa-fw fa-heartbeat"></i> <br />公益404</a>
+  </li>
+
+      
+      
+    </ul>
+  
+
+  
+
+  
+</nav>
+
+
+
+  
+
+
+
+</div>
+    </header>
+
+    
+
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          
+            
+
+          
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  
+    <div class="reading-progress-bar"></div>
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Frank">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Frank's Blog">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">一篇小文带你走进RabbitMQ的世界
+              
+            
+          </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+
+            
+            
+            
+
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+
+              
+                
+              
+
+              <time title="创建时间：2020-08-02 22:54:25" itemprop="dateCreated datePublished" datetime="2020-08-02T22:54:25+08:00">2020-08-02</time>
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/其它/" itemprop="url" rel="index"><span itemprop="name">其它</span></a></span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+            <span class="post-meta-divider">|</span>
+            <span class="post-meta-item-icon"
+            >
+            <i class="fa fa-eye"></i>
+             阅读次数： 
+            <span class="busuanzi-value" id="busuanzi_value_page_pv" ></span>
+            </span>
+          
+
+          
+            <div class="post-symbolscount">
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-file-word-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">本文字数：</span>
+                
+                <span title="本文字数">2.6k</span>
+              
+
+              
+                <span class="post-meta-divider">|</span>
+              
+
+              
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-clock-o"></i>
+                </span>
+                
+                  <span class="post-meta-item-text">阅读时长 &asymp;</span>
+                
+                <span title="阅读时长">5 分钟</span>
+              
+            </div>
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>说到消息中间件，大部分人的第一印象可能是<code>Kafka</code>。毕竟<code>Kafka</code>自问世以来，就顶着高并发，大流量的光环。当然了<code>Kafka</code>也不负众望，在大数据处理方面独领风骚。</p>
+<p>这里想说说另一款同样优秀的消息中间件<code>RabbitMQ</code>。</p>
+<a id="more"></a>
+<h4 id="选RabbitMQ还是Kafka"><a href="#选RabbitMQ还是Kafka" class="headerlink" title="选RabbitMQ还是Kafka"></a>选RabbitMQ还是Kafka</h4><p>如果单机数据量没有到十万级以上，我觉得选哪个都OK，如果超过百万甚至到了千万级别那么建议选择<code>Kafka</code>。</p>
+<p>对了还有重要的一点，<code>RabbitMQ</code>支持事务，而<code>Kafka</code>不支持。所以如果你的业务系统要求支持事务，那么只能选<code>RabbitMQ</code>。这也是很多金融系统选择<code>RabbitMQ</code>作为消息中间件的原因。</p>
+<h4 id="RabbitMQ基本概念"><a href="#RabbitMQ基本概念" class="headerlink" title="RabbitMQ基本概念"></a>RabbitMQ基本概念</h4><p>先来说一下消息中间件的通用模型，所有的消息中间件的模型基本都是这样。</p>
+<p><img src="rabbit_mq_01.png" alt="rabbit_mq_01.png"></p>
+<p>而<code>RabbitMQ</code>是基于<code>AMQP</code>协议实现的。模型大概是这个样子，如下图所示</p>
+<p><img src="rabbit_mq_02.png" alt="rabbit_mq_02.png"></p>
+<p>重点关注中间两个框框，下面依次解读一下。</p>
+<h5 id="信道"><a href="#信道" class="headerlink" title="信道"></a>信道</h5><p>建立<code>TCP</code>链接是一件很费时的事情，所以很多提供高并发服务的软件都支持<code>TCP</code>链接复用，比如<code>HTTP</code>协议的<code>KeepAlive</code>就是为了复用<code>TCP</code>链接准备的。所以<code>RabbitMQ</code>提出了信道的概念，一个<code>TCP</code>链接里面可以支持多个信道同时通信，以提高通信效率。如下图所示。</p>
+<p><img src="rabbit_mq_03.png" alt="rabbit_mq_03.png"></p>
+<h5 id="broker"><a href="#broker" class="headerlink" title="broker"></a>broker</h5><p>一个启动的<code>RabbitMQ</code>实例，代表一个<code>broker</code>。</p>
+<h5 id="虚拟主机"><a href="#虚拟主机" class="headerlink" title="虚拟主机"></a>虚拟主机</h5><p>虚拟主机可以理解成命名空间的概念，方便队列管理。</p>
+<h5 id="交换器"><a href="#交换器" class="headerlink" title="交换器"></a>交换器</h5><p>向<code>RabbitMQ</code>发送消息时，先把消息先发到交换器，再由交换器根据相关路由规则发到特定队列上。目前 <code>RabbitMQ</code>的交换器共四种类型：<code>direct</code>、<code>fanout</code>、<code>topic</code>、<code>headers</code>。</p>
+<p><strong>headers交换器</strong>： 匹配消息的<code>header</code>而不是路由键，除此之外<code>headers</code>交换器和<code>direct</code>交换器完全一致，但性能差很多，所以目前几乎不用。</p>
+<p><strong>direct交换器</strong>:  消息中的路由键（routing key）如果和<code>Binding</code>（绑定的概念后面会介绍）中的 binding key 一致， 交换器就将消息发到对应的队列中。<code>direct</code>模式是完全匹配的单播模式，也就是说路由键与队列名完全匹配，如果一个队列绑定到交换机要求路由键为“dog”，则只转发 routing key 标记为“dog”的消息，不会转发“dog.puppy”的消息。如下图所示。</p>
+<p><img src="rabbit_mq_05.png" alt="rabbit_mq_04.png"></p>
+<p><strong>fanout交换器</strong>：每个发送到<code>fanout</code>交换器中的消息，不会去匹配路由键，而是直接把消息投递到所有绑定到<code>fanout</code>交换器上的队列中。类似一个广播站，会向所有收听广播的用户发送消息。对应到实际应用中，它允许你针对一个消息作不同操作，比如用户上传了一张新的图片，系统要同时对这个事件进行不同的操作，比如删除旧的图片缓存、增加积分奖励等等。这样就大大降低了系统之间的耦合度了。<br>如下图所示。</p>
+<p><img src="rabbit_mq_06.png" alt="rabbit_mq_05.png"></p>
+<p><strong>topic交换器</strong>：<code>topic</code>交换器和<code>direct</code>交换器有相似之处，它通过模式匹配的方式分发消息，将路由键和某个模式进行匹配，此时队列需要绑定到一个模式上。它将路由键和绑定键的字符串切分成单词，这些单词之间用点隔开。它同样也会识别两个通配符：符号<code>#</code>和符号<code>*</code>。<code>#</code>匹配0个或多个单词，<code>*</code>匹配至少一个单词。如下图所示。</p>
+<p><img src="rabbit_mq_07.png" alt="rabbit_mq_06.png"></p>
+<h5 id="绑定"><a href="#绑定" class="headerlink" title="绑定"></a>绑定</h5><p>将消息队列和交换器进行关联。一个绑定就是基于路由键将交换器和消息队列连接起来的路由规则，所以可以将交换器理解成一个由绑定构成的路由表，如下图所示：<br><img src="rabbit_mq_04.png" alt="rabbit_mq_07.png"></p>
+<h4 id="集群及高可用"><a href="#集群及高可用" class="headerlink" title="集群及高可用"></a>集群及高可用</h4><p>因为<code>RabbitMQ</code>是<code>Erlang</code>开发的，所以天生支持分布式。所谓的天生支持的意思就是不用像<code>Kafka</code>那样借助<code>ZK</code>来实现集群。</p>
+<p>先来看一下典型的<code>RabbitMQ</code>集群架构图。</p>
+<p><img src="rabbit_mq_08.png" alt="rabbit_mq_08.png"></p>
+<p>集群分为普通模式和镜像模式。另外<code>RabbitMQ</code>集群分为内存节点和磁盘节点，集群当中必须存在磁盘节点。内存节点就是将数据存储到内存中，读写效率会比较高；而磁盘节点是将数据存储到磁盘上面，可以持久化保存数据。</p>
+<p><strong>普通模式</strong>：默认的集群模式。所谓的普通模式就是，多台机器上启动多个<code>Rabbitmq</code>实例，每台机器启动一个实例。但是创建的<code>queue</code>，只会放在一个<code>Rabbtimq</code>实例上，每个实例都会同步<code>queue</code>的元数据。消费的时候，如果连接到了另外一个实例，那么那个实例会从<code>queue</code>所在实例上拉取数据过来。如果存放<code>queue</code>的节点挂掉，那么就不能提供服务了。所以这种方式并不是真正的高可用。</p>
+<p><strong>镜像模式</strong>：创建的<code>queue</code>，无论元数据还是消息都会存在于多个实例上，每次写消息到<code>queue</code>的时候，都会自动把消息同步到多个实例的<code>queue</code>里。任何一个节点挂掉后，其他节点可以继续提供服务。类似于<code>Redis</code>集群的哨兵模式。关于Redis的高可用部署方式，可以看我<a href="https://mp.weixin.qq.com/s/T4NvijmBHxtVHX04KJ0QAA" target="_blank" rel="noopener">这篇</a>文章。</p>
+<h4 id="元数据："><a href="#元数据：" class="headerlink" title="元数据："></a>元数据：</h4><p>元数据主要包含四类,分别是<br>队列元数据：队列名称及属性；<br>交换器元数据：交换器名称、类型及属性<br>绑定元数据：记录了如何将消息路由到队列的数据；<br>vhost元数据：为队列、交换器和绑定提供命名空间和安全属性的数据；</p>
+<h4 id="运维常用管理命令"><a href="#运维常用管理命令" class="headerlink" title="运维常用管理命令"></a>运维常用管理命令</h4><p>启动<br><code>/sbin/rabbitmq-server</code></p>
+<p>重启<br><code>/sbin/rabbitmqctl reset</code></p>
+<p>停止<br> <code>/sbin/rabbitmqctl stop</code></p>
+<p>停止应用<br><code>/sbin/rabbitmqctl stop_app</code></p>
+<p>查看<code>RabbitMQ</code>状态<br><code>/sbin/rabbitmqctl status</code></p>
+<p>查看绑定<br><code>/sbin/rabbitmqctl list_bindings</code></p>
+<p>查看交换器<br><code>/sbin/rabbitmqctl list_exchanges</code></p>
+<p>查看已声明的队列<br><code>/sbin/rabbitmqctl list_queues</code></p>
+<h5 id="stop和stop-app-的区别"><a href="#stop和stop-app-的区别" class="headerlink" title="stop和stop_app 的区别"></a>stop和stop_app 的区别</h5><p>这里需要特别注意一下这两个命令的区别：由于 <code>RabbitmMQ</code>是用<code>Erlang</code>写的，<code>Erlang</code>有节点的概念，也就是在一个<code>Erlang</code>节点上，可以运行很多个<code>Erlang</code>应用，<code>stop</code>命令是使得整个<code>Erlang</code>节点停止工作，而<code>stop_app</code>则是使得当前应用停止工作，不会影响其它应用的正常运行。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>如果之前一直接触的Java开发的中间件，突然接触<code>RabbitMQ</code>，会有些许不适应。特别是对于<code>RabbitMQ</code>的集群部署及高可用的理解。不过了解之后会发现这只兔子还是很可爱的。毕竟存在就有存在的道理。</p>
+<hr>
+<p><strong>推荐阅读</strong><br><a href="https://mp.weixin.qq.com/s/KDZWRIj7U7d7nXPWiYT5oA" target="_blank" rel="noopener">1. Java并发编程那些事儿(十)——最后的总结</a><br><a href="https://mp.weixin.qq.com/s/v2uZnkWhGKXvTJu87iUWLg" target="_blank" rel="noopener">2. Java8的Stream流真香，没体验过的永远不知道</a><br><a href="https://mp.weixin.qq.com/s/xcwUDlmw2ABvcqaBMGmt0w" target="_blank" rel="noopener">3. Awk这件上古神兵你会用了吗</a><br><a href="https://mp.weixin.qq.com/s/yaRvdAWvau2M60QBK7njvw" target="_blank" rel="noopener">4. 手把手教你搭建一套ELK日志搜索运维平台</a></p>
+
+      
+    </div>
+
+    
+
+    
+    
+    
+
+    <div>
+        
+            <div>
+    
+        <div style="text-align:center;color: #ccc;font-size:14px;">-------------本文结束-------------</div>
+    
+</div>
+
+        
+    </div>
+
+    
+
+    
+      <div>
+        <div style="padding: 10px 0; margin: 20px auto; width: 90%; text-align: center;">
+  <div>坚持原创技术分享，您的支持将鼓励我继续创作!</div>
+  <button id="rewardButton" disable="enable" onclick="var qr = document.getElementById('QR'); if (qr.style.display === 'none') {qr.style.display='block';} else {qr.style.display='none'}">
+    <span>打赏</span>
+  </button>
+  <div id="QR" style="display: none;">
+
+    
+      <div id="wechat" style="display: inline-block">
+        <img id="wechat_qr" src="/images/wechatpay.png" alt="Frank 微信支付"/>
+        <p>微信支付</p>
+      </div>
+    
+
+    
+      <div id="alipay" style="display: inline-block">
+        <img id="alipay_qr" src="/images/alipay.png" alt="Frank 支付宝"/>
+        <p>支付宝</p>
+      </div>
+    
+
+    
+
+  </div>
+</div>
+
+      </div>
+    
+
+    
+      <div>
+        <ul class="post-copyright">
+  <li class="post-copyright-author">
+    <strong>本文作者： </strong>Frank</li>
+  <li class="post-copyright-link">
+    <strong>本文链接：</strong>
+    <a href="http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/" title="一篇小文带你走进RabbitMQ的世界">http://hellofrank.github.io/2020/08/02/一篇小文带你走进RabbitMQ的世界/</a>
+  </li>
+  <li class="post-copyright-license">
+    <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
+</ul>
+
+      </div>
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/其它/" rel="tag"><i class="fa fa-tag"></i> 其它</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/07/05/写给年轻程序员的一些心里话/" rel="next" title="写给年轻程序员的一些心里话">
+                <i class="fa fa-chevron-left"></i> 写给年轻程序员的一些心里话
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/avatar.png"
+                alt="Frank" />
+            
+              <p class="site-author-name" itemprop="name">Frank</p>
+              <p class="site-description motion-element" itemprop="description">Stay Hungry. Stay Foolish.</p>
+          </div>
+
+          
+            <nav class="site-state motion-element">
+              
+                <div class="site-state-item site-state-posts">
+                
+                  <a href="/archives">
+                
+                    <span class="site-state-item-count">59</span>
+                    <span class="site-state-item-name">日志</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-categories">
+                  <a href="/categories/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">20</span>
+                    <span class="site-state-item-name">分类</span>
+                  </a>
+                </div>
+              
+
+              
+                
+                
+                <div class="site-state-item site-state-tags">
+                  <a href="/tags/index.html">
+                    
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                      
+                    
+                    <span class="site-state-item-count">54</span>
+                    <span class="site-state-item-name">标签</span>
+                  </a>
+                </div>
+              
+            </nav>
+          
+
+          
+
+          
+
+          
+          
+
+          
+          
+
+          
+            
+          
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#选RabbitMQ还是Kafka"><span class="nav-number">1.</span> <span class="nav-text">选RabbitMQ还是Kafka</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#RabbitMQ基本概念"><span class="nav-number">2.</span> <span class="nav-text">RabbitMQ基本概念</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#信道"><span class="nav-number">2.1.</span> <span class="nav-text">信道</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#broker"><span class="nav-number">2.2.</span> <span class="nav-text">broker</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#虚拟主机"><span class="nav-number">2.3.</span> <span class="nav-text">虚拟主机</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#交换器"><span class="nav-number">2.4.</span> <span class="nav-text">交换器</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#绑定"><span class="nav-number">2.5.</span> <span class="nav-text">绑定</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#集群及高可用"><span class="nav-number">3.</span> <span class="nav-text">集群及高可用</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#元数据："><span class="nav-number">4.</span> <span class="nav-text">元数据：</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#运维常用管理命令"><span class="nav-number">5.</span> <span class="nav-text">运维常用管理命令</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#stop和stop-app-的区别"><span class="nav-number">5.1.</span> <span class="nav-text">stop和stop_app 的区别</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">6.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2020</span>
+  <span class="with-love" id="animate">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Frank</span>
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-area-chart"></i>
+    </span>
+    
+    <span title="站点总字数">187k</span>
+  
+
+  
+    <span class="post-meta-divider">|</span>
+    <span class="post-meta-item-icon">
+      <i class="fa fa-coffee"></i>
+    </span>
+    
+    <span title="站点阅读时长">5:false</span>
+  
+</div>
+
+
+
+
+  <div class="powered-by">由 <a class="theme-link" target="_blank" href="https://hexo.io">Hexo</a> 强力驱动 v3.7.1</div>
+
+
+
+  <span class="post-meta-divider">|</span>
+
+
+
+  <div class="theme-info">主题 &mdash; <a class="theme-link" target="_blank" href="https://github.com/theme-next/hexo-theme-next">NexT.Pisces</a> v6.2.0</div>
+
+
+
+
+        
+<div class="busuanzi-count">
+  <!--<script async src="https://dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>-->
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+  
+    <span class="site-uv" title="总访客量">
+      <i class="fa fa-user"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_uv"></span>
+    </span>
+  
+
+  
+    <span class="site-pv" title="总访问量">
+      <i class="fa fa-eye"></i>
+      <span class="busuanzi-value" id="busuanzi_value_site_pv"></span>
+    </span>
+  
+</div>
+
+
+
+
+
+
+  <script type="text/javascript">
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//tajs.qq.com/stats?sId=66469169";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+  </script>
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+          <span id="scrollpercent"><span>0</span>%</span>
+        
+      </div>
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/reading_progress/reading_progress.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=6.2.0"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=6.2.0"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=6.2.0"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=6.2.0"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=6.2.0"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=6.2.0"></script>
+
+
+
+  
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
