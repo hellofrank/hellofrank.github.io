@@ -128,29 +128,28 @@
 
 
 
-  <meta name="description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
-<meta name="keywords" content="git">
+  <meta name="description" content="目前大家常说的信息加密技术就两种，对称加密和非对称加密。">
+<meta name="keywords" content="其它">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Git Rebase 黄金法则问题">
-<meta property="og:url" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/index.html">
+<meta property="og:title" content="聊聊对称加密与非对称加密">
+<meta property="og:url" content="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/index.html">
 <meta property="og:site_name" content="Frank&#39;s Blog">
-<meta property="og:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
+<meta property="og:description" content="目前大家常说的信息加密技术就两种，对称加密和非对称加密。">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-2.png">
-<meta property="og:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-3.png">
-<meta property="og:updated_time" content="2019-09-04T13:05:58.145Z">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/a.png">
+<meta property="og:image" content="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/b.png">
+<meta property="og:updated_time" content="2020-08-02T15:25:20.947Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Git Rebase 黄金法则问题">
-<meta name="twitter:description" content="这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于上一篇文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。">
-<meta name="twitter:image" content="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/rebase-pic-1.png">
+<meta name="twitter:title" content="聊聊对称加密与非对称加密">
+<meta name="twitter:description" content="目前大家常说的信息加密技术就两种，对称加密和非对称加密。">
+<meta name="twitter:image" content="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/a.png">
 
 
 
 
 
 
-  <link rel="canonical" href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/"/>
+  <link rel="canonical" href="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/"/>
 
 
 
@@ -160,7 +159,7 @@
   };
 </script>
 
-  <title>Git Rebase 黄金法则问题 | Frank's Blog</title>
+  <title>聊聊对称加密与非对称加密 | Frank's Blog</title>
   
 
 
@@ -342,7 +341,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/">
+    <link itemprop="mainEntityOfPage" href="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Frank">
@@ -359,7 +358,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">Git Rebase 黄金法则问题
+          <h1 class="post-title" itemprop="name headline">聊聊对称加密与非对称加密
               
             
           </h1>
@@ -384,7 +383,7 @@
                 
               
 
-              <time title="创建时间：2018-04-27 00:00:00" itemprop="dateCreated datePublished" datetime="2018-04-27T00:00:00+08:00">2018-04-27</time>
+              <time title="创建时间：2020-08-02 23:14:18" itemprop="dateCreated datePublished" datetime="2020-08-02T23:14:18+08:00">2020-08-02</time>
             
 
             
@@ -402,7 +401,7 @@
                 <span class="post-meta-item-text">分类于</span>
               
               
-                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/Git/" itemprop="url" rel="index"><span itemprop="name">Git</span></a></span>
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing"><a href="/categories/其它/" itemprop="url" rel="index"><span itemprop="name">其它</span></a></span>
 
                 
                 
@@ -472,37 +471,32 @@
       
 
       
-        <p>这篇文章主要说一下rebase的黄金法则问题，本篇博文是基于<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">上一篇</a>文章出现的，很多场景都是基于上一篇。建议大家先阅读上一篇。<br>git 整合来自不同分支的修改主要有两种方法：merge 操作和rebase操作，<br>merge初学者可能很熟悉。我们今天来主要说一下 rebase 操作，文章结尾会简单说一下 merge 操作的 –no-ff 参数问题。</p>
+        <p>目前大家常说的信息加密技术就两种，<strong>对称加密</strong>和<strong>非对称加密</strong>。</p>
 <a id="more"></a>
-<blockquote>
-<p>rebase的简单定义：你可以把某一分支的所有修改都移至另外一个分支就像重新播放一样。</p>
-</blockquote>
-<p>有点儿像金庸武侠小说里面的乾坤大挪移。</p>
-<p>举个🌰</p>
-<p>将设我们本地库的代码，如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">     A---B---C  remotes/origin/master</span><br><span class="line">     /</span><br><span class="line">D---E---F---G  master</span><br></pre></td></tr></table></figure>
-<p>如果此时我们执行 git pull 操作，就会变成下面的样子，因为 pull 默认执行的是 merge 操作，多出来H这次没必要的提交。如下所示</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">     A---B---C  remotes/origin/master</span><br><span class="line">     /         \</span><br><span class="line">D---E---F---G---H master</span><br></pre></td></tr></table></figure>
-<p>如果我们执行 git pull –rebase 操作，将会变成下面的样子，这里我们用rebase代替了默认的merge操作</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">            remotes/origin</span><br><span class="line">                |</span><br><span class="line">D---E---A---B---C---F---G</span><br><span class="line">                        |</span><br><span class="line">                        master</span><br></pre></td></tr></table></figure>
-<p>rebase 作用就是变成线性了，这在多人协作的情况变得非常关键。因为多人合作是不允许随意制造分叉的。大家可以参考我<a href="https://hellofrank.github.io/2018/04/19/%E8%AE%B0%E4%B8%80%E6%AC%A1%E5%B8%B8%E8%A7%84%E7%9A%84gitflow%E5%B7%A5%E4%BD%9C%E6%B5%81/">这篇文章</a>。</p>
-<p>这就引出了这篇博文要主要阐述的问题，rebase golden rule 问题。</p>
-<blockquote>
-<p>Rebase golden rule<br>“No one shall rebase a shared branch” — Everyone about rebase</p>
-</blockquote>
-<p>简单来说就是不要在你的公共分支上做任何rebase操作。</p>
-<p>再举一个🌰。</p>
-<p>图一是我们做rebase操作前的样子<br><img src="rebase-pic-1.png" alt="pic-1">图二是我们正确rebase的结果，即在feature分支执行rebase develop命令<br><img src="rebase-pic-2.png" alt="pic-2"><br>图三是我们错误rebase的结果，即违反黄金法则的结果，我们在develop分支上执行了rebase feature操作<br><img src="rebase-pic-3.png" alt="pic-3"></p>
-<p>当我们在图三这种情况下对develop分支进行提交的话，会发现和远程分支冲突，然后我们手动或自动解决冲突，继续提交上去之后发现，我们修改的功能代码已经提交上去了，但是当我们看我们提交历史的记录的时候会发现有一部分重复的提交log。<br>这就是问题所在，你的项目组长是绝对不允许在他的项目里出现这种情况，因为会影响后续的代码追查，code review等问题。</p>
-<p>说完了这个问题，这篇博文的主要任务基本完成了，最后在简单说一下 merge 的 –no-ff 参数，这也是我们在分支合并的时候经常遇到的问题。<br>–no-ff 的意思就是关闭 merge 的 fast-forwarded，merge 操作默认执行的是 fast-forwarded。<br>fast-forwarded 的意思就是在合并分支的时候，如果不涉及三方合并，git 只会简单的移动指针。</p>
-<p>再再举一个🌰</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">        dev</span><br><span class="line">        |</span><br><span class="line">A---B---C</span><br><span class="line">         \</span><br><span class="line">          D---E</span><br><span class="line">              |</span><br><span class="line">              feature</span><br></pre></td></tr></table></figure>
-<p>此时我们执行 merge –no-ff 操作，将会得到如下图</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">                dev</span><br><span class="line">                |</span><br><span class="line">A---B---C--------F</span><br><span class="line">         \      /</span><br><span class="line">          D---E</span><br></pre></td></tr></table></figure>
-<p>执行 merge 之后得到的结果如下</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">               dev</span><br><span class="line">                |</span><br><span class="line">A---B---C---D---E</span><br></pre></td></tr></table></figure>
-<p>如上git 将指针从C移到了E。</p>
-<p>简单来说就是 –no-ff 的作用就是保持分支的非线性。方便我们看到分支的变化。</p>
+<h4 id="对称加密"><a href="#对称加密" class="headerlink" title="对称加密"></a>对称加密</h4><p>所谓的对称加密就是加密和解密用同一份密钥。对称加密的好处就是加密速度快，但是缺点也很明显，一定要保存好这份密钥，如果密钥丢失，就会带来很大的安全风险。而且如果与服务端进行通信的客户端比较多的话，服务端要管理很多份不同的密钥。</p>
+<h4 id="非对称加密"><a href="#非对称加密" class="headerlink" title="非对称加密"></a>非对称加密</h4><p>为了解决对称加密的缺点，人们提出了非对称加密，非对称加密技术也是目前应用最广泛的加密技术。所谓的非对称加密就是生成一对密钥，分为公钥和私钥。私钥自己保存，公钥发布出去。用私钥加密的信息只能用公钥解密，用公钥加密的信息也只能用私钥解密。</p>
+<h5 id="举个例子"><a href="#举个例子" class="headerlink" title="举个例子"></a>举个例子</h5><p>假设你的好朋友铁蛋，经常网购。购物网站为了保证信息安全传输，决定生成一对密钥，私钥自己保存，公钥发给铁蛋。铁蛋发给购物网站的信息都是用公钥加密的信息，购物网站收到后，用自己的私钥进行解密。这样即使传输途中，信息被截获，也没办法破解，因为没有私钥。</p>
+<p><img src="a.png" alt="a.png"></p>
+<h5 id="有个漏洞"><a href="#有个漏洞" class="headerlink" title="有个漏洞"></a>有个漏洞</h5><p>这个时候有个黑客，做了一个假的购物网站，页面和真的网站一摸一样，连网址都很相似。同时也生成了一对密钥，最重要的是黑客偷偷的把铁蛋电脑里真购物网站的公钥给替换成了假购物网站的公钥。</p>
+<p>当铁蛋打开假的网址进行购物操作时，会用假的公钥进行加密然后把消息发给假的网站，整个通信过程，铁蛋都没有发现自己被骗。</p>
+<p><img src="b.png" alt="b.png"></p>
+<p>铁蛋之所以被骗，是因为他不知道电脑里的真公钥已经被换成假的了。为了解决这个问题，出现一个认证机构，这个机构会对网站的公钥进行加密签名并形成一个证书，这个证书就是大家常说的<code>CA</code>证书，这个机构就是<code>CA</code>。</p>
+<p>只要铁蛋电脑里面安装的是经过<code>CA</code>认证的证书，在访问的时候，浏览器就会显示出一把小锁，提示可以安全访问，如果没有经过认证，浏览器就会提示铁蛋有风险。</p>
+<p>铁蛋经常在多个网站购物，难道需要每个网站都保存一份证书？其实不用这样，我们的电脑里面一般都有<code>CA</code>的根证书，只要有了这个证书，所有经过<code>CA</code>认证过的网站就都是安全的。</p>
+<p>没错，我上面介绍的就是<code>HTTPS</code>的工作原理，这也是非对称加密技术的典型应用。</p>
+<h4 id="双向认证"><a href="#双向认证" class="headerlink" title="双向认证"></a>双向认证</h4><p>非对称加密还有一个应用场景就是双向认证。所谓的双向认证就是不仅服务端要验证客户端的身份，客户端也要验证服务端的身份。说白了就是客户端和服务端各自生成一个密钥对，私钥自己保存，公钥发给对方。这种情况一般用在系统与系统的对接上。</p>
+<h5 id="为什么需要双向认证"><a href="#为什么需要双向认证" class="headerlink" title="为什么需要双向认证"></a>为什么需要双向认证</h5><p>假设<code>C</code>系统要访问<code>S</code>系统的服务，<code>S</code>系统对外提供的数据安全级别比较高，只有受信系统才能访问。假设目前只允许<code>C</code>系统访问。</p>
+<p><code>S</code>系统为了保证信息安全传输，决定生成一对密钥，私钥自己保存，公钥发给<code>C</code>系统。<code>C</code>系统访问<code>S</code>的时候，会用<code>S</code>的公钥将消息进行加密发给系统<code>S</code>，<code>S</code>用私钥进行解密。</p>
+<p>如果这个时候窃密者<code>B</code>系统偷偷拿到的<code>S</code>提供给<code>C</code>的公钥，然后<code>B</code>用<code>S</code>的公钥加密消息之后发送给系统<code>S</code>，获取相应的数据，那么<code>S</code>是没办法判断出请求的消息是来自<code>C</code>还是来自窃密者<code>B</code>。</p>
+<p>如何保证消息来自于受信系统<code>C</code>呢？经过协商，<code>C</code>系统也生成一对密钥，私钥自己保存，公钥发给系统<code>S</code>。</p>
+<p>当<code>C</code>向<code>S</code>发送请求的时候，<code>C</code>先将要发的消息,假设为<code>M</code>，进行一次<code>Hash</code>运算，得到一个固定长度的<code>Hash</code>值，这个值一般称为<strong>数字摘要</strong>。然后<code>C</code>用自己的私钥对这个数字摘要进行加密，加密后的值称为<strong>数字签名</strong>，其实跟现实中我们在文件中进行手写签名是一个意思。</p>
+<p><code>C</code>系统将数字签名和要发送的消息<code>M</code>，一起用<code>S</code>的公钥做一次加密之后发送给系统<code>S</code>。</p>
+<p><code>S</code>收到消息之后，先用自己的私钥对消息进行解密，解密之后，得到<code>C</code>的数字签名和消息<code>M</code>。这个时候关键的一步来了，就是验签，验证消息是否是<code>C</code>发来的。</p>
+<p>首先<code>S</code>用<code>C</code>的公钥对签名进行解密操作，解密完成后会得到一个摘要值，我们称之为<code>D</code>。能解开就证明消息是<code>C</code>发来的。<code>S</code>还会用和<code>C</code>一样的<code>Hash</code>算法对消息<code>M</code>进行<code>Hash</code>运算，这样将会得到一个摘要值，我们称之为<code>D‘</code>，如果<code>D</code>和<code>D’</code>相同就证明消息没有被篡改过。</p>
+<h4 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h4><p>上面的双向认证过程也是有漏洞的，只不过相比于单项认证，降低了被破译的风险而已。注意，世界上不存在绝对安全的系统，即便是现在逐渐流行起来的生物识别系统。我们所做的各种安全措施都只是在降低系统被破解的风险而已。</p>
+<p>就像家里的防盗门，只能防君子不能防小人。</p>
+<hr>
+<p><strong>推荐阅读</strong><br><a href="https://mp.weixin.qq.com/s/KDZWRIj7U7d7nXPWiYT5oA" target="_blank" rel="noopener">1. Java并发编程那些事儿(十)——最后的总结</a><br><a href="https://mp.weixin.qq.com/s/qSBaD1MInJrvl23kOeeMeA" target="_blank" rel="noopener">2. 一篇小文带你走进RabbitMQ的世界</a><br><a href="https://mp.weixin.qq.com/s/xcwUDlmw2ABvcqaBMGmt0w" target="_blank" rel="noopener">3. Awk这件上古神兵你会用了吗</a><br><a href="https://mp.weixin.qq.com/s/yaRvdAWvau2M60QBK7njvw" target="_blank" rel="noopener">4. 手把手教你搭建一套ELK日志搜索运维平台</a></p>
 
       
     </div>
@@ -564,7 +558,7 @@
     <strong>本文作者： </strong>Frank</li>
   <li class="post-copyright-link">
     <strong>本文链接：</strong>
-    <a href="http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/" title="Git Rebase 黄金法则问题">http://hellofrank.github.io/2018/04/27/Git-Rebase-黄金法则问题/</a>
+    <a href="http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/" title="聊聊对称加密与非对称加密">http://hellofrank.github.io/2020/08/02/聊聊对称加密与非对称加密/</a>
   </li>
   <li class="post-copyright-license">
     <strong>版权声明： </strong>本博客所有文章除特别声明外，均采用 <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="external nofollow" target="_blank">CC BY-NC-SA 4.0</a> 许可协议。转载请注明出处！</li>
@@ -577,7 +571,7 @@
       
         <div class="post-tags">
           
-            <a href="/tags/git/" rel="tag"><i class="fa fa-tag"></i> git</a>
+            <a href="/tags/其它/" rel="tag"><i class="fa fa-tag"></i> 其它</a>
           
         </div>
       
@@ -590,8 +584,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2018/04/19/记一次常规的gitflow工作流/" rel="next" title="记一次常规的gitflow工作流">
-                <i class="fa fa-chevron-left"></i> 记一次常规的gitflow工作流
+              <a href="/2020/08/02/一篇小文带你走进RabbitMQ的世界/" rel="next" title="一篇小文带你走进RabbitMQ的世界">
+                <i class="fa fa-chevron-left"></i> 一篇小文带你走进RabbitMQ的世界
               </a>
             
           </div>
@@ -599,10 +593,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/06/13/HTML中src和href之间的区别/" rel="prev" title="HTML中src和href之间的区别">
-                HTML中src和href之间的区别 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -651,8 +641,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -871,6 +870,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-4"><a class="nav-link" href="#对称加密"><span class="nav-number">1.</span> <span class="nav-text">对称加密</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#非对称加密"><span class="nav-number">2.</span> <span class="nav-text">非对称加密</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#举个例子"><span class="nav-number">2.1.</span> <span class="nav-text">举个例子</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#有个漏洞"><span class="nav-number">2.2.</span> <span class="nav-text">有个漏洞</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#双向认证"><span class="nav-number">3.</span> <span class="nav-text">双向认证</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#为什么需要双向认证"><span class="nav-number">3.1.</span> <span class="nav-text">为什么需要双向认证</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
